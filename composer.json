@@ -1,6 +1,6 @@
 {
 	"name" : "silverstripe-modules/events",
-	"description" : "A module for adding an event calendar",
+	"description" : "A module for adding an events system",
 	"type" : "silverstripe-module",
 	"repositories" : [{
 			"type" : "git",
@@ -24,13 +24,14 @@
 		}
 	],
 	"require" : {
-		"silverstripe/framework" : "~3.1",
-		"silverstripe-modules/VersionedModelAdmin" : "dev-master",
-		"silverstripe-modules/listingsummary" : "dev-master",
-		"micschk/silverstripe-excludechildren" : "dev-master"
+		"silverstripe/framework" : "~3.1.13",
+		"silverstripe/cms" : "~3.1.13",
+		"silverstripe-modules/VersionedModelAdmin" : "1.0.0",
+		"silverstripe-modules/listingsummary" : "1.1.0",
+		"micschk/silverstripe-excludechildren" : "1.1"
 	},
 	"extra" : {
-		"installer-name" : "versionedmodeladmin"
+		"installer-name" : "events"
 	},
 	"minimum-stability" : "dev"
 }

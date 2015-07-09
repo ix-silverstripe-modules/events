@@ -1,4 +1,4 @@
-Internetrix Events Module
+Internetrix Events Module (WIP)
 =======================================
 
 A module for adding news and news article pages to a site. Adds a NewsHolder and NewsArticle page type.
@@ -11,7 +11,7 @@ Maintainers
 
 ## Requirements
 
-* SilverStripe 3.1.10 or above
+* SilverStripe 3.1.13 or above
 
 ## Dependencies
 
@@ -25,7 +25,7 @@ Maintainers
 * Easily enable and disable sharing capabilities
 * Easily enable and disable archieve page
 * Two types of pagination available
-* This great README file!
+* This ~~great~~ *WIP* README file!
 
 ## Configuration
 

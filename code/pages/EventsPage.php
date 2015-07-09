@@ -7,7 +7,7 @@
  */
 class EventsPage extends Page {
 	
-	private static $icon = 'irxeventcalendar/images/icons/eventsholder';
+	private static $icon = 'events/images/icons/eventsholder';
 	private static $description = 'Page that lists all upcoming Events for selected calendars.';
 	private static $singular_name = 'Events Holder';
 	private static $plural_name = 'Events Holders';

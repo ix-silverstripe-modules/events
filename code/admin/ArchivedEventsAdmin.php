@@ -4,7 +4,7 @@ class ArchivedEventsAdmin extends VersionedModelAdmin {
 	private static $title       = 'Archived Events';
 	private static $menu_title  = 'Archived';
 	private static $url_segment = 'archivedevents';
-	private static $menu_icon 	=  'irxeventcalendar/images/icons/calendar_icon.png';
+	private static $menu_icon 	=  'events/images/icons/calendar_icon.png';
 
 	private static $managed_models  = array('CalendarEvent');
 	private static $model_importers = array();

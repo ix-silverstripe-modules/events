@@ -7,7 +7,7 @@
  */
 class CalendarEvent extends Page {
 	
-	private static $icon = 'irxeventcalendar/images/icons/eventspage';
+	private static $icon = 'events/images/icons/eventspage';
 	private static $description = 'Page that displays a single event.';
 	private static $singular_name = 'Event';
 	private static $plural_name = 'Events';

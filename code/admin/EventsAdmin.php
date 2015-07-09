@@ -5,7 +5,7 @@
  */
 class EventsAdmin extends VersionedModelAdmin {
 	
-	private static $menu_icon = 'irxeventcalendar/images/icons/calendar_icon.png';
+	private static $menu_icon = 'events/images/icons/calendar_icon.png';
 	
 	
 	public static $title       = 'Events';

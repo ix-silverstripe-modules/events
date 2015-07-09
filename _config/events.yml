@@ -1,3 +1,9 @@
 ---
 Name: events
 ---
+
+LeftAndMain:
+  menu_groups:
+    Events:
+      - EventsAdmin
+      - ArchivedEventsAdmin

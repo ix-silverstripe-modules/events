@@ -31,7 +31,7 @@
 		"micschk/silverstripe-excludechildren" : "1.1",
 		"tractorcow/silverstripe-colorpicker" : "931454b672a5d9e273aebb6da49c369ee90485f0",
 		"silverstripe/timedropdownfield" : "bda13f4aa9c703a48a18db7b11b98aa0e6a51e08",
-		"silverstripe-australia/silverstripe-addressable" : "1.0.0"
+		"silverstripe-australia/addressable" : "1.0.0"
 	},
 	"extra" : {
 		"installer-name" : "events"

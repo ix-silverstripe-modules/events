@@ -91,16 +91,15 @@ class CalendarEvent extends Page {
 
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
-
-		$fields->renameField('Title', 'Title');
-		$fields->removeByName('Behaviour');
-		$fields->removeByName('Todo');
-		$fields->removeByName('Access');
-		$fields->removeByName('Slideshow');
-		$fields->removeByName('MenuContent');
+		
+		// Makes sure the Listing Summary Toggle is present before
+		$configBefore = Config::inst()->get('Events', 'event_fields_before');
+		$configBefore = ($configBefore ? $configBefore : "Content");
+		
+		$putBefore = ($fields->fieldByName('Root.Main.ListingSummaryToggle') ? "ListingSummaryToggle" : $configBefore);
 		
 		// If an image has not been set, open the toggle field to remind user
-		if($this->ListingImageID == 0){
+		if(class_exists('ListingSummary') && $this->ListingImageID == 0){
 			$toggle = $fields->fieldByName('Root.Main.ListingSummaryToggle');
 			$toggle->setStartClosed(false);
 		}
@@ -120,29 +119,29 @@ class CalendarEvent extends Page {
 // 		$end->getDateField()->setConfig('dateformat', 'dd-MM-yyyy');
 		$end->setTimeField(TimeDropdownField::create('End[time]' , 'Time'));
 		
-		$fields->addFieldToTab('Root.Main', $start, 'ListingSummaryToggle');
-		$fields->addFieldToTab('Root.Main', $end, 'ListingSummaryToggle');
+		$fields->addFieldToTab('Root.Main', $start, $configBefore);
+		$fields->addFieldToTab('Root.Main', $end, $configBefore);
 		
-		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideStartAndEndTimes', 'Hide start and end times'), 'ListingSummaryToggle');
-		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideDatePosted', 'Hide date posted'), 'ListingSummaryToggle');
+		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideStartAndEndTimes', 'Hide start and end times'), $configBefore);
+		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideDatePosted', 'Hide date posted'), $configBefore);
 		
-		$fields->addFieldToTab('Root.Main', TextField::create('Cost', 'Cost (Leave it blank if cost is free)'), 'ListingSummaryToggle');
+		$fields->addFieldToTab('Root.Main', TextField::create('Cost', 'Cost (Leave it blank if cost is free)'), $configBefore);
 		
 		$fields->addFieldToTab('Root.Main', $cats = ListboxField::create('Categories', 'Categories', EventCategory::get()->map()->toArray())
 				->setMultiple(true)
-				,  'ListingSummaryToggle');
+				,  $configBefore);
 		
 		$fields->addFieldToTab('Root.Main', $contactToggle = ToggleCompositeField::create('ContactToggle', 'Contact Details', array(
 			TextField::create('Website', 'Website'),
 			TextField::create('Email', 'Email'),
 			TextField::create('Contact', 'Contact'),
 			TextField::create('Phone', 'Phone')
-		)), 'ListingSummaryToggle');
+		)), $configBefore);
 		
 		$address = $fields->findOrMakeTab('Root.Address');
 		$fields->removeByName('Address');
 		$address->removeByName('AddressHeader');
-		$fields->addFieldToTab('Root.Main', $addressToggle = ToggleCompositeField::create('AddressToggle', 'Address', $address), 'ListingSummaryToggle');
+		$fields->addFieldToTab('Root.Main', $addressToggle = ToggleCompositeField::create('AddressToggle', 'Address', $address), $configBefore);
 		
 		if(!$this->ID){
 			$contactToggle->setStartClosed(false);

@@ -2,6 +2,9 @@
 Name: events
 ---
 
+Events:
+  event_fields_before: 'Content'
+
 LeftAndMain:
   menu_groups:
     Events:

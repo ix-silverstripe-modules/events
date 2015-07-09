@@ -1,6 +1,6 @@
 <?php
 /**
- * @package irxeventcalendar
+ * @package events
  * @author 	Internetrix
  */
 class EventsAdmin extends VersionedModelAdmin {
@@ -95,7 +95,7 @@ class EventsAdmin extends VersionedModelAdmin {
 		foreach($models as $k => $v) {
 			if(is_numeric($k)) {
 				if($v == 'EventCategory') {
-					if(Subsite::currentSubsiteID() == 0){
+					if(class_exists('Subsite') && Subsite::currentSubsiteID() == 0){
 						$models[$v] = array('title' => singleton($v)->i18n_singular_name());
 					}
 				}else{

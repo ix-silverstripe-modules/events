@@ -143,7 +143,7 @@ class EventsPage_Controller extends Page_Controller {
 	protected $end;
 	protected $category;
 	protected $categoryurl;
-	protected $content;
+	protected $searchQuery;
 	protected $requiredAddFormFields = array('Title','Start','End', 'Categories', 'SubmitterFirstName', 'SubmitterSurname', 'SubmitterEmail', 'SubmitterPhoneNumber');
 	protected $printer = false;
 	protected $showimages = false;
@@ -165,7 +165,7 @@ class EventsPage_Controller extends Page_Controller {
 		$this->start 		= isset($getParams['startd']) 	? $getParams['startd'] 						: null;
 		$this->end 			= isset($getParams['end']) 		? $getParams['end'] 						: null;
 		$this->categoryurl 	= isset($getParams['category']) ? Convert::raw2sql($getParams['category']) 	: null;
-		$this->content 		= isset($getParams['content']) 	? Convert::raw2sql($getParams['content']) 	: null;
+		$this->searchQuery 	= isset($getParams['searchQuery']) 	? Convert::raw2sql($getParams['searchQuery']) 	: null;
 		$this->showimages	= isset($getParams['images']) 	? Convert::raw2sql($getParams['images']) 	: false;
 		
 		if($this->categoryurl){
@@ -380,12 +380,12 @@ class EventsPage_Controller extends Page_Controller {
 			$events	 = $events->filter(array('End:LessThan' => $endPlus));
 		}
 	
-		if($this->content){
+		if($this->searchQuery){
 			$eventTable = 'SiteTree';
 			if(Versioned::current_stage() == 'Live'){
 				$eventTable .= '_Live';
 			}
-			$events = $events->where("\"$eventTable\".\"Title\" LIKE '%" . $this->content . "%' OR \"$eventTable\".\"Content\" LIKE '%" . $this->content . "%'");
+			$events = $events->where("\"$eventTable\".\"Title\" LIKE '%" . $this->searchQuery . "%' OR \"$eventTable\".\"Content\" LIKE '%" . $this->searchQuery . "%'");
 		}
 	
 		if($this->category){
@@ -473,21 +473,21 @@ class EventsPage_Controller extends Page_Controller {
 		return $categories->FieldHolder();
 	}
 	
-	public function ContentField(){
-		$content = TextField::create('content', 'Content')
+	public function searchQueryField(){
+		$searchQuery = TextField::create('searchQuery', 'Search Query')
 			->addExtraClass('search-events');
 		
-		if($this->content){
-			$content->setValue($this->content);
+		if($this->searchQuery){
+			$searchQuery->setValue($this->searchQuery);
 		}
 			
 		if($this->SearchEventsPlaceholder){
-			$content->setAttribute('placeholder', $this->SearchEventsPlaceholder);
+			$searchQuery->setAttribute('placeholder', $this->SearchEventsPlaceholder);
 		}
 		
-		$this->extend('updateContentField', $content);
+		$this->extend('updateSearchQueryField', $searchQuery);
 		
-		return $content->Field();
+		return $searchQuery->Field();
 	}
 	
 	public function ShowImagesField(){
@@ -620,8 +620,8 @@ class EventsPage_Controller extends Page_Controller {
 			$event->writeToStage('Stage');
 		}
 		
-		$toEmail 		= $this->AddEventEmailTo ? $this->AddEventEmailTo : 'tourism@manningvalley.info';
-		$fromEmail 		= $this->AddEventEmailFrom ? $this->AddEventEmailFrom : 'no-reply@gtcc.nsw.gov.au';
+		$toEmail 		= $this->AddEventEmailTo ? $this->AddEventEmailTo : ''; // TODO: Default emails
+		$fromEmail 		= $this->AddEventEmailFrom ? $this->AddEventEmailFrom : ''; // TODO: Default emails
 		$data['Event'] 	= $event;
 		
 		$email = new Email();

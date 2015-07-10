@@ -280,6 +280,16 @@ class CalendarEvent extends Page {
 		return date('d/m/Y', strtotime($this->Start)) == date('d/m/Y', strtotime($this->End));
 	}
 	
+	public function getLeadingImage() {
+		if($this->ListingImageID) {
+			return $this->ListingImage();
+		}elseif($this->Categories()->first()->ImageID) {
+			return $this->Categories()->first()->Image();
+		} else {
+			return false;
+		}
+	}
+	
 }
 
 class CalendarEvent_Controller extends Page_Controller {

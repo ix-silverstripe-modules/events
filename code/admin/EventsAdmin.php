@@ -77,36 +77,37 @@ class EventsAdmin extends VersionedModelAdmin {
 	/**
 	 * @return array Map of class name to an array of 'title' (see {@link $managed_models})
 	 */
-	public function getManagedModels() {
-		$models = $this->stat('managed_models');
-		if(is_string($models)) {
-			$models = array($models);
-		}
-		if(!count($models)) {
-			user_error(
-			'ModelAdmin::getManagedModels():
-				You need to specify at least one DataObject subclass in public static $managed_models.
-				Make sure that this property is defined, and that its visibility is set to "public"',
-					E_USER_ERROR
-			);
-		}
+	// TODO: Allow YML to disable subsites to have categories (maybe)
+// 	public function getManagedModels() {
+// 		$models = $this->stat('managed_models');
+// 		if(is_string($models)) {
+// 			$models = array($models);
+// 		}
+// 		if(!count($models)) {
+// 			user_error(
+// 			'ModelAdmin::getManagedModels():
+// 				You need to specify at least one DataObject subclass in public static $managed_models.
+// 				Make sure that this property is defined, and that its visibility is set to "public"',
+// 					E_USER_ERROR
+// 			);
+// 		}
 	
-		// Normalize models to have their model class in array key
-		foreach($models as $k => $v) {
-			if(is_numeric($k)) {
-				if($v == 'EventCategory') {
-					if(class_exists('Subsite') && Subsite::currentSubsiteID() == 0){
-						$models[$v] = array('title' => singleton($v)->i18n_singular_name());
-					}
-				}else{
-					$models[$v] = array('title' => singleton($v)->i18n_singular_name());
-				}
+// 		// Normalize models to have their model class in array key
+// 		foreach($models as $k => $v) {
+// 			if(is_numeric($k)) {
+// 				if($v == 'EventCategory') {
+// 					if(class_exists('Subsite') && Subsite::currentSubsiteID() == 0){
+// 						$models[$v] = array('title' => singleton($v)->i18n_singular_name());
+// 					}
+// 				}else{
+// 					$models[$v] = array('title' => singleton($v)->i18n_singular_name());
+// 				}
 				
-				unset($models[$k]);
-			}
-		}
+// 				unset($models[$k]);
+// 			}
+// 		}
 	
-		return $models;
-	}
+// 		return $models;
+// 	}
 	
 }

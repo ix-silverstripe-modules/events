@@ -85,7 +85,7 @@ class EventCategory extends DataObject {
 	
 	public function customTitle(){
 		$colourBlock 	= $this->ColourBlock();
-		return $colourBlock->getValue() . '<span class="category-title">' . $this->Title . '</span';
+		return $colourBlock->getValue() . '<span class="category-title">' . $this->Title . '</span>';
 	}
 	
 	public function NumberOfEvents(){

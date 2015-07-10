@@ -4,6 +4,9 @@ Name: events
 
 Events:
   event_fields_before: 'Content'
+  enable_pdf_print: false
+  enable_sharing: false
+  pagination_type: static
 
 LeftAndMain:
   menu_groups:

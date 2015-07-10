@@ -79,13 +79,20 @@ class EventsPage extends Page {
 
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
+		
+		// Makes sure the Listing Summary Toggle is present before
+		$configBefore = Config::inst()->get('Events', 'event_fields_before');
+		$configBefore = ($configBefore ? $configBefore : "Content");
+		
+		$putBefore = ($fields->fieldByName('Root.Main.ListingSummaryToggle') ? "ListingSummaryToggle" : $configBefore);
+		
 		$fields->removeByName('Right');
-		$fields->addFieldToTab('Root.Main', NumericField::create('PaginationLimit', 'Pagination Limit'), 'ListingSummaryToggle');
-		$fields->addFieldToTab('Root.Main', TextField::create('ViewMoreText', 'View More Text'), 'ListingSummaryToggle');
-		$fields->addFieldToTab('Root.Main', TextField::create('SearchEventsPlaceholder', 'Search Events Placeholder'), 'ListingSummaryToggle');
-		$fields->addFieldToTab('Root.Main', TextField::create('EventsListTitle', 'Events List Title'), 'ListingSummaryToggle');
-		$fields->addFieldToTab('Root.Main', TextField::create('PrintTitle', 'Print Title'), 'ListingSummaryToggle');
-		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideSearchBox', 'Hide  the search box?'), 'ListingSummaryToggle');
+		$fields->addFieldToTab('Root.Main', NumericField::create('PaginationLimit', 'Pagination Limit'), $putBefore);
+		$fields->addFieldToTab('Root.Main', TextField::create('ViewMoreText', 'View More Text'), $putBefore);
+		$fields->addFieldToTab('Root.Main', TextField::create('SearchEventsPlaceholder', 'Search Events Placeholder'), $putBefore);
+		$fields->addFieldToTab('Root.Main', TextField::create('EventsListTitle', 'Events List Title'), $putBefore);
+		$fields->addFieldToTab('Root.Main', TextField::create('PrintTitle', 'Print Title'), $putBefore);
+		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideSearchBox', 'Hide  the search box?'), $putBefore);
 		
 		$fields->addFieldToTab('Root', new Tab('Messages', 'Messages & Emails'), 'Header');
 		$fields->addFieldToTab('Root.Messages', HtmlEditorField::create('NoEventsText', 'No Events Text')->setRows(6)->addExtraClass('withmargin'));
@@ -110,7 +117,7 @@ class EventsPage extends Page {
 			->setDescription('1819 x 205'));
 		$fields->addFieldToTab('Root.PDF.Footer', HtmlEditorField::create('PDFFooterContent', 'Footer Content')->setRows(6)->addExtraClass('withmargin'));
 		
-		$this->extend('IRXupdateEventsPageCMSFields', $fields);
+		$this->extend('updateEventsPageCMSFields', $fields);
 		
 		return $fields;
 	}
@@ -123,6 +130,8 @@ class EventsPage extends Page {
 				$children->remove($c);
 			}
 		}
+		
+		$this->extend('updateEventsPageChildren', $children);
 	
 		return $children;
 	}

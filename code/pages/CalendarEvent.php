@@ -164,12 +164,12 @@ class CalendarEvent extends Page {
 	
 	public function onAfterPublish() {
 		
-			/*****************************************belong many many relationships**********************************/
-			$categories = $this->Categories();
-			foreach($categories as $category){
-				$categories->add($category, array('Approved' => 1));
-			}
-			/**********************************************************************************************************/
+		/*****************************************belong many many relationships**********************************/
+		$categories = $this->Categories();
+		foreach($categories as $category){
+			$categories->add($category, array('Approved' => 1));
+		}
+		/**********************************************************************************************************/
 			
 	}
 

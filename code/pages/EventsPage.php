@@ -31,16 +31,6 @@ class EventsPage extends Page {
 		'AddEventEmailTo'			=> 'Varchar(255)',
 		'AddEventEmailFrom'			=> 'Varchar(255)',
 		'PrintTitle'				=> 'Varchar(255)',
-		'PDFFooterContent'			=> 'HTMLText',
-		'HidePDFHeaderImage'			=> 'Boolean',
-		'HidePDFFooterImage'			=> 'Boolean',
-		'HidePDFFooterBackgroundImage'	=> 'Boolean'
-	);
-	
-	private static $has_one = array(
-		'PDFHeaderImage' 			=> 'Image',
-		'PDFFooterImage' 			=> 'Image',
-		'PDFFooterBackgroundImage' 	=> 'Image'
 	);
 	
 	private static $defaults = array(
@@ -52,8 +42,7 @@ class EventsPage extends Page {
 		'FinishedMessage' 			=> '<p>Your event has been submitted and is under review.</p>',
 		'AddEventEmailTo' 			=> '',
 		'AddEventEmailFrom' 		=> '',
-		'PrintTitle'				=> 'Events Calendar for',
-		'PDFFooterContent'			=> '<p>Events Calendar</p>'
+		'PrintTitle'				=> 'Events Calendar for'
 	);
 	
 	public function requireDefaultRecords() {
@@ -261,6 +250,10 @@ class EventsPage_Controller extends Page_Controller {
 		}
 		
 		return $pt . " " . $dates;
+	}
+	
+	public function ViewMoreText() {
+		return ($this->ViewMoreText ? $this->ViewMoreText : "View Event");
 	}
 	
 	public function EventsCategories(){

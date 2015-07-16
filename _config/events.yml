@@ -7,7 +7,7 @@ Events:
   enable_sharing: false
   pagination_type: ajax
   page_search_type: refine
-  enable_public_add_event: false
+  enable_public_add_event: true
 
 LeftAndMain:
   menu_groups:

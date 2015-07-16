@@ -1,9 +1,9 @@
-<div class="calendar">
+<div class="calendar event-cal">
 
-	<div id="month-navigator" class="calendar-title">
-		<a class="calendar-prev" href="$PrevLink"></a>
-		$MonthName $Year
-		<a class="calendar-next" href="$NextLink"></a>
+	<div id="month-navigator" class="calendar-title ui-datepicker-header">
+		<a class="calendar-prev ui-datepicker-prev" href="$PrevLink"></a>
+		<div class="ui-datepicker-title">$MonthName $Year</div>
+		<a class="calendar-next ui-datepicker-next" href="$NextLink"></a>
 	</div>
 	
 	<table>

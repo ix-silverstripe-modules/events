@@ -86,13 +86,13 @@ class EventsPageCalendar extends Controller {
 		)->sort("Start");
 		
 		//get the categories whether they are from the search or from forcing them through the admin
-		$categories = $this->parent->getCalendarCategories();
-		if($categories){
-			$str  = "(";
-			$str .= implode(",", $categories);
-			$str .= ")";
-			$events = $events->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str .')');
-		}
+		//$categories = $this->parent->getCalendarCategories();
+// 		if($categories){
+// 			$str  = "(";
+// 			$str .= implode(",", $categories);
+// 			$str .= ")";
+// 			$events = $events->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str .')');
+// 		}
 
 		$eventDays = array();
 

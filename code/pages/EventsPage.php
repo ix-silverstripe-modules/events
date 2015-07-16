@@ -158,6 +158,10 @@ class EventsPage_Controller extends Page_Controller {
 		Requirements::javascript(FRAMEWORK_ADMIN_DIR . '/javascript/ssui.core.js');
 		Requirements::add_i18n_javascript(FRAMEWORK_DIR . '/javascript/lang');
 		
+		Requirements::javascript(EVENTCALENDAR_DIR . "/javascript/EventsPageCalendar.js");
+		Requirements::javascript(EVENTCALENDAR_DIR . "/thirdparty/qtip/jquery.qtip-2.0.0.min.js");
+		Requirements::css(EVENTCALENDAR_DIR . "/thirdparty/qtip/jquery.qtip-2.0.0.css");
+		
 		$request = $this->getRequest();
 		
 		$getParams = $request->getVars();
@@ -185,7 +189,8 @@ class EventsPage_Controller extends Page_Controller {
 		'add',
 		'AddForm',
 		'doAdd',
-		'finished'
+		'finished',
+		'eventcalendar'
 	);
 
 	public function index() {
@@ -408,7 +413,7 @@ class EventsPage_Controller extends Page_Controller {
 		
 		$events = $this->AllEvents();
 		
-		return GroupedList::create(PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit));
+		return PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);
 	}
 	
 	public function StartDateField(){
@@ -511,6 +516,11 @@ class EventsPage_Controller extends Page_Controller {
 	
 	public function ShowImages(){
 		return $this->showimages;
+	}
+	
+	public function eventcalendar() {
+		$calendar = new EventsPageCalendar($this, 'eventcalendar', $this->month, $this->year, $this->day);
+		return $calendar;
 	}
 	
 	public function AddForm(){

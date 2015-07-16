@@ -159,7 +159,7 @@ class EventsPageCalendar extends Controller {
 				
 				$days->push(new ArrayData(array(
 					'Num'      => $d,
-					'Link'     => $this->DayLink('day/' . $ymd),
+					'Link'     => $this->DayLink('?startd=' . $ymd.'&end='.$ymd),
 					'InMonth'  => $m == $this->month,
 					'Past'     => $m < date('m'),
 					'Today'    => $ymd == date('Y-m-d'),

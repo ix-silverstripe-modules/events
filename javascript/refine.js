@@ -61,22 +61,6 @@
 			}
 		});
 		
-		$('input#all-ranges').entwine({
-			onclick: function(e){
-				$('.price-range input[type=checkbox]').removeAttr('checked');
-			}
-		});
-		
-		$('.price-range input[type=checkbox]').entwine({
-			onclick: function(e){
-				if($('.price-range input[type=checkbox]:checked').length){
-					$('input#all-ranges').removeAttr('checked');
-				}else{
-					$('input#all-ranges').attr('checked', 'checked');
-				}
-			}
-		});
-		
 		function addslashes(string) {
 			return string.replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/@/g, '\\@').replace(/#/g, '\\#').replace(/%/g, '\\%').replace(/&/g, '\\&').replace(/!/g, '\\!');
 		}

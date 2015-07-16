@@ -162,6 +162,10 @@ class EventsPage_Controller extends Page_Controller {
 		Requirements::javascript(EVENTCALENDAR_DIR . "/thirdparty/qtip/jquery.qtip-2.0.0.min.js");
 		Requirements::css(EVENTCALENDAR_DIR . "/thirdparty/qtip/jquery.qtip-2.0.0.css");
 		
+		if(Config::inst()->get('Events', 'pagination_type') == "ajax") {
+			Requirements::javascript("events/javascript/eventspage.js");
+		}
+		
 		$request = $this->getRequest();
 		
 		$getParams = $request->getVars();
@@ -196,7 +200,7 @@ class EventsPage_Controller extends Page_Controller {
 	public function index() {
 		
 		if(Director::is_ajax()) {
-			return $this->renderWith('EventList');
+			return $this->renderWith('EventsList');
 		}
 		
 		$customTitle = $this->EventsListTitle;
@@ -208,6 +212,14 @@ class EventsPage_Controller extends Page_Controller {
 		return $this->customise(array(
 			'EventsListTitle' 	=> $customTitle
 		));
+	}
+	
+	public function getOffset() {
+		if(!isset($_REQUEST['start'])) {
+			$_REQUEST['start'] = 0;
+		}
+	
+		return $_REQUEST['start'];
 	}
 	
 	public function pdfheader(){
@@ -412,14 +424,37 @@ class EventsPage_Controller extends Page_Controller {
 	public function Events(){
 		
 		$events = $this->AllEvents();
+		$toreturn = null;
 		
 		$paginationType = Config::inst()->get('Events', 'pagination_type');
 		
 		if($paginationType == "ajax") {
+			$startVar = $this->request->getVar("start");
+				
+			if($startVar && !Director::is_ajax()) { // Only apply this when the user is returning from the article OR if they were linked here
+				$toload = ($startVar / $this->PaginationLimit); // What page are we at?
+				$limit = (($toload + 1) * $this->PaginationLimit); // Need to add 1 so we always load the first page as well (articles 0 to 5)
 			
+				$list = $events->limit($limit, 0);
+				$next = $limit;
+			} else {
+				$offset = $this->getOffset();
+				$limit = $this->PaginationLimit;
+			
+				$list = $events->limit($limit, $offset);
+				$next = $offset + $this->PaginationLimit;
+			}
+				
+			$all_news_count 	= $events->count();
+			$this->MoreNews 	= ($next < $all_news_count);
+			$this->MoreLink 	= HTTP::setGetVar("start", $next);
+				
+			$toreturn = $list;
 		} else {
-			return PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);
+			$toreturn = PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);
 		}
+		
+		return $toreturn;
 	}
 	
 	public function StartDateField(){

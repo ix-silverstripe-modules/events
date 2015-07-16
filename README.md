@@ -1,9 +1,9 @@
 Internetrix Events Module (WIP)
 =======================================
 
-A module for adding news and news article pages to a site. Adds a NewsHolder and NewsArticle page type.
+A module for adding a EventPage and CalendarEvent page to your SilverStripe project. Has the ability to create categories and has two types of loading methods.
 
-Provides two extensions for HomePage and Page to allow news articles to be displayed on the HomePage or in the sidebar of a page.
+Soon: ICS Support
 
 Maintainers
 ------------------

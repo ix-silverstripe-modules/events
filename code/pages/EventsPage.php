@@ -2,7 +2,7 @@
 /**
  * A page that lists all events and allows users to view details about them.
  * 
- * @package irxeventcalendar
+ * @package event
  * @author 	Internetrix
  */
 class EventsPage extends Page {
@@ -50,10 +50,10 @@ class EventsPage extends Page {
 		'EventsListTitle' 			=> 'Viewing All',
 		'NoEventsText' 				=> '<p>Sorry there are no events</p>',
 		'FinishedMessage' 			=> '<p>Your event has been submitted and is under review.</p>',
-		'AddEventEmailTo' 			=> 'tourism@manningvalley.info',
-		'AddEventEmailFrom' 		=> 'no-reply@gtcc.nsw.gov.au',
+		'AddEventEmailTo' 			=> '',
+		'AddEventEmailFrom' 		=> '',
 		'PrintTitle'				=> 'Events Calendar for',
-		'PDFFooterContent'			=> '<p>ABN 45 851 497 602<br>21 Manning River Drive, Taree NSW 2430<br><span>T</span> 02 6592 5444 or 1800 182 733</p>'
+		'PDFFooterContent'			=> '<p>Events Calendar</p>'
 	);
 	
 	public function requireDefaultRecords() {
@@ -238,7 +238,7 @@ class EventsPage_Controller extends Page_Controller {
 	
 	public function printer() {
 
-		Requirements::javascript(IRXEVENTCALENDAR_DIR . '/javascript/printer.js');
+		Requirements::javascript(EVENTCALENDAR_DIR . '/javascript/printer.js');
 		
 		$this->printer = true;
 		

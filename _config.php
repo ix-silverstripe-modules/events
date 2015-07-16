@@ -1,6 +1,6 @@
 <?php
 
-define('IRXEVENTCALENDAR_DIR', 'events');
+define('EVENTCALENDAR_DIR', 'events');
 
 $dir = basename(dirname(__FILE__));
 if($dir != "events") {

@@ -134,14 +134,14 @@ class EventPageExtension extends DataExtension {
 class EventPageExtension_Controller extends Extension {
 
 	public function updateInit() {
-		Requirements::css(IRXEVENTCALENDAR_DIR . '/thirdparty/qtip/jquery.qtip-2.0.0.css');
+		Requirements::css(EVENTCALENDAR_DIR . '/thirdparty/qtip/jquery.qtip-2.0.0.css');
 		
 		Requirements::block(THIRDPARTY_DIR . '/jquery/jquery.js');
 		Requirements::block(FRAMEWORK_DIR .'/thirdparty/jquery/jquery.js');
 		Requirements::javascript("https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js");
-		Requirements::combine_files(IRXEVENTCALENDAR_DIR . '.js', array(
-					IRXEVENTCALENDAR_DIR . '/javascript/EventsPageCalendar.js',
-					IRXEVENTCALENDAR_DIR . '/thirdparty/qtip/jquery.qtip-2.0.0.min.js'
+		Requirements::combine_files(EVENTCALENDAR_DIR . '.js', array(
+					EVENTCALENDAR_DIR . '/javascript/EventsPageCalendar.js',
+					EVENTCALENDAR_DIR . '/thirdparty/qtip/jquery.qtip-2.0.0.min.js'
 		));
 	}
 

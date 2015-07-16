@@ -224,6 +224,7 @@ class EventsPage_Controller extends Page_Controller {
 	}
 	
 	public function add() {
+		if(!Config::inst()->get('Events', 'enable_public_add_event')) return $this->httpError(404);
 		return $this->customise(array('Finished' => false))->renderWith(array('EventsPage_add', 'EventsPage', 'Page'));
 	}
 	

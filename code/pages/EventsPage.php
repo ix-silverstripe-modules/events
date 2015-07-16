@@ -413,7 +413,13 @@ class EventsPage_Controller extends Page_Controller {
 		
 		$events = $this->AllEvents();
 		
-		return PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);
+		$paginationType = Config::inst()->get('Events', 'pagination_type');
+		
+		if($paginationType == "ajax") {
+			
+		} else {
+			return PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);
+		}
 	}
 	
 	public function StartDateField(){

@@ -69,8 +69,8 @@ class EventsPage extends Page {
 			$page->EventsListTitle 			= 'Viewing All';
 			$page->NoEventsText 			= '<p>Sorry there are no events</p>';
 			$page->FinishedMessage 			= '<p>Your event has been submitted and is under review.</p>';
-			$page->AddEventEmailTo 			= 'tourism@manningvalley.info';
-			$page->AddEventEmailFrom 		= 'no-reply@gtcc.nsw.gov.au';
+			$page->AddEventEmailTo 			= '';
+			$page->AddEventEmailFrom 		= '';
 			$page->PrintTitle				= 'Events Calendar for';
 			$page->write();
 			$page->publish('Stage', 'Live');
@@ -361,9 +361,9 @@ class EventsPage_Controller extends Page_Controller {
 	
 		$events = CalendarEvent::get();
 	
-		if($this->SubsiteID == 0){
-			$events = $events->setDataQueryParam('Subsite.filter' , false);
-		}
+// 		if($this->SubsiteID == 0){
+// 			$events = $events->setDataQueryParam('Subsite.filter' , false);
+// 		}
 	
 		if($this->start){
 			$startAu = str_replace('/', '-', $this->start);

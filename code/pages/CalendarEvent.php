@@ -283,7 +283,7 @@ class CalendarEvent extends Page {
 	public function getLeadingImage() {
 		if($this->ListingImageID) {
 			return $this->ListingImage();
-		}elseif($this->Categories()->first()->ImageID) {
+		}elseif($this->Categories()->first() && $this->Categories()->first()->ImageID) {
 			return $this->Categories()->first()->Image();
 		} else {
 			return false;

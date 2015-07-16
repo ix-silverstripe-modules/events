@@ -31,10 +31,11 @@ Maintainers
 
 You can disable certain features in the config.yml of your site.
 
-	News:
-	  enable_sharing: true
-	  enable_archive: true
+	Events:
+	  event_fields_before: 'Content'
+	  enable_sharing: false
 	  pagination_type: ajax
+	  page_search_type: refine
 
 ### Enable/Disable Archiving
 
@@ -48,13 +49,15 @@ For Ajax Pagination, you must set the config as below:
 	
 Additionally, your news articles must be contained within a div and your more articles link/button must have a certain class
 
-	<div id="news-container">
-	<% include NewsList %>
+	<div id="events-container">
+		<% if $Events %>
+		<% include EventsList %>
+		<% end_if %>
 	</div>
 	
-	<% if MoreNews %>
-	<div class="show-more">
-		<a href="$MoreLink">Show More...</a>
+	<% if MoreEvents %>
+	<div>
+		<a href="$MoreLink" class="show-more">Show More...</a>
     </div>
 	<% end_if %>
 

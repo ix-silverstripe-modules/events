@@ -8,7 +8,7 @@
 			var me 	= $(this);
 			var url = me.attr("href");
 			var float = me.hasClass('calendar-prev')  ? "left" : "right";
-			me.replaceWith('<img style="width: 25px; float:' + float + ';" src="themes/svc/images/loading_transparent.gif" />');
+			me.replaceWith('<img style="width: 25px; float:' + float + ';" src="events/images/loading_transparent.gif" />');
 			
 			$(".calendar").load(url, null, function(){
 //				if(useQtips){

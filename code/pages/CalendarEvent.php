@@ -299,24 +299,25 @@ class CalendarEvent_Controller extends Page_Controller {
 		Requirements::block('timedropdownfield/javascript/TimeDropdownField.js');
 	}
 	
-	public function BackLink(){
-		$request = $this->getRequest();
-		$url 	 = false;
+	public function ShareLinksEnabled() {
+		return Config::inst()->get('Events', 'enable_sharing');
+	}
 	
-		if($request->requestVar('_REDIRECT_BACK_URL')) {
-			$url = $request->requestVar('_REDIRECT_BACK_URL');
-		} else if($request->getHeader('Referer')) {
-			$url = $request->getHeader('Referer');
-			//need to check the referer isnt the same page
-			if($url == Director::absoluteURL($this->Link())){
-				$url = false;
-			}
-		}
+	public function BackLink(){
+		$url 	 = false;
+ 		$value = Session::get('EventsOffset'.$this->ParentID);
+ 		
+ 		if($value) {
+ 			// Get parent
+ 			$parent = $this->Parent;
+ 			$url = $parent->Link("?start=$value".'#'.$this->URLSegment);
+ 		}
 	
 		if(!$url){
-			$page = EventsPage::get()->first();
-			$url = $page ? $page->Link() : false;
+			$page = $this->Parent();
+			$url = $page ? $page->Link('#'.$this->URLSegment) : false;
 		}
+		
 		return $url;
 	}
 	

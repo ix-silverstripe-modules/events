@@ -454,6 +454,8 @@ class EventsPage_Controller extends Page_Controller {
 			$toreturn = PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);
 		}
 		
+		Session::set('EventsOffset'.$this->ID, $this->getOffset());
+		
 		return $toreturn;
 	}
 	

@@ -321,5 +321,33 @@ class CalendarEvent_Controller extends Page_Controller {
 		return $url;
 	}
 	
+	public function PrevNextPage($Mode = 'next') {
+	
+		if($Mode == 'next'){
+			$Direction = "Start:GreaterThan";
+			$Sort = "Start ASC";
+		}
+		elseif($Mode == 'prev'){
+			$Direction = "Start:LessThan";
+			$Sort = "Start DESC";
+		}
+		else{
+			return false;
+		}
+		
+		// Filter out events that start before this
+		$PrevNext = CalendarEvent::get()->filter(array('Start:GreaterThan' => date('Y-m-d H:i:s')));
+		
+		$PrevNext = $PrevNext->filter(array(
+				$Direction => $this->Start
+			))
+			->sort($Sort)
+			->first();
+	
+		if ($PrevNext){
+			return $PrevNext->Link();
+		}
+	}
+	
 	
 }

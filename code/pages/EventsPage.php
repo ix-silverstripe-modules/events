@@ -200,6 +200,7 @@ class EventsPage_Controller extends Page_Controller {
 	public function index() {
 		
 		if(Director::is_ajax()) {
+			$this->response->addHeader("Vary", "Accept"); // This will enable pushState to work correctly
 			return $this->renderWith('EventsList');
 		}
 		
@@ -446,7 +447,7 @@ class EventsPage_Controller extends Page_Controller {
 			}
 				
 			$all_news_count 	= $events->count();
-			$this->MoreNews 	= ($next < $all_news_count);
+			$this->MoreEvents 	= ($next < $all_news_count);
 			$this->MoreLink 	= HTTP::setGetVar("start", $next);
 				
 			$toreturn = $list;

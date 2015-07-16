@@ -15,15 +15,18 @@ Maintainers
 
 ## Dependencies
 
-* [silverstripe-modules/VersionedModelAdmin](https://gitlab.internetrix.net/silverstripe-modules/versionedmodeladmin) module
-* [silverstripe-modules/listingsummary](https://gitlab.internetrix.net/silverstripe-modules/listingsummary) module
-* [micschk/silverstripe-excludechildren](https://github.com/micschk/silverstripe-excludechildren) module
+* silverstripe-modules/VersionedModelAdmin
+* silverstripe-modules/listingsummary
+* micschk/silverstripe-excludechildren
+* tractorcow/silverstripe-colorpicker
+* silverstripe/timedropdownfield
+* silverstripe-australia/addressable
+* silverstripe-australia/grouped-cms-menu
 
 ## Notable Features
 
 * Integrates with Listing Summary Module
 * Easily enable and disable sharing capabilities
-* Easily enable and disable archieve page
 * Two types of pagination available
 * This ~~great~~ *WIP* README file!
 

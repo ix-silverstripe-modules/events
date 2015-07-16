@@ -100,23 +100,6 @@ class EventsPage extends Page {
 		$fields->addFieldToTab('Root.Messages', TextField::create('AddEventEmailTo', '"Add event" email goes to?'));
 		$fields->addFieldToTab('Root.Messages', TextField::create('AddEventEmailFrom', '"Add event" email comes from?'));
 		
-		$fields->addFieldToTab('Root.PDF.Header', CheckboxField::create('HidePDFHeaderImage', 'Hide Header Image'));
-		$fields->addFieldToTab('Root.PDF.Header', UploadField::create('PDFHeaderImage', 'Header Image')
-			->setFolderName(Config::inst()->get('Upload', 'uploads_folder') . '/Events')
-			->addExtraClass('withmargin')
-			->setDescription('296 x 44'));
-		$fields->addFieldToTab('Root.PDF.Footer', CheckboxField::create('HidePDFFooterImage', 'Hide Footer Image'));
-		$fields->addFieldToTab('Root.PDF.Footer', UploadField::create('PDFFooterImage', 'Footer Image')
-			->setFolderName(Config::inst()->get('Upload', 'uploads_folder') . '/Events')
-			->addExtraClass('withmargin')
-			->setDescription('289 x 66'));
-		$fields->addFieldToTab('Root.PDF.Footer', CheckboxField::create('HidePDFFooterBackgroundImage', 'Hide Footer Background Image'));
-		$fields->addFieldToTab('Root.PDF.Footer', UploadField::create('PDFFooterBackgroundImage', 'Footer Background Image')
-			->setFolderName(Config::inst()->get('Upload', 'uploads_folder') . '/Events')
-			->addExtraClass('withmargin')
-			->setDescription('1819 x 205'));
-		$fields->addFieldToTab('Root.PDF.Footer', HtmlEditorField::create('PDFFooterContent', 'Footer Content')->setRows(6)->addExtraClass('withmargin'));
-		
 		$this->extend('updateEventsPageCMSFields', $fields);
 		
 		return $fields;

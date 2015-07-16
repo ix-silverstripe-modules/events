@@ -8,7 +8,7 @@
 		<div class="ui-datepicker-title">$MonthName $Year</div>
 	</div>
 	
-	<table>
+	<table class="ui-datepicker-calendar">
 		<tr class="days">
 			<th class="days">Mon</th>
 			<th class="days">Tues</th>

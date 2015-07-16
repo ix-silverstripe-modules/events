@@ -148,6 +148,14 @@ class EventsPage_Controller extends Page_Controller {
 	protected $printer = false;
 	protected $showimages = false;
 	
+	protected $types;
+	protected $typesDL;
+	protected $typesurl;
+	
+	protected $ranges;
+	protected $rangesDL;
+	protected $rangesurl;
+	
 	public function init()
 	{
 		parent::init();
@@ -166,6 +174,10 @@ class EventsPage_Controller extends Page_Controller {
 			Requirements::javascript("events/javascript/eventspage.js");
 		}
 		
+		if(Config::inst()->get('Events', 'page_search_type') == "refine") {
+			Requirements::javascript("events/javascript/refine.js");
+		}
+		
 		$request = $this->getRequest();
 		
 		$getParams = $request->getVars();
@@ -176,20 +188,25 @@ class EventsPage_Controller extends Page_Controller {
 		$this->searchQuery 	= isset($getParams['searchQuery']) 	? Convert::raw2sql($getParams['searchQuery']) 	: null;
 		$this->showimages	= isset($getParams['images']) 	? Convert::raw2sql($getParams['images']) 	: false;
 		
+		$this->typesurl 	= isset($getParams['types']) ? Convert::raw2sql($getParams['types']) 		: null;
+		
 		if($this->categoryurl){
 			$catURLs = explode(".", $this->categoryurl);
 			$category 		= EventCategory::get()->filter('URLSegment', $catURLs);
 			$this->category = implode(",", $category->map("ID", "ID")->toArray());
 		}
 		
+		if($this->typesurl){
+			$typesURLs 		= explode(".", $this->typesurl);
+			$types 			= EventCategory::get()->filter('URLSegment', $typesURLs);
+			$this->typesDL 	= $types;
+			$this->types 	= implode(",", $types->map("ID", "ID")->toArray());
+		}
+		
 	}
 
 	private static $allowed_actions = array(
 		'index',
-		'printer',
-		'pdfheader',
-		'pdfbody',
-		'pdffooter',
 		'add',
 		'AddForm',
 		'doAdd',
@@ -221,113 +238,6 @@ class EventsPage_Controller extends Page_Controller {
 		}
 	
 		return $_REQUEST['start'];
-	}
-	
-	public function pdfheader(){
-		Requirements::clear();
-		return $this->renderWith(array('EventsPage_printer_pdfheader'));
-	}
-	
-	public function pdfbody(){
-		if(!$this->start){
-			$this->start = date('d/m/Y', strtotime(date('Y-m-01')));
-		}
-		
-		if(!$this->end){
-			$this->end = date('d/m/Y', strtotime(date('Y-m-t')));
-		}
-		
-		return $this->renderWith(array('EventsPage_printer_pdf'));
-	}
-	
-	public function pdffooter(){
-		Requirements::clear();
-		return $this->renderWith(array('EventsPage_printer_pdffooter'));
-	}
-	
-	public function PDFLink(){
-		$request = $this->getRequest();
-		$getvars = $request->getVars();
-		unset($getvars['url']);
-		$getvars['print'] = 1;
-		
-		return Controller::join_links($this->Link('printer'), '?' . http_build_query($getvars));
-	}
-	
-	public function printer() {
-
-		Requirements::javascript(EVENTCALENDAR_DIR . '/javascript/printer.js');
-		
-		$this->printer = true;
-		
-		if(!$this->start){
-			$this->start = date('d/m/Y', strtotime(date('Y-m-01')));
-		}
-		
-		if(!$this->end){
-			$this->end = date('d/m/Y', strtotime(date('Y-m-t')));
-		}
-		
-		$page = new Page();
-		$page->Title 	 	 = 'printer';
-		$page->MenuTitle 	 = 'printer';
-		$this->extracrumbs[] = $page;
-		
-		if(isset($_REQUEST['print'])) {
-			$content = $this->renderWith(array('EventsPage_printer_pdf', 'EventsPage', 'Page'));
-			
-			$request = $this->getRequest();
-			$getvars = $request->getVars();
-			unset($getvars['url']);
-			
-			$pdfBody = Controller::join_links($this->AbsoluteLink() . 'pdfbody', '?' . http_build_query($getvars));
-			 
-			
-			$apikey = '83f1edea-b547-4760-a19c-a72a92f0f1ba';
-// 			$value 	= $content->getValue();
-			
-			$postdata = http_build_query(
-				array(
-					'apikey' 		=> $apikey,
-					'value' 		=> $pdfBody,
-					'MarginTop'		=> 40,
-					'HeaderSpacing'	=> 10,
-					'MarginBottom'	=> 52,
-					'FooterSpacing'	=> 10,
-					'HeaderUrl'		=> $this->AbsoluteLink() . 'pdfheader',
-					'FooterUrl'		=> $this->AbsoluteLink() . 'pdffooter'
-				)
-			);
-			$opts = array( 'http' =>
-				array(
-					'method'  => 'POST',
-					'header'  => 'Content-type: application/x-www-form-urlencoded',
-					'content' => $postdata
-				)
-			);
-			$context  = stream_context_create($opts);
-			
-			// Convert the HTML string to a PDF using those parameters
-			$result = file_get_contents('http://api.html2pdfrocket.com/pdf', false, $context);
-
-			// Output headers so that the file is downloaded rather than displayed
-			// Remember that header() must be called before any actual output is sent
-			header('Content-Description: File Transfer');
-			header('Content-Type: application/pdf');
-			header('Expires: 0');
-			header('Cache-Control: must-revalidate');
-			header('Pragma: public');
-			header('Content-Length: ' . strlen($result));
-			
-			// Make the file a downloadable attachment - comment this out to show it directly inside the
-			// web browser.  Note that you can give the file any name you want, e.g. alias-name.pdf below:
-			header('Content-Disposition: attachment; filename=' . 'events.pdf' );
-			
-			// Stream PDF to user
-			echo $result;
-		}
-		
-		return $this->customise(array('Finished' => false))->renderWith(array('EventsPage_printer', 'EventsPage', 'Page'));
 	}
 	
 	public function add() {
@@ -416,6 +326,18 @@ class EventsPage_Controller extends Page_Controller {
 			$str  = "(" . $this->category . ")" ;
 			
 	
+			$events = $events->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str . $extraWhere . ')');
+		}
+		
+		if($this->types){
+			$eventTable = 'CalendarEvent';
+			$extraWhere = "";
+			if(Versioned::current_stage() == 'Live'){
+				$eventTable .= '_Live';
+				// 				$extraWhere = ' AND "EventCategory_Events"."Approved" = 1 ';
+			}
+			$str  = "(" . $this->types . ")" ;
+				
 			$events = $events->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str . $extraWhere . ')');
 		}
 		

@@ -92,6 +92,19 @@ class EventCategory extends DataObject {
 		return $this->Events()->Count();
 	}
 	
+	public function NumberOfUpcomingEvents(){
+		return $this->Events()->filter(array('Start:GreaterThan' => date('Y-m-d H:i:s')))->Count();
+	}
+	
+	public function IsChecked(){
+		$request 	= Controller::curr()->getRequest();
+		$types 		= $request->getVar('types');
+	
+		if(stripos($types, $this->URLSegment) !== false){
+			return true;
+		}
+	}
+	
 	public function PrinterActive(){
 		$controller = Controller::curr();
 		if($controller){

@@ -4,9 +4,10 @@ Name: events
 
 Events:
   event_fields_before: 'Content'
-  enable_pdf_print: false
   enable_sharing: false
-  pagination_type: static
+  pagination_type: ajax
+  page_search_type: refine
+  enable_public_add_event: false
 
 LeftAndMain:
   menu_groups:

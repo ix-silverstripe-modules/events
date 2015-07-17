@@ -1,5 +1,7 @@
 (function($) {
 	$(function () {
+		applyStyles();
+		
 		$(".calendar").on("click", "#month-navigator a", function() {
 			var me 	= $(this);
 			var url = me.attr("href");

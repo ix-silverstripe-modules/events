@@ -4,7 +4,7 @@
 			applyStyles();
 //		}
 		
-		$("#month-navigator a").live("click", function() {
+		$(".calendar").on("click", "#month-navigator a", function() {
 			var me 	= $(this);
 			var url = me.attr("href");
 			var float = me.hasClass('calendar-prev')  ? "left" : "right";
@@ -28,21 +28,21 @@
 				console.log(title);
 				
 				jQuery(this).qtip({
-									content: title,
-									show: {
-										event: "mouseover"
-									},
-									hide: {
-										event: "mouseout"
-									},
-									style: {
-										classes: "qtip-bootstrap"
-									},
-									position: {
-										at: "right center",
-										my: "bottom left"
-									}
-								}
+						content: title,
+						show: {
+							event: "mouseover"
+						},
+						hide: {
+							event: "mouseout"
+						},
+						style: {
+							classes: "qtip-bootstrap"
+						},
+						position: {
+							at: "right center",
+							my: "bottom left"
+						}
+					}
 				);
 			});
 		}

@@ -52,6 +52,8 @@ There are two types of page search types. The "refine" type is for a search box 
 
 You can choose to allow the public to add events to the calendar. First set "enable_public_add_event" in the YML as true and then access the page via /events/add. The public will be able to add the event and then you will receive an email about it. You can choose to delete or publish the event in the CMS.
 
+This page will source the fields from the DataObject. So any extensions that modify the CMSFields will also show. Additionally, fields such as Submitter Name etc are added in at the end. You can modify what fields are shown or not by modifying the static variable $block_frontend_fields in CalendarEvent. Obvious fields like Navigation Label and Metadata are removed.
+
 ### Ajax Pagination Setup
 
 For Ajax Pagination, you must set the config as below:

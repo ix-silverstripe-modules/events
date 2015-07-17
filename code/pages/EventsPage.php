@@ -480,91 +480,10 @@ class EventsPage_Controller extends Page_Controller {
 		$calendar = new EventsPageCalendar($this, 'eventcalendar', $this->month, $this->year, $this->day);
 		return $calendar;
 	}
-	
-// 	public function AddForm(){
-		
-// 		$size 	= 0.25 * 1024 * 1024; //256KB
-// 		$fields = new FieldList(array(
-// 			HeaderField::create('EventDetails', 'Event Details'),
-				
-// 			DropdownField::create('Categories', 'Category', $this->EventsCategories()->map()->toArray())
-// 				->setEmptyString("-- Select a Category --"),
-// 			TextField::create('Title', 'Title')->addExtraClass('second'),
-// 			$start = DatetimeField::create('Start', 'Start'),
-// 			$end = DatetimeField::create('End', 'End'),
-// 			TextField::create('Cost', 'Cost'),
-// 			$upField = UploadField::create('ListingImage', 'Image')
-// 				->setFolderName(Config::inst()->get('Upload', 'uploads_folder') . '/Events')
-// 				->setCanAttachExisting(false)
-// 				->setCanUpload(true)
-// 				->setCanPreviewFolder(false)
-// 				->setOverwriteWarning(false)
-// 				->setRightTitle('Max file size - 256KB')
-// 				->setAttribute('maxlength', 10)
-// 				->setAttribute('data-tinymce-maxlength-indicator', true),
-				
-// 			HeaderField::create('EventContactDetails', 'Event Contact Details'),
-// 			TextField::create('Website', 'Website'),
-// 			EmailField::create('Email', 'Email')->addExtraClass('second'),
-// 			TextField::create('Contact', 'Contact'),
-// 			TextField::create('Phone', 'Phone')->addExtraClass('second'),
-				
-// 			HeaderField::create('EventAddress', 'Address'),
-// 			TextField::create('Address', 'Address'),
-// 			TextField::create('Suburb', 'Suburb')->addExtraClass('second'),
-// 			DropdownField::create('State', 'State', array(
-// 				'ACT' => 'Australian Capital Territory',
-// 				'NSW' => 'New South Wales',
-// 				'NT'  => 'Northern Territory',
-// 				'QLD' => 'Queensland',
-// 				'SA'  => 'South Australia',
-// 				'TAS' => 'Tasmania',
-// 				'VIC' => 'Victoria',
-// 				'WA'  => 'Western Australia'
-// 			)),
-// 			$postcode = new RegexTextField('Postcode', 'Postcode'),
-// 			HtmlEditorField::create('Content')
-// 				->setRightTitle('Max characters - 1000'),
-// 			HeaderField::create('YourDetails', 'Your Details'),
-// 			$firstName = TextField::create('SubmitterFirstName', 'First Name'),
-// 			$surname = TextField::create('SubmitterSurname', 'Surname')->addExtraClass('second'),
-// 			$email = EmailField::create('SubmitterEmail', 'Email'),
-// 			$phone = TextField::create('SubmitterPhoneNumber', 'Phone Number')->addExtraClass('second'),
-// 		));
-		
-// 		$upField->getValidator()->setAllowedMaxFileSize($size);
-		
-// 		$start->getDateField()->setConfig('showcalendar', true);
-// 		$start->getDateField()->setConfig('dateformat', 'dd/MM/YYYY');
-// 		$start->setTimeField(TimeDropdownField::create('Start[time]' , 'Time'));
-		
-// 		$end->getDateField()->setConfig('showcalendar', true);
-// 		$end->getDateField()->setConfig('dateformat', 'dd/MM/YYYY');
-// 		$end->setTimeField(TimeDropdownField::create('End[time]' , 'Time'));
-		
-// 		$postcode->setRegex('/^[0-9]+$/');
-// 		$postcode->addExtraClass('second');
-	
-// 		$validator = RequiredFields::create($this->requiredAddFormFields);
-	
-// 		$member = Member::currentUser();
-// 		if($member){
-// 			$firstName->setValue($member->FirstName);
-// 			$surname->setValue($member->Surname);
-// 			$email->setValue($member->Email);
-// 			$phone->setValue($member->PhoneNumber);
-// 		}
-	
-// 		$actions = FieldList::create(
-// 			FormAction::create('doAdd', 'Add')
-// 		);
-// 		//Create form
-// 		$form = Form::create($this, 'AddForm', $fields, $actions, $validator);
-			
-// 		return $form;
-// 	}
 
 	public function AddForm(){
+		$size 	= 0.25 * 1024 * 1024;
+		
 		// Get the fields from the Calendar Event page
 		$calendarEvent = singleton('CalendarEvent');
 		$calendarEventForm = $calendarEvent->getCMSFields();
@@ -581,6 +500,19 @@ class EventsPage_Controller extends Page_Controller {
 		
 		// Rename Page Title to Event Name
 		$contentFields->renameField("Title", "Event Name");
+		
+		$upField = UploadField::create('ListingImage', 'Image')
+			->setFolderName(Config::inst()->get('Upload', 'uploads_folder') . '/Events')
+			->setCanAttachExisting(false)
+			->setCanUpload(true)
+			->setCanPreviewFolder(false)
+			->setOverwriteWarning(false)
+			->setRightTitle('Max file size - 256KB')
+			->setAttribute('maxlength', 10)
+			->setAttribute('data-tinymce-maxlength-indicator', true);
+		
+		$contentFields->push($upField);
+		$upField->getValidator()->setAllowedMaxFileSize($size);
 		
 		// Add Submitter Values
 		$contentFields->push(HeaderField::create("Your Details"));

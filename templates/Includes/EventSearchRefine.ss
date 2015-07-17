@@ -1,4 +1,5 @@
 <% if not $HideSearchBox %>
+<% if $refineSearchEnabled %>
 <form action="$SearchEventsFormAction" method="GET" id="refine-events">
 <!-- Events Filter -->
 <div class="refineoptions">
@@ -30,4 +31,5 @@
     	<input type="submit" value="Filter/Search" />
     </div>
 </form>
+<% end_if %>
 <% end_if %>

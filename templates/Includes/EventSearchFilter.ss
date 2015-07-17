@@ -1,4 +1,5 @@
 <% if not $HideSearchBox %>
+<% if $filterSearchEnabled %>
 <div class="events-search">
 	<form action="$SearchEventsFormAction" id="filter-search" method="GET">
     	<div class="row">
@@ -20,4 +21,5 @@
         </div>
   	</form>
 </div>
+<% end_if %>
 <% end_if %>

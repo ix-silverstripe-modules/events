@@ -3,7 +3,7 @@ Internetrix Events Module (WIP)
 
 A module for adding a EventPage and CalendarEvent page to your SilverStripe project. Has the ability to create categories and has two types of loading methods.
 
-Soon: ICS Support
+[TO DO List](TODO.md)
 
 Maintainers
 ------------------
@@ -43,7 +43,7 @@ You can disable certain features in the config.yml of your site.
 
 ### Page Search Type
 
-There are two types of page search types. The "refine" type is for a search box which appears in the sidebar and allows you to refine via start date, end date and category (ex: Strathfield Council). The other type is "" and it will show a search box on the top of the events and allow refinement of start date, end date, category and search query (ex: GTCC)
+There are two types of page search types. The "refine" type is for a search box which appears in the sidebar and allows you to refine via start date, end date and category (ex: Strathfield Council). The other type is "filter" and it will show a search box on the top of the events and allow refinement of start date, end date, category and search query (ex: GTCC)
 
 ### Public Event Adding
 
@@ -87,4 +87,5 @@ You can include the "EventPageExtension" to the desired Page class to enable fun
 		extensions:
 			- 'EventPageExtension'
 
-A new tab in the CMS will allow you to control the display of the calendar.
+A new tab in the CMS will allow you to control the display of the calendar. Be sure to include the template in your template file.
+	<% include CalendarSidebar %>

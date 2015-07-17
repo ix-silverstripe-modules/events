@@ -465,6 +465,14 @@ class EventsPage_Controller extends Page_Controller {
 		return $this->showimages;
 	}
 	
+	public function filterSearchEnabled() {
+		return (Config::inst()->get('Events', 'page_search_type') == "filter");
+	}
+	
+	public function refineSearchEnabled() {
+		return (Config::inst()->get('Events', 'page_search_type') == "refine");
+	}
+	
 	public function eventcalendar() {
 		$calendar = new EventsPageCalendar($this, 'eventcalendar', $this->month, $this->year, $this->day);
 		return $calendar;

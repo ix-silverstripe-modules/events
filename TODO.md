@@ -4,9 +4,9 @@
 
 ~~2) Add the "back to events" functionality just like news~~
 
-3) Enable/Disable calendar functionality. Allow calendar to be both in the content/sidebar (an include)
+~~3) Enable/Disable calendar functionality. Allow calendar to be both in the content/sidebar (an include)
  Hovering over a day in the calendar should show all the events on that day in a qtip.
- Clicking on a day in the calendar should take the user to an event listing page where all the events on that day are shown.
+ Clicking on a day in the calendar should take the user to an event listing page where all the events on that day are shown.~~
  
 ~~4) Event list should optionally start with the filter fields (i.e Start,End, Content, Category, Keyword) - see gtcc~~
 

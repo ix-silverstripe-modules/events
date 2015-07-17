@@ -1,8 +1,13 @@
+/* refine.js
+ * ==========================
+ * File contains javascript code relating to the "refine" search type in the events module
+ * Automatically included when chosen as the search type.
+ */
+
 (function($) {
 	$.entwine(function($) {
 		
 		var types = [];
-		var priceranges = [];
 		
 		if(!$('.type input[type=checkbox]:checked').length){
 			$('input#all-types').attr('checked', 'checked');
@@ -19,10 +24,6 @@
 				
 				$('.type input[type=checkbox]:checked').each(function(){
 					types.push($(this).val())
-				});
-				
-				$('.price-range input[type=checkbox]:checked').each(function(){
-					priceranges.push($(this).val())
 				});
 				
 				if(types.length){

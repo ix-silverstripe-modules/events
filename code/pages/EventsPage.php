@@ -150,6 +150,10 @@ class EventsPage_Controller extends Page_Controller {
 			Requirements::javascript("events/javascript/refine.js");
 		}
 		
+		if(Config::inst()->get('Events', 'page_search_type') == "filter") {
+			Requirements::javascript("events/javascript/filter.js");
+		}
+		
 		$request = $this->getRequest();
 		
 		$getParams = $request->getVars();
@@ -577,14 +581,18 @@ class EventsPage_Controller extends Page_Controller {
 		$fromEmail 		= $this->AddEventEmailFrom ? $this->AddEventEmailFrom : ''; // TODO: Default emails
 		$data['Event'] 	= $event;
 		
-		$email = new Email();
-		$email->setSubject('New event submission from website');
-		$email->setTo($toEmail);
-		$email->setFrom($fromEmail);
-		$email->setTemplate('PublicEventAddition');
-		$email->populateTemplate($data);
-		$email->send();
-			
+		if($toEmail == '' || $fromEmail == '') {
+			// Don't send if one of the above fields is empty. 
+		} else {
+			$email = new Email();
+			$email->setSubject('New event submission from website');
+			$email->setTo($toEmail);
+			$email->setFrom($fromEmail);
+			$email->setTemplate('PublicEventAddition');
+			$email->populateTemplate($data);
+			$email->send();
+		}
+		
 		return $this->redirect($this->Link('finished'));
 	}
 	

@@ -1,6 +1,6 @@
 <% if not $HideSearchBox %>
 <div class="events-search">
-	<form action="$SearchEventsFormAction" method="GET">
+	<form action="$SearchEventsFormAction" id="filter-search" method="GET">
     	<div class="row">
             <div class="large-4 medium-6 columns">
                 $StartDateField

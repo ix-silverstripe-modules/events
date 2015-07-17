@@ -10,7 +10,7 @@
  
 ~~4) Event list should optionally start with the filter fields (i.e Start,End, Content, Category, Keyword) - see gtcc~~
 
-5) Add event form. When a member of the public adds an event, that event is added but is in draft mode - steal this from gtcc
+~~5) Add event form. When a member of the public adds an event, that event is added but is in draft mode - steal this from gtcc~~
 
 6) Add plenty of extension hooks.
 

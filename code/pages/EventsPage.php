@@ -132,6 +132,9 @@ class EventsPage_Controller extends Page_Controller {
 	{
 		parent::init();
 		
+		// Block out
+		Requirements::block("framework/thirdparty/jquery-ui-themes/smoothness/jquery-ui.css");
+		
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery-ui/jquery-ui.js');
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery-entwine/dist/jquery.entwine-dist.js');
@@ -478,72 +481,120 @@ class EventsPage_Controller extends Page_Controller {
 		return $calendar;
 	}
 	
+// 	public function AddForm(){
+		
+// 		$size 	= 0.25 * 1024 * 1024; //256KB
+// 		$fields = new FieldList(array(
+// 			HeaderField::create('EventDetails', 'Event Details'),
+				
+// 			DropdownField::create('Categories', 'Category', $this->EventsCategories()->map()->toArray())
+// 				->setEmptyString("-- Select a Category --"),
+// 			TextField::create('Title', 'Title')->addExtraClass('second'),
+// 			$start = DatetimeField::create('Start', 'Start'),
+// 			$end = DatetimeField::create('End', 'End'),
+// 			TextField::create('Cost', 'Cost'),
+// 			$upField = UploadField::create('ListingImage', 'Image')
+// 				->setFolderName(Config::inst()->get('Upload', 'uploads_folder') . '/Events')
+// 				->setCanAttachExisting(false)
+// 				->setCanUpload(true)
+// 				->setCanPreviewFolder(false)
+// 				->setOverwriteWarning(false)
+// 				->setRightTitle('Max file size - 256KB')
+// 				->setAttribute('maxlength', 10)
+// 				->setAttribute('data-tinymce-maxlength-indicator', true),
+				
+// 			HeaderField::create('EventContactDetails', 'Event Contact Details'),
+// 			TextField::create('Website', 'Website'),
+// 			EmailField::create('Email', 'Email')->addExtraClass('second'),
+// 			TextField::create('Contact', 'Contact'),
+// 			TextField::create('Phone', 'Phone')->addExtraClass('second'),
+				
+// 			HeaderField::create('EventAddress', 'Address'),
+// 			TextField::create('Address', 'Address'),
+// 			TextField::create('Suburb', 'Suburb')->addExtraClass('second'),
+// 			DropdownField::create('State', 'State', array(
+// 				'ACT' => 'Australian Capital Territory',
+// 				'NSW' => 'New South Wales',
+// 				'NT'  => 'Northern Territory',
+// 				'QLD' => 'Queensland',
+// 				'SA'  => 'South Australia',
+// 				'TAS' => 'Tasmania',
+// 				'VIC' => 'Victoria',
+// 				'WA'  => 'Western Australia'
+// 			)),
+// 			$postcode = new RegexTextField('Postcode', 'Postcode'),
+// 			HtmlEditorField::create('Content')
+// 				->setRightTitle('Max characters - 1000'),
+// 			HeaderField::create('YourDetails', 'Your Details'),
+// 			$firstName = TextField::create('SubmitterFirstName', 'First Name'),
+// 			$surname = TextField::create('SubmitterSurname', 'Surname')->addExtraClass('second'),
+// 			$email = EmailField::create('SubmitterEmail', 'Email'),
+// 			$phone = TextField::create('SubmitterPhoneNumber', 'Phone Number')->addExtraClass('second'),
+// 		));
+		
+// 		$upField->getValidator()->setAllowedMaxFileSize($size);
+		
+// 		$start->getDateField()->setConfig('showcalendar', true);
+// 		$start->getDateField()->setConfig('dateformat', 'dd/MM/YYYY');
+// 		$start->setTimeField(TimeDropdownField::create('Start[time]' , 'Time'));
+		
+// 		$end->getDateField()->setConfig('showcalendar', true);
+// 		$end->getDateField()->setConfig('dateformat', 'dd/MM/YYYY');
+// 		$end->setTimeField(TimeDropdownField::create('End[time]' , 'Time'));
+		
+// 		$postcode->setRegex('/^[0-9]+$/');
+// 		$postcode->addExtraClass('second');
+	
+// 		$validator = RequiredFields::create($this->requiredAddFormFields);
+	
+// 		$member = Member::currentUser();
+// 		if($member){
+// 			$firstName->setValue($member->FirstName);
+// 			$surname->setValue($member->Surname);
+// 			$email->setValue($member->Email);
+// 			$phone->setValue($member->PhoneNumber);
+// 		}
+	
+// 		$actions = FieldList::create(
+// 			FormAction::create('doAdd', 'Add')
+// 		);
+// 		//Create form
+// 		$form = Form::create($this, 'AddForm', $fields, $actions, $validator);
+			
+// 		return $form;
+// 	}
+
 	public function AddForm(){
+		// Get the fields from the Calendar Event page
+		$calendarEvent = singleton('CalendarEvent');
+		$calendarEventForm = $calendarEvent->getCMSFields();
+		$contentFields = $calendarEventForm->findOrMakeTab('Root.Main')->Fields();
 		
-		$size 	= 0.25 * 1024 * 1024; //256KB
-		$fields = new FieldList(array(
-			HeaderField::create('EventDetails', 'Event Details'),
-				
-			DropdownField::create('Categories', 'Category', $this->EventsCategories()->map()->toArray())
-				->setEmptyString("-- Select a Category --"),
-			TextField::create('Title', 'Title')->addExtraClass('second'),
-			$start = DatetimeField::create('Start', 'Start'),
-			$end = DatetimeField::create('End', 'End'),
-			TextField::create('Cost', 'Cost'),
-			$upField = UploadField::create('ListingImage', 'Image')
-				->setFolderName(Config::inst()->get('Upload', 'uploads_folder') . '/Events')
-				->setCanAttachExisting(false)
-				->setCanUpload(true)
-				->setCanPreviewFolder(false)
-				->setOverwriteWarning(false)
-				->setRightTitle('Max file size - 256KB')
-				->setAttribute('maxlength', 10)
-				->setAttribute('data-tinymce-maxlength-indicator', true),
-				
-			HeaderField::create('EventContactDetails', 'Event Contact Details'),
-			TextField::create('Website', 'Website'),
-			EmailField::create('Email', 'Email')->addExtraClass('second'),
-			TextField::create('Contact', 'Contact'),
-			TextField::create('Phone', 'Phone')->addExtraClass('second'),
-				
-			HeaderField::create('EventAddress', 'Address'),
-			TextField::create('Address', 'Address'),
-			TextField::create('Suburb', 'Suburb')->addExtraClass('second'),
-			DropdownField::create('State', 'State', array(
-				'ACT' => 'Australian Capital Territory',
-				'NSW' => 'New South Wales',
-				'NT'  => 'Northern Territory',
-				'QLD' => 'Queensland',
-				'SA'  => 'South Australia',
-				'TAS' => 'Tasmania',
-				'VIC' => 'Victoria',
-				'WA'  => 'Western Australia'
-			)),
-			$postcode = new RegexTextField('Postcode', 'Postcode'),
-			HtmlEditorField::create('Content')
-				->setRightTitle('Max characters - 1000'),
-			HeaderField::create('YourDetails', 'Your Details'),
-			$firstName = TextField::create('SubmitterFirstName', 'First Name'),
-			$surname = TextField::create('SubmitterSurname', 'Surname')->addExtraClass('second'),
-			$email = EmailField::create('SubmitterEmail', 'Email'),
-			$phone = TextField::create('SubmitterPhoneNumber', 'Phone Number')->addExtraClass('second'),
-		));
+		// Clean up - remove the listing summary and metadata
+		$blockfields = Config::inst()->get("CalendarEvent", "block_frontend_fields");
 		
-		$upField->getValidator()->setAllowedMaxFileSize($size);
+		if($blockfields) {
+			foreach($blockfields as $field) {
+				$contentFields->removeByName($field);
+			}
+		}
 		
-		$start->getDateField()->setConfig('showcalendar', true);
-		$start->getDateField()->setConfig('dateformat', 'dd/MM/YYYY');
-		$start->setTimeField(TimeDropdownField::create('Start[time]' , 'Time'));
+		// Rename Page Title to Event Name
+		$contentFields->renameField("Title", "Event Name");
 		
-		$end->getDateField()->setConfig('showcalendar', true);
-		$end->getDateField()->setConfig('dateformat', 'dd/MM/YYYY');
-		$end->setTimeField(TimeDropdownField::create('End[time]' , 'Time'));
+		// Add Submitter Values
+		$contentFields->push(HeaderField::create("Your Details"));
+		$contentFields->push($firstName = TextField::create('SubmitterFirstName', 'First Name'));
+		$contentFields->push($surname = TextField::create('SubmitterSurname', 'Surname')->addExtraClass('second'));
+		$contentFields->push($email = EmailField::create('SubmitterEmail', 'Email'));
+		$contentFields->push($phone = TextField::create('SubmitterPhoneNumber', 'Phone Number')->addExtraClass('second'));
 		
-		$postcode->setRegex('/^[0-9]+$/');
-		$postcode->addExtraClass('second');
-	
 		$validator = RequiredFields::create($this->requiredAddFormFields);
-	
+
+		$actions = FieldList::create(
+			FormAction::create('doAdd', 'Add')
+		);
+		
 		$member = Member::currentUser();
 		if($member){
 			$firstName->setValue($member->FirstName);
@@ -551,12 +602,8 @@ class EventsPage_Controller extends Page_Controller {
 			$email->setValue($member->Email);
 			$phone->setValue($member->PhoneNumber);
 		}
-	
-		$actions = FieldList::create(
-			FormAction::create('doAdd', 'Add')
-		);
-		//Create form
-		$form = Form::create($this, 'AddForm', $fields, $actions, $validator);
+		
+		$form = Form::create($this, 'AddForm', $contentFields, $actions, $validator);
 			
 		return $form;
 	}

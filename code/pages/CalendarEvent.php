@@ -74,6 +74,14 @@ class CalendarEvent extends Page {
 		"ListingImage.CMSThumbnail" => 'Image'
 	);
 	
+	private static $block_frontend_fields = array(
+		"ListingSummaryToggle",
+		"Metadata",
+		"URLSegment",
+		"HideStartAndEndTimes",
+		"HideDatePosted",
+		"MenuTitle"
+	);
 	
 	public function populateDefaults(){
 		parent::populateDefaults();

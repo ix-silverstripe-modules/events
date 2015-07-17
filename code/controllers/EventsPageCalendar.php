@@ -47,12 +47,20 @@ class EventsPageCalendar extends Controller {
 		$time = mktime(null, null, null, $this->month, 1, $this->year);
 		$prev = mktime(null, null, null, $this->month - 1, 1, $this->year);
 		$next = mktime(null, null, null, $this->month + 1, 1, $this->year);
+		
+		// Need to ensure the calendar loads from the correct controller. Get the link of the EventsPage and use that.
+		$eventsPage = EventsPage::get()->first();
+		$link = $this;
+		
+		if($eventsPage) {
+			$link = $eventsPage;
+		}
 
 		return $this->render(array(
 			'MonthName' => date('F', $time),
 			'Year'      => $this->year,
-			'PrevLink'  => $this->Link(sprintf('%s?m=%d&y=%d', $this->name, date('m', $prev), date('Y', $prev))),
-			'NextLink'  => $this->Link(sprintf('%s?m=%d&y=%d', $this->name, date('m', $next), date('Y', $next))),
+			'PrevLink'  => $link->Link(sprintf('%s?m=%d&y=%d', $this->name, date('m', $prev), date('Y', $prev))),
+			'NextLink'  => $link->Link(sprintf('%s?m=%d&y=%d', $this->name, date('m', $next), date('Y', $next))),
 		));
 	}
 

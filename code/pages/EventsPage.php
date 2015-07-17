@@ -535,6 +535,10 @@ class EventsPage_Controller extends Page_Controller {
 			$phone->setValue($member->PhoneNumber);
 		}
 		
+		$this->extend("updateEventAddFields", $contentFields);
+		$this->extend("updateEventAddActions", $actions);
+		$this->extend("updateEventAddValidator", $validator);
+		
 		$form = Form::create($this, 'AddForm', $contentFields, $actions, $validator);
 			
 		return $form;

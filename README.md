@@ -84,7 +84,7 @@ For Static Pagination (ie, the next / prev buttons), you must set the config as 
 	
 Additionally, you must include the pagination code. It is included at the end of NewsList.ss. It is safe to leave both the AJAX and Static pagination template code in as they will only work when activated.
 
-## Page Extension
+### Page Extension
 
 You can include the "EventPageExtension" to the desired Page class to enable functionality of showing the event calendar and upcoming events on the page. A template has been provided "CalendarSidebar" to get you started.
 
@@ -97,3 +97,14 @@ You can include the "EventPageExtension" to the desired Page class to enable fun
 
 A new tab in the CMS will allow you to control the display of the calendar. Be sure to include the template in your template file.
 	<% include CalendarSidebar %>
+
+### Other Extensions
+
+Plenty are provided throughout the module. Including (but not limited to):
+
+* updateEventAddFields
+* updateEventAddActions
+* updateEventAddValidator
+* updateEventsCategories
+* updateEventsPageChildren
+* updateEventCMSFields

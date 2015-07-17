@@ -266,6 +266,7 @@ class CalendarEvent extends Page {
 		if(Versioned::current_stage() == 'Live'){
 			$categories = $categories->filter('Approved', true);
 		}
+		
 		return $categories;
 	}
 	

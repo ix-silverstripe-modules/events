@@ -45,6 +45,9 @@ You can disable certain features in the config.yml of your site.
 
 There are two types of page search types. The "refine" type is for a search box which appears in the sidebar and allows you to refine via start date, end date and category (ex: Strathfield Council). The other type is "filter" and it will show a search box on the top of the events and allow refinement of start date, end date, category and search query (ex: GTCC)
 
+	Op 1: page_search_type: refine
+	Op 2: page_search_type: filter
+
 ### Public Event Adding
 
 You can choose to allow the public to add events to the calendar. First set "enable_public_add_event" in the YML as true and then access the page via /events/add. The public will be able to add the event and then you will receive an email about it. You can choose to delete or publish the event in the CMS.

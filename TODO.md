@@ -2,7 +2,7 @@
 
 ~~1) Event listing - switch between pagination/ajax~~
 
-2) Add the "back to events" functionality just like news
+~~2) Add the "back to events" functionality just like news~~
 
 3) Enable/Disable calendar functionality. Allow calendar to be both in the content/sidebar (an include)
  Hovering over a day in the calendar should show all the events on that day in a qtip.

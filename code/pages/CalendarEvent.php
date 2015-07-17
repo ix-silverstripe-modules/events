@@ -307,7 +307,17 @@ class CalendarEvent_Controller extends Page_Controller {
 		$url 	 = false;
  		$value = Session::get('EventsOffset'.$this->ParentID);
  		
- 		if($value) {
+ 		// check the referrer first. If they came from a filtered page, the back link needs to be formulated a little different
+ 		$referer = $this->request->getHeaders();
+ 		$parseReferer = parse_url($referer["Referer"]);
+
+ 		if($parseReferer['query']) {
+ 			// Get parent
+ 			$parent = $this->Parent;
+ 			$url = $parent->Link("?".$parseReferer['query']."&start=$value".'#'.$this->URLSegment);
+ 		}
+ 		
+ 		if(!$url && $value) {
  			// Get parent
  			$parent = $this->Parent;
  			$url = $parent->Link("?start=$value".'#'.$this->URLSegment);

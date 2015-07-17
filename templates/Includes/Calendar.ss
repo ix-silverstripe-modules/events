@@ -1,1 +1,1 @@
-$Calendar
+$eventcalendar

@@ -89,6 +89,9 @@ You can include the "EventPageExtension" to the desired Page class to enable fun
 	SiteTree:
 		extensions:
 			- 'EventPageExtension'
+	ContentController:
+		extensions:
+			- 'EventPageExtension_Controller'
 
 A new tab in the CMS will allow you to control the display of the calendar. Be sure to include the template in your template file.
 	<% include CalendarSidebar %>

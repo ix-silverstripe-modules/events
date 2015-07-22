@@ -12,7 +12,7 @@
 
 ~~5) Add event form. When a member of the public adds an event, that event is added but is in draft mode - steal this from gtcc~~
 
-6) Add plenty of extension hooks.
+~~6) Add plenty of extension hooks.~~
 
 ### Desirable
 1) Add an event registration page (extends userform). If a checkbox on the event is ticked, then a button on that event links the user to the registration page (where the event url-segment is in the url) This will assign the registration against that event. Look at the jobs module to see how this is done.

@@ -12,7 +12,7 @@ class EventCategory extends DataObject {
 	);
 	
 	private static $has_one = array(
-		'Image' => 'Image'
+		'Image'			 => 'Image'
 	);
 
 	private static $many_many = array(

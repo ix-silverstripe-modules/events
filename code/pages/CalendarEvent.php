@@ -30,6 +30,7 @@ class CalendarEvent extends Page {
 		'SubmitterPhoneNumber'		=> 'Varchar(255)',
 		'HideStartAndEndTimes'		=> 'Boolean',
 		'HideDatePosted'			=> 'Boolean',
+		'EnableRegistrationPage'	=> 'Boolean'
 	);
 	
 	private static $default_sort = '"Start" ASC'; // broke the modelAdmin
@@ -42,6 +43,10 @@ class CalendarEvent extends Page {
 		
 	private static $has_one = array(
 		'CreatedBy' => 'Member'
+	);
+	
+	private static $has_many = array(
+		"Fields"	=> 'EditableFormField'
 	);
 	
 	private static $belongs_many_many = array(
@@ -132,6 +137,12 @@ class CalendarEvent extends Page {
 		
 		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideStartAndEndTimes', 'Hide start and end times'), $configBefore);
 		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideDatePosted', 'Hide date posted'), $configBefore);
+		$fields->addFieldToTab('Root.Main', CheckboxField::create('EnableRegistrationPage', 'Enable visitors to register for event?'), $configBefore);
+		
+		if($this->ID == 0) {
+			$regoinfoField = LiteralField::create('EnableRegistrationPage2', '<span style="color: red; margin-left: 184px;">Please save the event to show configuration options</span>');
+			$fields->addFieldToTab('Root.Main', DisplayLogicWrapper::create($regoinfoField)->displayIf("EnableRegistrationPage")->isChecked()->end(), $configBefore);
+		}
 		
 		$fields->addFieldToTab('Root.Main', TextField::create('Cost', 'Cost (Leave it blank if cost is free)'), $configBefore);
 		
@@ -163,6 +174,11 @@ class CalendarEvent extends Page {
 				ReadonlyField::create('SubmitterEmail', 'Email'),
 				ReadonlyField::create('SubmitterPhoneNumber', 'Phone Number')
 			));
+		}
+		
+		// Show this tab only if the Registration Page has been enabled
+		if($this->EnableRegistrationPage) {
+			$fields->addFieldToTab("Root.RegistrationForm", FieldEditor::create("Fields", 'Fields', "", $this ));
 		}
 		
 		$this->extend('updateEventCMSFields', $fields);
@@ -303,6 +319,8 @@ class CalendarEvent extends Page {
 
 class CalendarEvent_Controller extends Page_Controller {
 	
+	private static $allowed_actions = array('RegistrationForm');
+	
 	public function init () {
 		parent::init ();
 		Requirements::block('timedropdownfield/javascript/TimeDropdownField.js');
@@ -318,12 +336,15 @@ class CalendarEvent_Controller extends Page_Controller {
  		
  		// check the referrer first. If they came from a filtered page, the back link needs to be formulated a little different
  		$referer = $this->request->getHeaders();
- 		$parseReferer = parse_url($referer["Referer"]);
-
- 		if($parseReferer['query']) {
- 			// Get parent
- 			$parent = $this->Parent;
- 			$url = $parent->Link("?".$parseReferer['query']."&start=$value".'#'.$this->URLSegment);
+ 		
+ 		if(isset($referer["Referer"])) {
+	 		$parseReferer = parse_url($referer["Referer"]);
+	
+	 		if(isset($parseReferer['query'])) {
+	 			// Get parent
+	 			$parent = $this->Parent;
+	 			$url = $parent->Link("?".$parseReferer['query']."&start=$value".'#'.$this->URLSegment);
+	 		}
  		}
  		
  		if(!$url && $value) {
@@ -367,6 +388,89 @@ class CalendarEvent_Controller extends Page_Controller {
 			return $PrevNext->Link();
 		}
 	}
+	
+	private function getRegistrationFormFields() {
+		$fields 	= new FieldList();
+
+		if($this->Fields()) {
+			foreach($this->Fields() as $editableField) {
+				// get the raw form field from the editable version
+				$field = $editableField->getFormField();
+				if(!$field) break;
+	
+				// set the error / formatting messages
+				$field->setCustomValidationMessage($editableField->getErrorMessage());
+	
+				// set the right title on this field
+				if($right = $editableField->getSetting('RightTitle')) {
+					$field->setRightTitle($right);
+				}
+	
+				// if this field is required add some
+				if($editableField->Required) {
+					$field->addExtraClass('required');
+	
+					if($identifier = UserDefinedForm::config()->required_identifier) {
+	
+						$title = $field->Title() ." <span class='required-identifier'>". $identifier . "</span>";
+						$field->setTitle($title);
+					}
+				}
+				// if this field has an extra class
+				if($editableField->getSetting('ExtraClass')) {
+					$field->addExtraClass(Convert::raw2att(
+							$editableField->getSetting('ExtraClass')
+					));
+				}
+	
+				// 				// set the values passed by the url to the field
+				// 				$request = $this->getRequest();
+				// 				if($var = $request->getVar($field->name)) {
+				// 					$field->value = Convert::raw2att($var);
+				// 				}
+	
+				$fields->push($field);
+			}
+		}
+		$this->extend('updateRegistrationFormFields', $fields);
+	
+		return $fields;
+	}
+	
+	private function getRequiredFields(FieldList $fields) {
+		$requiredfields = array();
+		
+		foreach($fields as $editableField) {
+			if($editableField->Required) {
+				$requiredfields[] = $editableField->Name;
+			}
+		}
+		
+		return $requiredfields;
+	}
+	
+	public function RegistrationForm() {
+		$fields = $this->getRegistrationFormFields();
+		
+		if($fields) {
+			$required = $this->getRequiredFields($this->Fields());
+			$validator = new RequiredFields($required);
+			
+			$actions = new FieldList(
+					new FormAction('doRegister', 'Submit')
+			);
+			
+			return new Form($this, 'RegistrationForm', $fields, $actions, $validator);
+		}
+		return;
+	}
+	
+	public function doRegister($data, $form) {
+		Debug::show($this->ID);
+		Debug::show($data);
+		die();
+	}
+	
 	
 	
 }

@@ -5,12 +5,26 @@ Name: events
 Events:
   event_fields_before: 'Content'
   enable_sharing: false
-  pagination_type: ajax
+  pagination_type: static
   page_search_type: refine
   enable_public_add_event: true
+  RequiredEventFields:
+    FullName:
+      Title: 'Full Name'
+      Type: EditableTextField
+    EmailAddress:
+      Title: 'Email Address'
+      Type: EditableEmailField
+    ContactNumber:
+      Title: 'Contact Number'
+      Type: EditableNumericField
 
 LeftAndMain:
   menu_groups:
     Events:
       - EventsAdmin
       - ArchivedEventsAdmin
+
+EditableFormField:
+  extensions:
+    - EditableFormFieldExtension

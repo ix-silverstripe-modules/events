@@ -42,7 +42,7 @@ class CalendarEvent extends Page {
 	);
 		
 	private static $has_one = array(
-		'CreatedBy' => 'Member'
+		'CreatedBy' 	=> 'Member'
 	);
 	
 	private static $has_many = array(
@@ -91,11 +91,6 @@ class CalendarEvent extends Page {
 	
 	public function populateDefaults(){
 		parent::populateDefaults();
-		
-// 		$member = Member::currentUser();
-// 		$member = $member ? $member->getName() : "";
-		
-// 		$this->setField('CreatedBy', $member);
 		
 		$this->setField('Start', date('Y-m-d', strtotime('now')));
 		$this->setField('End', date('Y-m-d', strtotime('now')));
@@ -240,7 +235,7 @@ SQL;
 			$export->setExportColumns($columns);
 				
 			$submissions->setConfig($config);
-			$fields->addFieldToTab('Root.RegistrationSubmissions', $submissions);
+			$fields->addFieldToTab('Root.Registrations', $submissions);
 		}
 		
 		$this->extend('updateEventCMSFields', $fields);
@@ -282,7 +277,35 @@ SQL;
 		if (!empty($checkSite) && strpos($checkSite, "http") !== 0){
 			$this->setField('Website', "http://" . $checkSite);
 		}
+				
+	}
+	
+	public function onAfterWrite() {
+		parent::onAfterWrite();
 		
+		// If a submission form is desired, we need to ensure it has the default fields
+		if($this->EnableRegistrationPage) {
+			$forcedFields = Config::inst()->get("Events", "RequiredEventFields");
+			
+			if($forcedFields) {
+				foreach($forcedFields as $fieldname => $field) {
+					$title = $field["Title"];
+					$type = $field["Type"];
+					
+					$checkFields = $this->Fields()->filter(array("Title" => $title));
+					
+					if($checkFields->Count() == 0) {
+						$fieldObj = new $type;
+						$fieldObj->ParentID = $this->ID;
+						$fieldObj->setReadonly = 1;
+						$fieldObj->Name = $field->class . $field->ID;
+						$fieldObj->Title = $title;
+						$fieldObj->write();
+					}
+					
+				}
+			}
+		}
 	}
 	
 	public function googleMapAddress(){
@@ -590,6 +613,8 @@ class CalendarEvent_Controller extends Page_Controller {
 		
 			$submittedFields->push($submittedField);
 		}
+		
+		$this->redirect($this->Link());
 	}
 	
 	

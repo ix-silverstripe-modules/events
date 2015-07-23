@@ -1,17 +1,15 @@
-;jQuery(function($) {
-	
-	$(document).ready(function(){
+(function($) {
+	$(function() {
 		
-		$('a.select-all').live('click', function(){
+		$(document).on('click', 'a.select-all', function(){
 			$(this).closest('fieldset').find(':checkbox').attr('checked', 'checked');
 			return false;
 		})
 		
-		$('a.deselect-all').live('click', function(){
+		$(document).on('click', 'a.deselect-all', function(){
 			$(this).closest('fieldset').find(':checkbox').removeAttr('checked');
 			return false;
 		})
-		
 	});
-	
-}); 
+
+})(jQuery);

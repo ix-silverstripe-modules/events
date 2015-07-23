@@ -129,18 +129,6 @@ class EventPageExtension extends DataExtension {
 			return $forced->map('ID', 'ID')->toArray();
 		}
 	}
-	
-// 	public function contentcontrollerInit() {
-// 		Requirements::css(EVENTCALENDAR_DIR . '/thirdparty/qtip/jquery.qtip-2.0.0.css');
-	
-// 		Requirements::block(THIRDPARTY_DIR . '/jquery/jquery.js');
-// 		Requirements::block(FRAMEWORK_DIR .'/thirdparty/jquery/jquery.js');
-	
-// 		Requirements::combine_files(EVENTCALENDAR_DIR . '.js', array(
-// 		EVENTCALENDAR_DIR . '/javascript/EventsPageCalendar.js',
-// 		EVENTCALENDAR_DIR . '/thirdparty/qtip/jquery.qtip-2.0.0.min.js'
-// 				));
-// 	}
 
 }
 

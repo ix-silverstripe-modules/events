@@ -190,7 +190,8 @@ class EventsPage_Controller extends Page_Controller {
 		'AddForm',
 		'doAdd',
 		'finished',
-		'eventcalendar'
+		'eventcalendar',
+		'search'
 	);
 
 	public function index() {
@@ -209,6 +210,15 @@ class EventsPage_Controller extends Page_Controller {
 		return $this->customise(array(
 			'EventsListTitle' 	=> $customTitle
 		));
+	}
+	
+	public function search() {
+		$vars = $this->request->getVars();
+		
+		$date = "01/".(!empty($vars["Month"]) ? $vars["Month"] : "01") ."/".$vars["Year"];
+		$categories = (!empty($vars["Categories"]) ? implode(".", $vars["Categories"]) : null);;
+		
+		$this->redirect($this->Link("?startd=$date".($categories ? "&types=".$categories : "")));
 	}
 	
 	public function getOffset() {

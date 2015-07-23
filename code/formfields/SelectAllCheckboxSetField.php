@@ -81,8 +81,8 @@ class SelectAllCheckboxSetField extends CheckboxSetField {
 				$options[] = new ArrayData(array(
 						'ID' => $itemID,
 						'Class' => $extraClass,
-						'Name' => "{$this->name}[{$value}]",
-						'Value' => $value,
+						'Name' => "{$this->name}[{$item->URLSegment}]",
+						'Value' => $item->URLSegment,
 						'Title' => $title,
 						'isChecked' => in_array($value, $items) || in_array($value, $this->defaultItems),
 						'isDisabled' => $this->disabled || in_array($value, $this->disabledItems)

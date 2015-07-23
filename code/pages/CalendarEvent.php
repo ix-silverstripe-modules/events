@@ -46,7 +46,8 @@ class CalendarEvent extends Page {
 	);
 	
 	private static $has_many = array(
-		"Fields"	=> 'EditableFormField'
+		"Fields"		=> 'EditableFormField',
+		"Submissions" 	=> "SubmittedForm"
 	);
 	
 	private static $belongs_many_many = array(
@@ -179,6 +180,67 @@ class CalendarEvent extends Page {
 		// Show this tab only if the Registration Page has been enabled
 		if($this->EnableRegistrationPage) {
 			$fields->addFieldToTab("Root.RegistrationForm", FieldEditor::create("Fields", 'Fields', "", $this ));
+			
+			// view the submissions
+			$submissions = new GridField(
+					'Submissions',
+					_t('UserDefinedForm.SUBMISSIONS', 'Submissions'),
+					$this->Submissions()->sort('Created', 'DESC')
+			);
+				
+			// make sure a numeric not a empty string is checked against this int column for SQL server
+			$parentID = (!empty($this->ID)) ? $this->ID : 0;
+				
+			// get a list of all field names and values used for print and export CSV views of the GridField below.
+			$columnSQL = <<<SQL
+SELECT "Name", "Title"
+FROM "SubmittedFormField"
+LEFT JOIN "SubmittedForm" ON "SubmittedForm"."ID" = "SubmittedFormField"."ParentID"
+WHERE "SubmittedForm"."ParentID" = '$parentID'
+ORDER BY "Title" ASC
+SQL;
+			$columns = DB::query($columnSQL)->map();
+				
+			$config = new GridFieldConfig();
+			$config->addComponent(new GridFieldToolbarHeader());
+			$config->addComponent($sort = new GridFieldSortableHeader());
+			$config->addComponent($filter = new UserFormsGridFieldFilterHeader());
+			$config->addComponent(new GridFieldDataColumns());
+			$config->addComponent(new GridFieldEditButton());
+			$config->addComponent(new GridState_Component());
+			$config->addComponent(new GridFieldDeleteAction());
+			$config->addComponent(new GridFieldPageCount('toolbar-header-right'));
+			$config->addComponent($pagination = new GridFieldPaginator(25));
+			$config->addComponent(new GridFieldDetailForm());
+			$config->addComponent($export = new GridFieldExportButton());
+			$config->addComponent($print = new GridFieldPrintButton());
+				
+			/**
+			 * Support for {@link https://github.com/colymba/GridFieldBulkEditingTools}
+			*/
+			if(class_exists('GridFieldBulkManager')) {
+				$config->addComponent(new GridFieldBulkManager());
+			}
+				
+			$sort->setThrowExceptionOnBadDataType(false);
+			$filter->setThrowExceptionOnBadDataType(false);
+			$pagination->setThrowExceptionOnBadDataType(false);
+				
+			// attach every column to the print view form
+			$columns['Created'] = 'Created';
+			$filter->setColumns($columns);
+				
+			// print configuration
+				
+			$print->setPrintHasHeader(true);
+			$print->setPrintColumns($columns);
+				
+			// export configuration
+			$export->setCsvHasHeader(true);
+			$export->setExportColumns($columns);
+				
+			$submissions->setConfig($config);
+			$fields->addFieldToTab('Root.RegistrationSubmissions', $submissions);
 		}
 		
 		$this->extend('updateEventCMSFields', $fields);
@@ -466,9 +528,68 @@ class CalendarEvent_Controller extends Page_Controller {
 	}
 	
 	public function doRegister($data, $form) {
-		Debug::show($this->ID);
-		Debug::show($data);
-		die();
+		Session::set("FormInfo.{$form->FormName()}.data",$data);
+		Session::clear("FormInfo.{$form->FormName()}.errors");
+		
+		// Store the submitted form
+		$submittedForm = Object::create('SubmittedForm');
+		$submittedForm->SubmittedByID = ($id = Member::currentUserID()) ? $id : 0;
+		$submittedForm->ParentID = $this->ID;
+		$submittedForm->write();
+		
+		$submittedFields = new ArrayList();
+		
+		foreach($this->Fields() as $field) {
+				
+			$submittedField = $field->getSubmittedFormField();
+			$submittedField->ParentID = $submittedForm->ID;
+			$submittedField->Name = $field->Name;
+			$submittedField->Title = $field->getField('Title');
+				
+			// save the value from the data
+			if($field->hasMethod('getValueFromData')) {
+				$submittedField->Value = $field->getValueFromData($data);
+			} else {
+				if(isset($data[$field->Name])) {
+					$submittedField->Value = $data[$field->Name];
+				}
+			}
+		
+			if(!empty($data[$field->Name])){
+				if(in_array("EditableFileField", $field->getClassAncestry())) {
+					if(isset($_FILES[$field->Name])) {
+						$foldername = $field->getFormField()->getFolderName();
+		
+						// create the file from post data
+						$upload = new Upload();
+						$file = new File();
+						$file->ShowInSearch = 0;
+						try {
+							$upload->loadIntoFile($_FILES[$field->Name], $file, $foldername);
+						} catch( ValidationException $e ) {
+							$validationResult = $e->getResult();
+							$form->addErrorMessage($field->Name, $validationResult->message(), 'bad');
+							Controller::curr()->redirectBack();
+							return;
+						}
+		
+						// write file to form field
+						$submittedField->UploadedFileID = $file->ID;
+		
+						// attach a file only if lower than 1MB
+						if($file->getAbsoluteSize() < 1024*1024*1){
+							$attachments[] = $file;
+						}
+					}
+				}
+			}
+				
+			$submittedField->extend('onPopulationFromField', $field);
+			
+			$submittedField->write();
+		
+			$submittedFields->push($submittedField);
+		}
 	}
 	
 	

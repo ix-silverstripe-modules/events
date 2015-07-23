@@ -85,6 +85,21 @@ For Static Pagination (ie, the next / prev buttons), you must set the config as 
 	
 Additionally, you must include the pagination code. It is included at the end of NewsList.ss. It is safe to leave both the AJAX and Static pagination template code in as they will only work when activated.
 
+### Event Registration Page
+
+Something here.
+
+	RequiredEventFields:
+	  FullName:
+	    Title: 'Full Name'
+	    Type: EditableTextField
+	  EmailAddress:
+	    Title: 'Email Address'
+	    Type: EditableEmailField
+	  ContactNumber:
+	    Title: 'Contact Number'
+	    Type: EditableNumericField
+
 ### Page Extension
 
 You can include the "EventPageExtension" to the desired Page class to enable functionality of showing the event calendar and upcoming events on the page. A template has been provided "CalendarSidebar" to get you started.

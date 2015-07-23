@@ -22,6 +22,7 @@ Maintainers
 * silverstripe/timedropdownfield
 * silverstripe-australia/addressable
 * silverstripe-australia/grouped-cms-menu
+* userforms
 
 ## Notable Features
 

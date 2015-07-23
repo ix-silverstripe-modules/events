@@ -76,7 +76,6 @@ class EventPageExtension extends DataExtension {
 			->addExtraClass('dropdown');
 		$categoryField = SelectAllCheckboxSetField::create('Categories', 'Categories', EventCategory::get(), $this->owner->getCalendarCategories());
 	
-	
 		$fields = new FieldList($monthField, $yearField, $categoryField);
 	
 		$formAction = new FormAction('search', 'Go');

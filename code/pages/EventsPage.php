@@ -201,10 +201,22 @@ class EventsPage_Controller extends Page_Controller {
 			return $this->renderWith('EventsList');
 		}
 		
-		$customTitle = $this->EventsListTitle;
+		$customTitle = (!empty($this->EventsListTitle) ? $this->EventsListTitle : "Events");
 		
 		if($this->start || $this->end || $this->category > 0 || $this->content){
-			$customTitle = "Search Results";
+			$customTitle = "Showing results ";
+			
+			if($this->typesDL && $this->typesDL->count()){
+				$customTitle .= "in <span>" . implode(",", $this->typesDL->map("Title", "Title")->toArray()) . "</span>";
+			}
+			
+			if($this->start && $this->end){
+				$customTitle .= " between <span>" . $this->start . "</span> and <span>" . $this->end . "</span>";
+			}elseif($this->start){
+				$customTitle .= " after <span>" . $this->start . "</span>";
+			}elseif($this->end){
+				$customTitle .= " before <span>" . $this->end . "</span>";
+			}
 		}
 		
 		return $this->customise(array(

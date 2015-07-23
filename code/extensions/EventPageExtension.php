@@ -3,7 +3,7 @@ class EventPageExtension extends DataExtension {
 	
 	private static $db = array(
 		'ShowCalendar' 		 	=> 'Boolean',
-		'HideMonthJumper' 		=> 'Boolean',
+		'ShowMonthJumper' 		=> 'Boolean',
 		'ShowUpcomingEvents' 	=> 'Boolean',
 		'UpcomingEventsCount' 	=> 'Int'
 	);
@@ -29,7 +29,7 @@ class EventPageExtension extends DataExtension {
 				$this->owner->ForcedCalendarCategories()
 		)->displayIf("ShowCalendar")->isChecked()->end(), $insertBefore);
 
-		$fields->addFieldToTab($tab, CheckboxField::create('HideMonthJumper', 'Hide the month jumper?'), $insertBefore);
+		$fields->addFieldToTab($tab, CheckboxField::create('ShowMonthJumper', 'Show the month jumper?'), $insertBefore);
 
 		$fields->addFieldToTab($tab, CheckboxField::create('ShowUpcomingEvents', 'Show upcoming events?'), $insertBefore);
 		$fields->addFieldToTab($tab, NumericField::create('UpcomingEventsCount', 'How many upcoming events to show in the sidebar?')
@@ -79,7 +79,7 @@ class EventPageExtension extends DataExtension {
 	
 		$fields = new FieldList($monthField, $yearField, $categoryField);
 	
-		$formAction = new FormAction('search', ' ');
+		$formAction = new FormAction('search', 'Go');
 		$formAction->addExtraClass('events-submit');
 	
 		$actions = new FieldList( $formAction);

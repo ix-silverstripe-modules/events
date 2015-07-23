@@ -10,3 +10,5 @@
 	<a href="$Link">$Title</a><br />
 	<% end_loop %>
 <% end_if %>
+
+<% include MonthJumper %>

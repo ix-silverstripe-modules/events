@@ -1,8 +1,6 @@
 <div id="month-navigator" class="calendar-title ui-datepicker-header">
-	<% if not $HideMonthJumper %><a class="calendar-prev ui-datepicker-prev" href="$PrevLink"></a><% end_if %>
-	
-	<% if not $HideMonthJumper %><a class="calendar-next ui-datepicker-next" href="$NextLink"></a><% end_if %>
-	
+	<a class="calendar-prev ui-datepicker-prev" href="$PrevLink"></a>
+	<a class="calendar-next ui-datepicker-next" href="$NextLink"></a>
 	<div class="ui-datepicker-title">$MonthName $Year</div>
 </div>
 

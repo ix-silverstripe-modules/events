@@ -8,6 +8,7 @@ Events:
   pagination_type: static
   page_search_type: refine
   enable_public_add_event: true
+  
   RequiredEventFields:
     FullName:
       Title: 'Full Name'

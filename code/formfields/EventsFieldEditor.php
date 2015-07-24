@@ -4,6 +4,8 @@
  * for saving into a {@link UserDefinedForm}
  *
  * @package userforms
+ * 
+ * ****** THIS IS NOT USED ******
  */
 
 class EventsFieldEditor extends FieldEditor {

@@ -25,6 +25,6 @@
 
 ~~2) Upgrading the calendar functionality so that months directly before and after are loaded in the calendar. If the user clicks to the next month, the month after that is loaded behind the scenes. This should make the loading appear pretty instant.~~
 
-3) Recurring events module continues to work
+~~3) Recurring events module continues to work~~
 
-4) ICS / Add to Calendar function
+~~4) ICS / Add to Calendar function~~

@@ -294,6 +294,7 @@ SQL;
 						$fieldObj->ParentID = $this->ID;
 						$fieldObj->ForcedField = 1;
 						$fieldObj->Title = $title;
+						$fieldObj->Required = 1;
 						$fieldObj->write(); // Write first so the ID is created
 						$fieldObj->Name = $fieldObj->class . $fieldObj->ID;
 						$fieldObj->write();
@@ -400,11 +401,15 @@ SQL;
 
 class CalendarEvent_Controller extends Page_Controller {
 	
-	private static $allowed_actions = array('RegistrationForm', 'finished');
+	private static $allowed_actions = array('index', 'RegistrationForm', 'finished');
 	
 	public function init () {
 		parent::init ();
 		Requirements::block('timedropdownfield/javascript/TimeDropdownField.js');
+	}
+	
+	public function index() {
+		return $this->customise(array('Finished' => false));
 	}
 	
 	public function finished() {

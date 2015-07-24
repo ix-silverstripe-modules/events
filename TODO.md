@@ -19,7 +19,7 @@
 ~~8) Move Block Frontend Fields to YAML.~~
 
 ### Desirable
-1) Add an event registration page (extends userform). If a checkbox on the event is ticked, then a button on that event links the user to the registration page (where the event url-segment is in the url) This will assign the registration against that event. Look at the jobs module to see how this is done.
+~~1) Add an event registration page (extends userform). If a checkbox on the event is ticked, then a button on that event links the user to the registration page (where the event url-segment is in the url) This will assign the registration against that event. Look at the jobs module to see how this is done.~~
 
 2) Upgrading the calendar functionality so that months directly before and after are loaded in the calendar. If the user clicks to the next month, the month after that is loaded behind the scenes. This should make the loading appear pretty instant.
 

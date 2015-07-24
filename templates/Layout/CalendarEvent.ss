@@ -23,6 +23,8 @@
                                                     
                         $Content
                         
+                        <a href="$Link(ics)" class="button">Add to Calendar</a>
+                        
                         <% if $Finished %>Thank you, your response has been recorded. <% end_if %>
                         
                         $RegistrationForm

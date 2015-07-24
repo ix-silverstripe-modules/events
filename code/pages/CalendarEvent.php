@@ -30,8 +30,7 @@ class CalendarEvent extends Page {
 		'SubmitterPhoneNumber'		=> 'Varchar(255)',
 		'HideStartAndEndTimes'		=> 'Boolean',
 		'HideDatePosted'			=> 'Boolean',
-		'EnableRegistrationPage'	=> 'Boolean',
-		'ForcedFieldsCreated'		=> 'Boolean'
+		'EnableRegistrationPage'	=> 'Boolean'
 	);
 	
 	private static $default_sort = '"Start" ASC'; // broke the modelAdmin
@@ -166,6 +165,7 @@ class CalendarEvent extends Page {
 		
 		// Show this tab only if the Registration Page has been enabled
 		if($this->EnableRegistrationPage) {
+			$fields->addFieldToTab("Root.RegistrationForm", LiteralField::create("FE", "Note: Full Name, Email and Phone are required fields. If they are deleted or modified, they will be recreated automatically."));
 			$fields->addFieldToTab("Root.RegistrationForm", FieldEditor::create("Fields", 'Fields', "", $this ));
 			
 			// view the submissions
@@ -297,8 +297,6 @@ SQL;
 					}
 					
 				}
-				
-				$this->ForcedFieldsCreated = 1;
 			}
 		}
 	}

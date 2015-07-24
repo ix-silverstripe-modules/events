@@ -30,7 +30,8 @@ class CalendarEvent extends Page {
 		'SubmitterPhoneNumber'		=> 'Varchar(255)',
 		'HideStartAndEndTimes'		=> 'Boolean',
 		'HideDatePosted'			=> 'Boolean',
-		'EnableRegistrationPage'	=> 'Boolean'
+		'EnableRegistrationPage'	=> 'Boolean',
+		'ForcedFieldsCreated'		=> 'Boolean'
 	);
 	
 	private static $default_sort = '"Start" ASC'; // broke the modelAdmin
@@ -284,9 +285,10 @@ SQL;
 		parent::onAfterWrite();
 		
 		// If a submission form is desired, we need to ensure it has the default fields
-		if($this->EnableRegistrationPage) {
+		if($this->EnableRegistrationPage && !$this->ForcedFieldsCreated) {
 			$forcedFields = Config::inst()->get("Events", "RequiredEventFields");
 			
+			// Only attempt to create the fields if the config exists
 			if($forcedFields) {
 				foreach($forcedFields as $fieldname => $field) {
 					$title = $field["Title"];
@@ -295,15 +297,17 @@ SQL;
 					$checkFields = $this->Fields()->filter(array("Title" => $title));
 					
 					if($checkFields->Count() == 0) {
-						$fieldObj = new $type;
+						$fieldObj = new $type();
 						$fieldObj->ParentID = $this->ID;
-						$fieldObj->setReadonly = 1;
-						$fieldObj->Name = $field->class . $field->ID;
+						$fieldObj->ForcedField = 1;
+						$fieldObj->Name = $fieldObj->class . $fieldObj->ID;
 						$fieldObj->Title = $title;
 						$fieldObj->write();
 					}
 					
 				}
+				
+				$this->ForcedFieldsCreated = 1;
 			}
 		}
 	}
@@ -545,6 +549,10 @@ class CalendarEvent_Controller extends Page_Controller {
 					new FormAction('doRegister', 'Submit')
 			);
 			
+			$this->extend('RegistrationFormFields', $fields);
+			$this->extend('RegistrationFormActions', $actions);
+			$this->extend('RegistrationFormValidator', $validator);
+			
 			return new Form($this, 'RegistrationForm', $fields, $actions, $validator);
 		}
 		return;
@@ -598,23 +606,18 @@ class CalendarEvent_Controller extends Page_Controller {
 		
 						// write file to form field
 						$submittedField->UploadedFileID = $file->ID;
-		
-						// attach a file only if lower than 1MB
-						if($file->getAbsoluteSize() < 1024*1024*1){
-							$attachments[] = $file;
-						}
 					}
 				}
 			}
 				
-			$submittedField->extend('onPopulationFromField', $field);
+			$submittedField->extend('onSubmittedFormField', $field);
 			
 			$submittedField->write();
 		
 			$submittedFields->push($submittedField);
 		}
 		
-		$this->redirect($this->Link());
+		$this->redirect($this->Link("finished"));
 	}
 	
 	

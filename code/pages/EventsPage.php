@@ -512,7 +512,7 @@ class EventsPage_Controller extends Page_Controller {
 		$contentFields = $calendarEventForm->findOrMakeTab('Root.Main')->Fields();
 		
 		// Clean up - remove the listing summary and metadata
-		$blockfields = Config::inst()->get("CalendarEvent", "block_frontend_fields");
+		$blockfields = Config::inst()->get("Events", "block_frontend_fields");
 		
 		if($blockfields) {
 			foreach($blockfields as $field) {

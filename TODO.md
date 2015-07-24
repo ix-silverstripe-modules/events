@@ -21,6 +21,8 @@
 ### Desirable
 ~~1) Add an event registration page (extends userform). If a checkbox on the event is ticked, then a button on that event links the user to the registration page (where the event url-segment is in the url) This will assign the registration against that event. Look at the jobs module to see how this is done.~~
 
+1.1) Set forced fields as read only. I spent an hour on trying to do this but couldn't get far. Need to find somewhere to access the field before it's rendered to set it as readonly since it's only a private static variable on the class.
+
 2) Upgrading the calendar functionality so that months directly before and after are loaded in the calendar. If the user clicks to the next month, the month after that is loaded behind the scenes. This should make the loading appear pretty instant.
 
 3) Recurring events module continues to work

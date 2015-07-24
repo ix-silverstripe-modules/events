@@ -94,6 +94,47 @@ class EventsPage extends Page {
 		return $fields;
 	}
 	
+	public function MenuYears() {
+		$set   = new ArrayList();
+		$year  = DB::getConn()->formattedDatetimeClause('"Date"', '%Y');
+	
+		$query = new SQLQuery();
+	
+		// Modfiy select to add subsite in if it's installed
+		if(class_exists('Subsite')) {
+			$query->setSelect("$year tDate, \"SiteTree\".\"SubsiteID\"")->addFrom('"CalendarEvent"');
+		} else {
+			$query->setSelect("$year tDate")->addFrom('"CalendarEvent"');
+		}
+		$query->addLeftJoin("SiteTree", '"SiteTree"."ID" = "CalendarEvent"."ID"');
+		$query->setGroupBy('"tDate"');
+		$query->setOrderBy('"Date" DESC');
+		if(class_exists('Subsite')) {
+			$query->setWhere('"SiteTree"."SubsiteID" = ' . Subsite::currentSubsiteID());
+		}
+	
+		$years = $query->execute()->column();
+	
+		if (!in_array(date('Y'), $years)) {
+			array_unshift($years, date('Y'));
+		}
+	
+		$selectedYear = Controller::curr()->getRequest()->param('ID');
+	
+		foreach ($years as $year) {
+			$set->push(new ArrayData(array(
+					'Title'    		=> $year,
+					'MenuTitle'    	=> $year,
+					'Link'    		=> $this->Link("archive/" . $year . "/"),
+					'LinkingMode'	=> ($selectedYear && ($selectedYear == $year)) ? 'current' : 'section',
+			)));
+		}
+	
+		$this->extend('updateEvenysPageMenuYears', $set);
+	
+		return $set;
+	}
+	
 	public function Children(){
 		$children = parent::Children();
 	
@@ -127,6 +168,8 @@ class EventsPage_Controller extends Page_Controller {
 	protected $ranges;
 	protected $rangesDL;
 	protected $rangesurl;
+	
+	protected $year;
 	
 	public function init()
 	{
@@ -191,7 +234,14 @@ class EventsPage_Controller extends Page_Controller {
 		'doAdd',
 		'finished',
 		'eventcalendar',
-		'search'
+		'search',
+		'archive'
+	);
+	
+	public static $url_handlers = array(
+			'archive/$Year'		=> 'archive',
+			'archive'			=> 'archive',
+			'' 					=> 'index'
 	);
 
 	public function index() {
@@ -248,6 +298,37 @@ class EventsPage_Controller extends Page_Controller {
 	
 	public function finished() {
 		return $this->customise(array('Finished' => true))->renderWith(array('EventsPage_add', 'EventsPage', 'Page'));
+	}
+	
+	public function archive($request){
+		if(!Config::inst()->get('Events', 'enable_archive')) return $this->httpError(404);
+	
+		$year = (int) $request->param('Year');
+	
+		if($year){
+			$this->year = $year;
+		}else{
+			$this->year = date('Y');
+		}
+	
+		$page = new Page();
+		$page->Title 	 	 = 'archive';
+		$page->MenuTitle 	 = 'archive';
+		$this->extracrumbs[] = $page;
+	
+		$data = array(
+				'Title' 	=> $this->year . ' Events Archive',
+				'Content' 	=> '',
+				'InArchive'	=> true,
+				'NoEventsText' => $this->NoEventsText ? $this->NoEventsText : "<p>Sorry! There are no events to display.</p>"
+		);
+	
+		return $this->customise($data)->renderWith(array('EventsPage_archive', 'NewsHolder', 'Page'));
+	}
+	
+	public function ArchiveEvents(){
+		$events = CalendarEvent::get()->sort('"Start" DESC')->where(DB::getConn()->formattedDatetimeClause('"Start"', '%Y') . " = $this->year" );
+		return GroupedList::create($events);
 	}
 	
 	public function PrintTitle(){

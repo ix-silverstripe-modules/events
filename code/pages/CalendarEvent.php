@@ -383,6 +383,10 @@ SQL;
 		return date('Y', strtotime($this->Start));
 	}
 	
+	public function getDateMonth() {
+		return date('F', strtotime($this->Start));
+	}
+	
 	public function OneDay(){
 		return date('d/m/Y', strtotime($this->Start)) == date('d/m/Y', strtotime($this->End));
 	}

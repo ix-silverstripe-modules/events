@@ -5,6 +5,7 @@ Name: events
 Events:
   event_fields_before: 'Content'
   enable_sharing: false
+  enable_archive: true
   pagination_type: static
   page_search_type: refine
   enable_public_add_event: true

@@ -276,7 +276,7 @@ SQL;
 		parent::onAfterWrite();
 		
 		// If a submission form is desired, we need to ensure it has the default fields
-		if($this->EnableRegistrationPage && !$this->ForcedFieldsCreated) {
+		if($this->EnableRegistrationPage) {
 			$forcedFields = Config::inst()->get("Events", "RequiredEventFields");
 			
 			// Only attempt to create the fields if the config exists
@@ -285,14 +285,17 @@ SQL;
 					$title = $field["Title"];
 					$type = $field["Type"];
 					
+					// Search current fields by name
 					$checkFields = $this->Fields()->filter(array("Title" => $title));
 					
+					// Don't create fields that already exist
 					if($checkFields->Count() == 0) {
 						$fieldObj = new $type();
 						$fieldObj->ParentID = $this->ID;
 						$fieldObj->ForcedField = 1;
-						$fieldObj->Name = $fieldObj->class . $fieldObj->ID;
 						$fieldObj->Title = $title;
+						$fieldObj->write(); // Write first so the ID is created
+						$fieldObj->Name = $fieldObj->class . $fieldObj->ID;
 						$fieldObj->write();
 					}
 					

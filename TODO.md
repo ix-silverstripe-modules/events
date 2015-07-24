@@ -23,7 +23,7 @@
 
 1.1) Set forced fields as read only. I spent an hour on trying to do this but couldn't get far. Need to find somewhere to access the field before it's rendered to set it as readonly since it's only a private static variable on the class.
 
-2) Upgrading the calendar functionality so that months directly before and after are loaded in the calendar. If the user clicks to the next month, the month after that is loaded behind the scenes. This should make the loading appear pretty instant.
+~~2) Upgrading the calendar functionality so that months directly before and after are loaded in the calendar. If the user clicks to the next month, the month after that is loaded behind the scenes. This should make the loading appear pretty instant.~~
 
 3) Recurring events module continues to work
 

@@ -340,7 +340,7 @@ SQL;
 	
 	public function LoadAddress(){
 		if($this->Address && $this->Suburb && $this->State) 
-			return $this->Address.', '.$this->Suburb.', '.$this->State;
+			return $this->Address.', '.$this->Suburb.', '.$this->State.' '.$this->Postcode;
 
 		return false;
 	}
@@ -401,7 +401,7 @@ SQL;
 
 class CalendarEvent_Controller extends Page_Controller {
 	
-	private static $allowed_actions = array('index', 'RegistrationForm', 'finished');
+	private static $allowed_actions = array('index', 'RegistrationForm', 'finished', 'ics');
 	
 	public function init () {
 		parent::init ();
@@ -414,6 +414,38 @@ class CalendarEvent_Controller extends Page_Controller {
 	
 	public function finished() {
 		return $this->customise(array('Finished' => true))->renderWith(array('CalendarEvent', 'Page'));
+	}
+	
+	public function ics() {
+		$timezone = date_default_timezone_get();
+
+		$this->getResponse()->addHeader('Cache-Control','private');
+		$this->getResponse()->addHeader('Content-Description','File Transfer');
+		$this->getResponse()->addHeader('Content-Type','text/calendar');
+		$this->getResponse()->addHeader('Content-Transfer-Encoding','binary');
+		
+		if(stristr($_SERVER['HTTP_USER_AGENT'], "MSIE")) {
+			$this->getResponse()->addHeader("Content-disposition","filename=event.ics; attachment;");
+		}
+		else {
+			$this->getResponse()->addHeader("Content-disposition","attachment; filename=event.ics");
+		}
+		$result = trim(strip_tags($this->customise(array(
+		'HOST' => "IRXICS",
+		'START' => $timezone.':'.$this->obj('Start')->Format('Ymd\THis\Z'),
+		'END' => $timezone.':'.$this->obj('End')->Format('Ymd\THis\Z'),
+		'URL' => $this->AbsoluteLink(),
+		'SUMMARY' => $this->Title,
+		'DESC' => $this->Content,
+		'LOCATION' => $this->LoadAddress(),
+		'NOW' => $timezone.':'.date('Ymd\THis\Z', time()),
+		'ID' => $this->ID
+		))->renderWith(array('ics'))));
+		return $result;
+	}
+	
+	function escapeString($string) {
+		return preg_replace('/([\,;])/','\\\$1', $string);
 	}
 	
 	public function ShareLinksEnabled() {
@@ -542,7 +574,7 @@ class CalendarEvent_Controller extends Page_Controller {
 	public function RegistrationForm() {
 		$fields = $this->getRegistrationFormFields();
 		
-		if($fields) {
+		if($fields->count()) {
 			$required = $this->getRequiredFields($this->Fields());
 			$validator = new RequiredFields($required);
 			

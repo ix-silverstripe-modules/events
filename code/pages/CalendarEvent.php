@@ -408,11 +408,15 @@ SQL;
 
 class CalendarEvent_Controller extends Page_Controller {
 	
-	private static $allowed_actions = array('RegistrationForm');
+	private static $allowed_actions = array('RegistrationForm', 'finished');
 	
 	public function init () {
 		parent::init ();
 		Requirements::block('timedropdownfield/javascript/TimeDropdownField.js');
+	}
+	
+	public function finished() {
+		return $this->customise(array('Finished' => true))->renderWith(array('CalendarEvent', 'Page'));
 	}
 	
 	public function ShareLinksEnabled() {

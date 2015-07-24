@@ -27,4 +27,6 @@
 
 ~~3) Recurring events module continues to work~~
 
+3.1) Change recurring events module to have a blacklist so submission relationships aren't cloned
+
 ~~4) ICS / Add to Calendar function~~

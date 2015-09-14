@@ -26,8 +26,8 @@
 	"require" : {
 		"silverstripe/framework" : "~3.1.13",
 		"silverstripe/cms" : "~3.1.13",
-		"silverstripe-modules/versionedmodeladmin" : "~1.0.0",
-		"silverstripe-modules/listingsummary" : "~1.1.0",
+		"silverstripe-modules/versionedmodeladmin" : "1.0.*",
+		"silverstripe-modules/listingsummary" : "1.1.*",
 		"micschk/silverstripe-excludechildren" : "1.1",
 		"tractorcow/silverstripe-colorpicker" : "dev-master#931454b672a5d9e273aebb6da49c369ee90485f0",
 		"silverstripe/timedropdownfield" : "dev-master#bda13f4aa9c703a48a18db7b11b98aa0e6a51e08",

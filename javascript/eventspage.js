@@ -15,7 +15,7 @@
 					url: me.attr('href'),
 					success: function(data) {
 						me.remove();
-						$('#events-container').append(data);
+						$('#event-calendar-events').append(data);
 						fetching = false;
 						history.pushState(null, null, me.attr('href'));
 					}

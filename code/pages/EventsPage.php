@@ -248,7 +248,7 @@ class EventsPage_Controller extends Page_Controller {
 		
 		if(Director::is_ajax()) {
 			$this->response->addHeader("Vary", "Accept"); // This will enable pushState to work correctly
-			return $this->renderWith('EventsList');
+			return $this->renderWith('EventList');
 		}
 		
 		$customTitle = (!empty($this->EventsListTitle) ? $this->EventsListTitle : "Events");

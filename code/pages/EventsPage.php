@@ -170,6 +170,8 @@ class EventsPage_Controller extends Page_Controller {
 	protected $rangesurl;
 	
 	protected $year;
+	protected $month;
+	protected $day;
 	
 	public function init()
 	{
@@ -225,6 +227,13 @@ class EventsPage_Controller extends Page_Controller {
 			$this->types 	= implode(",", $types->map("ID", "ID")->toArray());
 		}
 		
+		if($this->start){
+			$date = new DateTime($this->start);
+			$curr = $date->getTimestamp();
+			$this->day = date('d', $curr);
+			$this->month = date('m', $curr);
+			$this->year = date('Y', $curr);
+		}
 	}
 
 	private static $allowed_actions = array(
@@ -375,6 +384,10 @@ class EventsPage_Controller extends Page_Controller {
 	public function AllEvents(){
 	
 		$events = CalendarEvent::get();
+		
+// 		if($this->SubsiteID == 0){
+// 			$events = $events->setDataQueryParam('Subsite.filter' , false);
+// 		}
 	
 		if($this->start){
 			$startAu = str_replace('/', '-', $this->start);

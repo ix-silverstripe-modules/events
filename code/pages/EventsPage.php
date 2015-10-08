@@ -376,23 +376,19 @@ class EventsPage_Controller extends Page_Controller {
 	
 		$events = CalendarEvent::get();
 	
-// 		if($this->SubsiteID == 0){
-// 			$events = $events->setDataQueryParam('Subsite.filter' , false);
-// 		}
-	
 		if($this->start){
 			$startAu = str_replace('/', '-', $this->start);
 			$startAu = date('Y-m-d', strtotime($startAu));
-			$events = $events->filterAny(array('Start:GreaterThan' => $startAu, 'End:GreaterThan' => $startAu));
+			$events = $events->filter(array('Start:LessThanOrEqual' => $startAu, 'End:GreaterThanOrEqual' => $startAu));
+			
 		}else{
-			$events = $events->filter(array('End:GreaterThan' => date('Y-m-d H:i:s')));
+			$events = $events->filter(array('Start:LessThanOrEqual' => date('Y-m-d H:i:s'), 'End:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
 		}
 	
 		if($this->end){
 			//we need to add one day so that end date is included
-			$endPlus = str_replace('/', '-', $this->end);
-			$endPlus = date('Y-m-d', strtotime($endPlus . "+1 day"));
-			$events	 = $events->filter(array('End:LessThan' => $endPlus));
+			$endAu = str_replace('/', '-', $this->end);
+			$events	 = $events->filter(array('End:GreaterThanOrEqual' => $endAu));
 		}
 	
 		if($this->searchQuery){

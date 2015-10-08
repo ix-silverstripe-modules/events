@@ -395,7 +395,7 @@ class EventsPage_Controller extends Page_Controller {
 			$events = $events->filter(array('Start:LessThanOrEqual' => $startAu, 'End:GreaterThanOrEqual' => $startAu));
 			
 		}else{
-			$events = $events->filter(array('Start:LessThanOrEqual' => date('Y-m-d H:i:s'), 'End:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
+			$events = $events->filter(array('Start:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
 		}
 	
 		if($this->end){

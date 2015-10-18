@@ -96,7 +96,7 @@ class EventsPage extends Page {
 	
 	public function MenuYears() {
 		$set   = new ArrayList();
-		$year  = DB::getConn()->formattedDatetimeClause('"Date"', '%Y');
+		$year  = DB::getConn()->formattedDatetimeClause('"Start"', '%Y');
 	
 		$query = new SQLQuery();
 	
@@ -108,7 +108,7 @@ class EventsPage extends Page {
 		}
 		$query->addLeftJoin("SiteTree", '"SiteTree"."ID" = "CalendarEvent"."ID"');
 		$query->setGroupBy('"tDate"');
-		$query->setOrderBy('"Date" DESC');
+		$query->setOrderBy('"tDate" DESC');
 		if(class_exists('Subsite')) {
 			$query->setWhere('"SiteTree"."SubsiteID" = ' . Subsite::currentSubsiteID());
 		}

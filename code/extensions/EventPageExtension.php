@@ -16,14 +16,17 @@ class EventPageExtension extends DataExtension {
 			'UpcomingEventsCount' 	=> 3
 	);
 	
-	public function IRXupdateCMSFields(FieldSet &$fields, $tab = 'Root.SideBar', $insertBefore = '') {
+	public function IRXupdateCMSFields(FieldSet &$fields) {
+
+		$tab = 'Root.SideBar';
+		$insertBefore = '';
 
 		$fields->addFieldToTab($tab, HeaderField::create('EventOptions', 'Event Options'), $insertBefore);
 		
 		$fields->addFieldToTab($tab, CheckboxField::create('ShowCalendar', 'Show the calendar?'), $insertBefore);
 		$fields->addFieldToTab($tab, CheckboxSetField::create(
 				'ForcedCalendarCategories',
-				'Only show events belonging to the following categories in the calendar',
+				'Restrict to these categories',
 				EventCategory::get(),
 				$this->owner->ForcedCalendarCategories()
 		)->displayIf("ShowCalendar")->isChecked()->end(), $insertBefore);

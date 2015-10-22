@@ -389,16 +389,21 @@ class EventsPage_Controller extends Page_Controller {
 			$events = $events->sort("\"Start\" $sort");
 		}
 		
+		
 // 		if($this->SubsiteID == 0){
 // 			$events = $events->setDataQueryParam('Subsite.filter' , false);
 // 		}
+
+		$toreturn = null;
+
+		$toreturn = $this->PopulateEvents($toreturn, $events);
 		
-		return $events;
+		return $toreturn;
 	}
 	
 	public function Events($sort=null){
 		
-		$events = $this->AllEvents();
+		$events = CalendarEvent::get();
 		$sort = Convert::raw2sql($sort);
 		if($sort == "ASC" || $sort == "DESC"){
 			$events = $events->sort("\"Start\" $sort");
@@ -454,29 +459,35 @@ class EventsPage_Controller extends Page_Controller {
 		
 		$toreturn = null;
 		
+		$toreturn = $this->PopulateEvents($toreturn, $events);
+		
+		return $toreturn;
+	}
+	
+	public function PopulateEvents($toreturn, DataList &$events){
 		$paginationType = Config::inst()->get('Events', 'pagination_type');
 		
 		if($paginationType == "ajax") {
 			$startVar = $this->request->getVar("start");
-				
+		
 			if($startVar && !Director::is_ajax()) { // Only apply this when the user is returning from the article OR if they were linked here
 				$toload = ($startVar / $this->PaginationLimit); // What page are we at?
 				$limit = (($toload + 1) * $this->PaginationLimit); // Need to add 1 so we always load the first page as well (articles 0 to 5)
-			
+					
 				$list = $events->limit($limit, 0);
 				$next = $limit;
 			} else {
 				$offset = $this->getOffset();
 				$limit = $this->PaginationLimit;
-			
+					
 				$list = $events->limit($limit, $offset);
 				$next = $offset + $this->PaginationLimit;
 			}
-				
+		
 			$all_news_count 	= $events->count();
 			$this->MoreEvents 	= ($next < $all_news_count);
 			$this->MoreLink 	= HTTP::setGetVar("start", $next);
-				
+		
 			$toreturn = $list;
 		} else {
 			$toreturn = PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);

@@ -381,29 +381,44 @@ class EventsPage_Controller extends Page_Controller {
 		return $categories;
 	}
 	
-	public function AllEvents(){
+	public function AllEvents($sort=null){
 	
-		$events = CalendarEvent::get();
+		$events = CalendarEvent::get()->sort('"Start" DESC');
+		$sort = Convert::raw2sql($sort);
+		if($sort == "ASC" || $sort == "DESC"){
+			$events = $events->sort("\"Start\" $sort");
+		}
 		
 // 		if($this->SubsiteID == 0){
 // 			$events = $events->setDataQueryParam('Subsite.filter' , false);
 // 		}
+		
+		return $events;
+	}
 	
+	public function Events($sort=null){
+		
+		$events = $this->AllEvents();
+		$sort = Convert::raw2sql($sort);
+		if($sort == "ASC" || $sort == "DESC"){
+			$events = $events->sort("\"Start\" $sort");
+		}
+		
 		if($this->start){
 			$startAu = str_replace('/', '-', $this->start);
 			$startAu = date('Y-m-d', strtotime($startAu));
 			$events = $events->filter(array('Start:LessThanOrEqual' => $startAu, 'End:GreaterThanOrEqual' => $startAu));
-			
+				
 		}else{
 			$events = $events->filter(array('Start:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
 		}
-	
+		
 		if($this->end){
 			//we need to add one day so that end date is included
 			$endAu = str_replace('/', '-', $this->end);
 			$events	 = $events->filter(array('End:GreaterThanOrEqual' => $endAu));
 		}
-	
+		
 		if($this->searchQuery){
 			$eventTable = 'SiteTree';
 			if(Versioned::current_stage() == 'Live'){
@@ -411,7 +426,7 @@ class EventsPage_Controller extends Page_Controller {
 			}
 			$events = $events->where("\"$eventTable\".\"Title\" LIKE '%" . $this->searchQuery . "%' OR \"$eventTable\".\"Content\" LIKE '%" . $this->searchQuery . "%'");
 		}
-	
+		
 		if($this->category){
 			$eventTable = 'CalendarEvent';
 			$extraWhere = "";
@@ -420,8 +435,8 @@ class EventsPage_Controller extends Page_Controller {
 				$extraWhere = ' AND "EventCategory_Events"."Approved" = 1 ';
 			}
 			$str  = "(" . $this->category . ")" ;
-			
-	
+				
+		
 			$events = $events->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str . $extraWhere . ')');
 		}
 		
@@ -433,16 +448,10 @@ class EventsPage_Controller extends Page_Controller {
 				// 				$extraWhere = ' AND "EventCategory_Events"."Approved" = 1 ';
 			}
 			$str  = "(" . $this->types . ")" ;
-				
+		
 			$events = $events->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str . $extraWhere . ')');
 		}
 		
-		return $events;
-	}
-	
-	public function Events(){
-		
-		$events = $this->AllEvents();
 		$toreturn = null;
 		
 		$paginationType = Config::inst()->get('Events', 'pagination_type');

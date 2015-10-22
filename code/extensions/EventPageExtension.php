@@ -16,15 +16,17 @@ class EventPageExtension extends DataExtension {
 			'UpcomingEventsCount' 	=> 3
 	);
 	
-	public function IRXupdateCMSFields(FieldSet &$fields, $tab = 'Root.SideBar', $insertBefore = 'PageBannersHeading') {
-		$tab = ($tab ? $tab : 'Root.SideBar');
+	public function IRXupdateCMSFields(FieldSet &$fields) {
+
+		$tab = 'Root.SideBar';
+		$insertBefore = '';
 
 		$fields->addFieldToTab($tab, HeaderField::create('EventOptions', 'Event Options'), $insertBefore);
 		
 		$fields->addFieldToTab($tab, CheckboxField::create('ShowCalendar', 'Show the calendar?'), $insertBefore);
 		$fields->addFieldToTab($tab, CheckboxSetField::create(
 				'ForcedCalendarCategories',
-				'Only show events belonging to the following categories in the calendar',
+				'Restrict to these categories',
 				EventCategory::get(),
 				$this->owner->ForcedCalendarCategories()
 		)->displayIf("ShowCalendar")->isChecked()->end(), $insertBefore);
@@ -32,7 +34,7 @@ class EventPageExtension extends DataExtension {
 		$fields->addFieldToTab($tab, CheckboxField::create('ShowMonthJumper', 'Show the month jumper?'), $insertBefore);
 
 		$fields->addFieldToTab($tab, CheckboxField::create('ShowUpcomingEvents', 'Show upcoming events?'), $insertBefore);
-		$fields->addFieldToTab($tab, NumericField::create('UpcomingEventsCount', 'How many upcoming events to show in the sidebar?')
+		$fields->addFieldToTab($tab, NumericField::create('UpcomingEventsCount', 'How many upcoming events?')
 				->displayIf('ShowUpcomingEvents')->isChecked()->end(), $insertBefore);
 		
 		return $fields;

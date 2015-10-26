@@ -400,7 +400,7 @@ class EventsPage_Controller extends Page_Controller {
 		return $toreturn;
 	}
 	
-	public function Events($sort=null){
+	public function Events($sort=null, $futureEvents=true){
 		
 		$events = CalendarEvent::get();
 		$sort = Convert::raw2sql($sort);
@@ -420,7 +420,7 @@ class EventsPage_Controller extends Page_Controller {
 				$startAu = str_replace('/', '-', $this->start);
 				$startAu = date('Y-m-d', strtotime($startAu));
 				$events = $events->filterAny(array('Start:GreaterThanOrEqual' => $startAu, 'End:GreaterThanOrEqual' => $startAu));
-			}else{
+			}elseif($futureEvents){
 				$events = $events->filter(array('Start:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
 			}
 			

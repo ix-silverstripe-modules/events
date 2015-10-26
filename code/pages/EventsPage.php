@@ -491,12 +491,12 @@ class EventsPage_Controller extends Page_Controller {
 				$next = $offset + $this->PaginationLimit;
 			}
 		
-			$all_news_count 	= $events->count();
-			$this->MoreEvents 	= ($next < $all_news_count);
-			$this->MoreLink 	= HTTP::setGetVar("start", $next);
-		
-			$toreturn = $list;
+			$this->AllEventsCount 	= $events->count();
+			$this->MoreEvents 		= ($next < $this->AllEventsCount);
+			$this->MoreLink 		= HTTP::setGetVar("start", $next);
+			$toreturn 				= $list;
 		} else {
+			$this->AllEventsCount 	= $events->count();
 			$toreturn = PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);
 		}
 		

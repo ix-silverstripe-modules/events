@@ -226,13 +226,12 @@ class EventsPage_Controller extends Page_Controller {
 			$this->typesDL 	= $types;
 			$this->types 	= implode(",", $types->map("ID", "ID")->toArray());
 		}
-		
-		if($this->start){
-			$date = new DateTime($this->start);
-			$curr = $date->getTimestamp();
-			$this->day = date('d', $curr);
-			$this->month = date('m', $curr);
-			$this->year = date('Y', $curr);
+
+		if($this->start && $this->end && $this->start == $this->end){
+			$time = strtotime($this->start);
+			$this->day = date('d', $time);
+			$this->month = date('m', $time);
+			$this->year = date('Y', $time);
 		}
 	}
 
@@ -409,19 +408,27 @@ class EventsPage_Controller extends Page_Controller {
 			$events = $events->sort("\"Start\" $sort");
 		}
 		
-		if($this->start){
-			$startAu = str_replace('/', '-', $this->start);
-			$startAu = date('Y-m-d', strtotime($startAu));
-			$events = $events->filter(array('Start:LessThanOrEqual' => $startAu, 'End:GreaterThanOrEqual' => $startAu));
-				
+		if(!empty($this->day)){
+			$where = sprintf(
+				'"Start" < \'%s\' AND "End" > \'%s\'',
+				date('Y-m-d H:i:s', mktime(0, 0, 0, $this->month, $this->day + 1, $this->year)),
+				date('Y-m-d H:i:s', mktime(0, 0, -1, $this->month, $this->day, $this->year))
+			);
+			$events = $events->where($where);
 		}else{
-			$events = $events->filter(array('Start:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
-		}
-		
-		if($this->end){
-			//we need to add one day so that end date is included
-			$endAu = str_replace('/', '-', $this->end);
-			$events	 = $events->filter(array('End:GreaterThanOrEqual' => $endAu));
+			if($this->start){
+				$startAu = str_replace('/', '-', $this->start);
+				$startAu = date('Y-m-d', strtotime($startAu));
+				$events = $events->filterAny(array('Start:GreaterThanOrEqual' => $startAu, 'End:GreaterThanOrEqual' => $startAu));
+			}else{
+				$events = $events->filter(array('Start:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
+			}
+			
+			if($this->end){
+				//we need to add one day so that end date is included
+				$endAu = str_replace('/', '-', $this->end);
+				$events	 = $events->filter(array('End:LessThanOrEqual' => $endAu));
+			}
 		}
 		
 		if($this->searchQuery){

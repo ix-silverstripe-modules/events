@@ -9,6 +9,7 @@ Events:
   pagination_type: static
   page_search_type: refine
   enable_public_add_event: true
+  enable_event_registration: false
   block_frontend_fields:
     - ListingSummaryToggle
     - Metadata

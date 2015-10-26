@@ -124,12 +124,16 @@ class CalendarEvent extends Page {
 		
 		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideStartAndEndTimes', 'Hide start and end times'), $configBefore);
 		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideDatePosted', 'Hide date posted'), $configBefore);
-		$fields->addFieldToTab('Root.Main', CheckboxField::create('EnableRegistrationPage', 'Enable visitors to register for event?'), $configBefore);
 		
-		if($this->ID == 0) {
-			$regoinfoField = LiteralField::create('EnableRegistrationPage2', '<span style="color: red; margin-left: 184px;">Please save the event to show configuration options</span>');
-			$fields->addFieldToTab('Root.Main', DisplayLogicWrapper::create($regoinfoField)->displayIf("EnableRegistrationPage")->isChecked()->end(), $configBefore);
+		if($this->config()->enable_event_registration){
+			$fields->addFieldToTab('Root.Main', CheckboxField::create('EnableRegistrationPage', 'Enable visitors to register for event?'), $configBefore);
+			
+			if($this->ID == 0) {
+				$regoinfoField = LiteralField::create('EnableRegistrationPage2', '<span style="color: red; margin-left: 184px;">Please save the event to show configuration options</span>');
+				$fields->addFieldToTab('Root.Main', DisplayLogicWrapper::create($regoinfoField)->displayIf("EnableRegistrationPage")->isChecked()->end(), $configBefore);
+			}
 		}
+		
 		
 		$fields->addFieldToTab('Root.Main', TextField::create('Cost', 'Cost (Leave it blank if cost is free)'), $configBefore);
 		

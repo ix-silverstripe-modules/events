@@ -8,12 +8,12 @@ class EventsAdmin extends VersionedModelAdmin {
 	private static $menu_icon = 'events/images/icons/calendar_icon.png';
 	
 	
-	public static $title       = 'Events';
-	public static $menu_title  = 'Upcoming';
-	public static $url_segment = 'events';
+	private static $title       = 'Events';
+	private static $menu_title  = 'Upcoming';
+	private static $url_segment = 'events';
 
-	public static $managed_models  = array('CalendarEvent', 'EventCategory');
-	public static $model_importers = array();
+	private static $managed_models  = array('CalendarEvent', 'EventCategory');
+	private static $model_importers = array();
 
 	public function init() {
 		parent::init();

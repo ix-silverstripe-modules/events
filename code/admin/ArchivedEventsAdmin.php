@@ -13,7 +13,7 @@ class ArchivedEventsAdmin extends VersionedModelAdmin {
 	
 	public function getList() {
 		$list = parent::getList();
-		$list = $list->filter(array('Start:LessThan' => date('Y-m-d H:i:s')));
+		$list = $list->filter(array('End:LessThan' => date('Y-m-d H:i:s')));
 		$list = $list->sort("Start DESC");
 		return $list;
 	}
@@ -23,7 +23,8 @@ class ArchivedEventsAdmin extends VersionedModelAdmin {
 	
 		if($this->modelClass == 'CalendarEvent') {
 			$gridField = $form->Fields()->fieldByName($this->sanitiseClassName($this->modelClass));
-			$gridField->getConfig()->removeComponentsByType('GridFieldAddNewButton');  
+			//$gridField->getConfig()->removeComponentsByType('GridFieldAddNewButton');
+			$gridField->setTitle('Archived Events');
 		} 
 	
 		return $form;

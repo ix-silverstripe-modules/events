@@ -416,14 +416,15 @@ class EventsPage_Controller extends Page_Controller {
 			);
 			$events = $events->where($where);
 		}else{
-			if($this->start){
-				$startAu = str_replace('/', '-', $this->start);
-				$startAu = date('Y-m-d', strtotime($startAu));
-				$events = $events->filterAny(array('Start:GreaterThanOrEqual' => $startAu, 'End:GreaterThanOrEqual' => $startAu));
-			}elseif($futureEvents){
-				$events = $events->filter(array('Start:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
+			if($futureEvents){
+				$events = $events->filter(array('End:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
+			}else{
+				if($this->start){
+					$startAu = str_replace('/', '-', $this->start);
+					$startAu = date('Y-m-d', strtotime($startAu));
+					$events = $events->filterAny(array('Start:GreaterThanOrEqual' => $startAu, 'End:GreaterThanOrEqual' => $startAu));
+				}			
 			}
-			
 			if($this->end){
 				//we need to add one day so that end date is included
 				$endAu = str_replace('/', '-', $this->end);

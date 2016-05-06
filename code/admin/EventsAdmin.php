@@ -43,7 +43,7 @@ class EventsAdmin extends VersionedModelAdmin {
 			$params = $this->request->requestVar('q'); // use this to access search parameters
 			
 // 			$list = $list->filter(array('Start:GreaterThan' => date('Y-m-d H:i:s', strtotime("05-11-2014")), 'LegacyID' => 0));
-			$list = $list->filter(array('Start:GreaterThan' => date('Y-m-d H:i:s')));
+			$list = $list->filter(array('End:GreaterThan' => date('Y-m-d H:i:s')));
 			$list = $list->leftJoin('CalendarEvent', '"SiteTree"."ID" = "EventsModelAdmin"."ID"', "EventsModelAdmin");
 			$list = $list->sort('"EventsModelAdmin"."Start"');
 			
@@ -65,10 +65,11 @@ class EventsAdmin extends VersionedModelAdmin {
 	
 	public function getEditForm($id = null, $fields = null) {
 		$form = parent::getEditForm($id, $fields);
-	
+		$gridField = $form->Fields()->fieldByName($this->sanitiseClassName($this->modelClass));
 		if($this->modelClass == 'EventCategory') {
-			$gridField = $form->Fields()->fieldByName($this->sanitiseClassName($this->modelClass));
-			$gridField->getConfig()->addComponent(new GridFieldOrderableRows('Sort')); //GridFieldSortableRows GridFieldOrderableRows
+			$gridField->getConfig()->addComponent(new GridFieldOrderableRows('Sort'));
+		} else {
+			$gridField->setTitle('Upcoming Events');
 		}
 	
 		return $form;

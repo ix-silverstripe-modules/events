@@ -34,7 +34,7 @@ class CalendarEvent extends Page {
 	);
 	
 	private static $default_sort = '"Start" ASC'; // broke the modelAdmin
-
+	private static $better_buttons_actions = array ( 'replicate' );
 	private static $defaults = array(
 		'ShowListingImageOnPage' => true,
 		'ShowShareIcons'		 => true,
@@ -253,7 +253,31 @@ SQL;
 	public function getCMSValidator() {
 		return new RequiredFields('Title', 'Start', 'End');
 	}
-
+	
+	public function replicate($action, $controller, $request) {
+		$clone = parent::duplicate(false);
+		$clone->Created = date("Y-m-d H:i:s");
+		$clone->Title = "Copy of ".$clone->Title;
+		$clone->write();
+	
+		$action->setRedirectURL(
+			$controller->getEditLink($clone->ID)
+		);
+	
+		return "Successfully copied.";
+	}
+	
+	public function getBetterButtonsUtils() {
+		if( !class_exists('BetterButtonDataObject') ) return false;
+		$fields = parent::getBetterButtonsUtils();
+		if( !$this->isNew() ){
+			$fields->push(
+				BetterButtonCustomAction::create('replicate', 'Make a copy')
+			);
+		}
+		return $fields;
+	}
+	
 	public function onBeforeWrite(){
 		parent::onBeforeWrite();
 		

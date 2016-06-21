@@ -539,7 +539,7 @@ class CalendarEvent_Controller extends Page_Controller {
 			->first();
 	
 		if ($PrevNext){
-			return $PrevNext->Link();
+			return $PrevNext;
 		}
 	}
 	

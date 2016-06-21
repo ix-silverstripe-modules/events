@@ -33,6 +33,7 @@ Events:
 LeftAndMain:
   menu_groups:
     Events:
+      icon: 'eventsadmin'
       - EventsAdmin
       - ArchivedEventsAdmin
 

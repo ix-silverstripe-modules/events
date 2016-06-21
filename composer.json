@@ -24,16 +24,16 @@
 		}
 	],
 	"require" : {
-		"silverstripe/framework" : "~3.1.13",
-		"silverstripe/cms" : "~3.1.13",
-		"silverstripe-modules/versionedmodeladmin" : "1.0.*",
+		"silverstripe/framework" : ">=3.1.13",
+		"silverstripe/cms" : ">=3.1.13",
+		"silverstripe-modules/versionedmodeladmin" : "*",
 		"silverstripe-modules/listingsummary" : "*",
 		"micschk/silverstripe-excludechildren" : "*",
 		"tractorcow/silverstripe-colorpicker" : "dev-master#931454b672a5d9e273aebb6da49c369ee90485f0",
 		"silverstripe/timedropdownfield" : "dev-master#bda13f4aa9c703a48a18db7b11b98aa0e6a51e08",
-		"silverstripe-australia/addressable" : "1.0.0",
+		"silverstripe-australia/addressable" : "*",
 		"silverstripe-australia/grouped-cms-menu" : "2.1.1",
-		"silverstripe/userforms" : "2.0.10"
+		"silverstripe/userforms" : "*"
 	},
 	"extra" : {
 		"installer-name" : "events"

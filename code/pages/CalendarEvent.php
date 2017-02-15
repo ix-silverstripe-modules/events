@@ -255,9 +255,13 @@ SQL;
 	}
 	
 	public function replicate($action, $controller, $request) {
-		$clone = parent::duplicate(false);
+		$className = $this->class;
+		$clone = new $className( $this->toMap(), false, $this->model );
+		$clone->ID = 0;
+		$clone->invokeWithExtensions('onBeforeDuplicate', $this, false);
 		$clone->Created = date("Y-m-d H:i:s");
 		$clone->Title = "Copy of ".$clone->Title;
+		$clone->invokeWithExtensions('onAfterDuplicate', $this, false);
 		$clone->write();
 	
 		$action->setRedirectURL(

@@ -1,6 +1,6 @@
 (function($) {
+	
 	$(function() {
-
 		var fetching = false;
 		
 		$(document).on("click", '.show-more',function(e) {

@@ -78,8 +78,8 @@ class EventsPageCalendar extends Controller {
 		// Figure out which days have events on them.
 		$nWeeks = ceil(($finish - $curr) / (3600 * 24 * 7));
 		
-		$conn   = DB::getConn();
-		$events = new SQLQuery();
+		$conn   = DB::get_conn();
+		$events = new SQLSelect();
 		
 		$eventTable = 'CalendarEvent';
 		if(Versioned::current_stage() == 'Live'){

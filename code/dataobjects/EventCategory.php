@@ -78,7 +78,7 @@ class EventCategory extends DataObject {
 	}
 	
 	public function ColourBlock(){
-		$html = new HTMLVarchar();
+		$html = HTMLVarchar::create();
 		$html->setValue("<div style='width: 20px; height: 20px; background-color: #" . $this->Colour . ";'></div>");
 		return $html;
 	}

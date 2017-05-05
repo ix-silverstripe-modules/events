@@ -173,10 +173,10 @@ class CalendarEvent extends Page {
 			$fields->addFieldToTab("Root.RegistrationForm", FieldEditor::create("Fields", 'Fields', "", $this ));
 			
 			// view the submissions
-			$submissions = new GridField(
-					'Submissions',
-					_t('UserDefinedForm.SUBMISSIONS', 'Submissions'),
-					$this->Submissions()->sort('Created', 'DESC')
+			$submissions = GridField::create(
+				'Submissions',
+				_t('UserDefinedForm.SUBMISSIONS', 'Submissions'),
+				$this->Submissions()->sort('Created', 'DESC')
 			);
 				
 			// make sure a numeric not a empty string is checked against this int column for SQL server
@@ -251,7 +251,7 @@ SQL;
 	}
 
 	public function getCMSValidator() {
-		return new RequiredFields('Title', 'Start', 'End');
+		return RequiredFields::create('Title', 'Start', 'End');
 	}
 	
 	public function replicate($action, $controller, $request) {
@@ -288,7 +288,7 @@ SQL;
 		if(!$this->ParentID){
 			$parent = EventsPage::get()->first();
 			if(!$parent){
-				$parent = new EventsPage();
+				$parent = EventsPage::create();
 				$parent->Title 		= 'Events';
 				$parent->URLSegment = 'events';
 				$parent->write();

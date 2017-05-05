@@ -8,8 +8,11 @@
 class EventsPage extends Page {
 	
 	private static $icon = 'events/images/icons/eventsholder';
+	
 	private static $description = 'Page that lists all upcoming Events for selected calendars.';
+	
 	private static $singular_name = 'Events Holder';
+	
 	private static $plural_name = 'Events Holders';
 	
 	private static $extensions = array(
@@ -49,7 +52,7 @@ class EventsPage extends Page {
 		parent::requireDefaultRecords();
 	
 		if (!EventsPage::get()->First()) {
-			$page = new EventsPage();
+			$page = EventsPage::create();
 			$page->Title      				= 'Events';
 			$page->URLSegment 				= 'events';
 			$page->PaginationLimit 			= 5;
@@ -62,55 +65,68 @@ class EventsPage extends Page {
 			$page->AddEventEmailFrom 		= '';
 			$page->PrintTitle				= 'Events Calendar for';
 			$page->write();
-			$page->publish('Stage', 'Live');
 		}
+	}
+	
+	public function canCreate($member = null){
+	    $can = parent::canCreate($member);
+	    if($can){
+	        $hasEventsPage = EventsPage::get()->first();
+	        if($hasEventsPage){
+	            return false;
+	        }
+	    }
 	}
 
 	public function getCMSFields() {
-		$fields = parent::getCMSFields();
+		$self = $this;
 		
-		// Makes sure the Listing Summary Toggle is present before
-		$configBefore = Config::inst()->get('Events', 'event_fields_before');
-		$configBefore = ($configBefore ? $configBefore : "Content");
-		
-		$putBefore = ($fields->fieldByName('Root.Main.ListingSummaryToggle') ? "ListingSummaryToggle" : $configBefore);
-		
-		$fields->removeByName('Right');
-		$fields->addFieldToTab('Root.Main', NumericField::create('PaginationLimit', 'Pagination Limit'), $putBefore);
-		$fields->addFieldToTab('Root.Main', TextField::create('ViewMoreText', 'View More Text'), $putBefore);
-		$fields->addFieldToTab('Root.Main', TextField::create('SearchEventsPlaceholder', 'Search Events Placeholder'), $putBefore);
-		$fields->addFieldToTab('Root.Main', TextField::create('EventsListTitle', 'Events List Title'), $putBefore);
-		$fields->addFieldToTab('Root.Main', TextField::create('PrintTitle', 'Print Title'), $putBefore);
-		$fields->addFieldToTab('Root.Main', CheckboxField::create('HideSearchBox', 'Hide  the search box?'), $putBefore);
-		
-		$fields->addFieldToTab('Root', new Tab('Messages', 'Messages & Emails'), 'Header');
-		$fields->addFieldToTab('Root.Messages', HtmlEditorField::create('NoEventsText', 'No Events Text')->setRows(6)->addExtraClass('withmargin'));
-		$fields->addFieldToTab('Root.Messages', HtmlEditorField::create('FinishedMessage', 'Message after adding an event from the website')->setRows(6)->addExtraClass('withmargin'));
-		$fields->addFieldToTab('Root.Messages', TextField::create('AddEventEmailTo', '"Add event" email goes to?'));
-		$fields->addFieldToTab('Root.Messages', TextField::create('AddEventEmailFrom', '"Add event" email comes from?'));
-		
-		$this->extend('updateEventsPageCMSFields', $fields);
+		$this->beforeUpdateCMSFields(function ($fields) use ($self) {
+		    // Makes sure the Listing Summary Toggle is present before
+		    $configBefore = Config::inst()->get('Events', 'event_fields_before');
+		    $configBefore = ($configBefore ? $configBefore : "Content");
+		    
+		    $putBefore = ($fields->fieldByName('Root.Main.ListingSummaryToggle') ? "ListingSummaryToggle" : $configBefore);
+		    
+		    $fields->addFieldToTab('Root.Main', NumericField::create('PaginationLimit', 'Pagination Limit'), $putBefore);
+		    $fields->addFieldToTab('Root.Main', TextField::create('ViewMoreText', 'View More Text'), $putBefore);
+		    $fields->addFieldToTab('Root.Main', TextField::create('SearchEventsPlaceholder', 'Search Events Placeholder'), $putBefore);
+		    $fields->addFieldToTab('Root.Main', TextField::create('EventsListTitle', 'Events List Title'), $putBefore);
+		    $fields->addFieldToTab('Root.Main', TextField::create('PrintTitle', 'Print Title'), $putBefore);
+		    $fields->addFieldToTab('Root.Main', CheckboxField::create('HideSearchBox', 'Hide  the search box?'), $putBefore);
+		    
+		    $fields->addFieldToTab('Root', Tab::create('Messages', 'Messages & Emails'));
+		    $fields->addFieldToTab('Root.Messages', HtmlEditorField::create('NoEventsText', 'No Events Text')->setRows(10)->addExtraClass('withmargin'));
+		    $fields->addFieldToTab('Root.Messages', HtmlEditorField::create('FinishedMessage', 'Message after adding an event from the website')->setRows(10)->addExtraClass('withmargin'));
+		    $fields->addFieldToTab('Root.Messages', TextField::create('AddEventEmailTo', '"Add event" email goes to?'));
+		    $fields->addFieldToTab('Root.Messages', TextField::create('AddEventEmailFrom', '"Add event" email comes from?'));
+		    
+		});
+		    
+	    $fields = parent::getCMSFields();
+	    
+	    $this->extend('updateEventsPageCMSFields', $fields);
 		
 		return $fields;
 	}
 	
 	public function MenuYears() {
-		$set   = new ArrayList();
-		$year  = DB::getConn()->formattedDatetimeClause('"Start"', '%Y');
-	
-		$query = new SQLQuery();
-	
-		// Modfiy select to add subsite in if it's installed
-		if(class_exists('Subsite')) {
-			$query->setSelect("$year tDate, \"SiteTree\".\"SubsiteID\"")->addFrom('"CalendarEvent"');
-		} else {
-			$query->setSelect("$year tDate")->addFrom('"CalendarEvent"');
-		}
+	    $set   = ArrayList::create();
+	    
+		$year  = DB::get_conn()->formattedDatetimeClause('"Start"', '%Y');
+
+		$query = SQLSelect::create();
+		$query->addFrom('"CalendarEvent"');
 		$query->addLeftJoin("SiteTree", '"SiteTree"."ID" = "CalendarEvent"."ID"');
 		$query->setGroupBy('"tDate"');
 		$query->setOrderBy('"tDate" DESC');
+	
+		// Modfiy select to add subsite in if it's installed
 		if(class_exists('Subsite')) {
+			$query->setSelect("$year tDate, \"SiteTree\".\"SubsiteID\"");
 			$query->setWhere('"SiteTree"."SubsiteID" = ' . Subsite::currentSubsiteID());
+		} else {
+			$query->setSelect("$year tDate");
 		}
 	
 		$years = $query->execute()->column();
@@ -122,11 +138,11 @@ class EventsPage extends Page {
 		$selectedYear = Controller::curr()->getRequest()->param('ID');
 	
 		foreach ($years as $year) {
-			$set->push(new ArrayData(array(
-					'Title'    		=> $year,
-					'MenuTitle'    	=> $year,
-					'Link'    		=> $this->Link("archive/" . $year . "/"),
-					'LinkingMode'	=> ($selectedYear && ($selectedYear == $year)) ? 'current' : 'section',
+		    $set->push(ArrayData::create(array(
+				'Title'    		=> $year,
+				'MenuTitle'    	=> $year,
+				'Link'    		=> $this->Link("archive/" . $year . "/"),
+				'LinkingMode'	=> ($selectedYear && ($selectedYear == $year)) ? 'current' : 'section',
 			)));
 		}
 	
@@ -157,7 +173,16 @@ class EventsPage_Controller extends Page_Controller {
 	protected $category;
 	protected $categoryurl;
 	protected $searchQuery;
-	protected $requiredAddFormFields = array('Title','Start','End', 'Categories', 'SubmitterFirstName', 'SubmitterSurname', 'SubmitterEmail', 'SubmitterPhoneNumber');
+	protected $requiredAddFormFields = array(
+	    'Title',
+	    'Start',
+	    'End', 
+	    'Categories', 
+	    'SubmitterFirstName', 
+	    'SubmitterSurname', 
+	    'SubmitterEmail', 
+        'SubmitterPhoneNumber'
+	);
 	protected $printer = false;
 	protected $showimages = false;
 	
@@ -291,16 +316,10 @@ class EventsPage_Controller extends Page_Controller {
 		$this->redirect($this->Link("?startd=$date".($categories ? "&types=".$categories : "")));
 	}
 	
-	public function getOffset() {
-		if(!isset($_REQUEST['start'])) {
-			$_REQUEST['start'] = 0;
-		}
-	
-		return $_REQUEST['start'];
-	}
-	
 	public function add() {
-		if(!Config::inst()->get('Events', 'enable_public_add_event')) return $this->httpError(404);
+		if(!Config::inst()->get('Events', 'enable_public_add_event')) 
+		    return $this->httpError(404);
+		
 		return $this->customise(array('Finished' => false))->renderWith(array('EventsPage_add', 'EventsPage', 'Page'));
 	}
 	
@@ -319,23 +338,23 @@ class EventsPage_Controller extends Page_Controller {
 			$this->year = date('Y');
 		}
 	
-		$page = new Page();
+		$page = Page::create();
 		$page->Title 	 	 = 'archive';
 		$page->MenuTitle 	 = 'archive';
 		$this->extracrumbs[] = $page;
 	
 		$data = array(
-				'Title' 	=> $this->year . ' Events Archive',
-				'Content' 	=> '',
-				'InArchive'	=> true,
-				'NoEventsText' => $this->NoEventsText ? $this->NoEventsText : "<p>Sorry! There are no events to display.</p>"
+			'Title' 	=> $this->year . ' Events Archive',
+			'Content' 	=> '',
+			'InArchive'	=> true,
+			'NoEventsText' => $this->NoEventsText ? $this->NoEventsText : "<p>Sorry! There are no events to display.</p>"
 		);
 	
 		return $this->customise($data)->renderWith(array('EventsPage_archive', 'NewsHolder', 'Page'));
 	}
 	
 	public function ArchiveEvents(){
-		$events = CalendarEvent::get()->sort('"Start" DESC')->where(DB::getConn()->formattedDatetimeClause('"Start"', '%Y') . " = $this->year" );
+	    $events = CalendarEvent::get()->sort('"Start" DESC')->where(DB::get_conn()->formattedDatetimeClause('"Start"', '%Y') . " = $this->year" );
 		return GroupedList::create($events);
 	}
 	
@@ -380,7 +399,7 @@ class EventsPage_Controller extends Page_Controller {
 		return $categories;
 	}
 	
-	public function AllEvents($sort=null){
+	public function AllEvents($sort = null){
 	
 		$events = CalendarEvent::get()->sort('"Start" DESC');
 		$sort = Convert::raw2sql($sort);
@@ -388,56 +407,51 @@ class EventsPage_Controller extends Page_Controller {
 			$events = $events->sort("\"Start\" $sort");
 		}
 		
-		
-// 		if($this->SubsiteID == 0){
-// 			$events = $events->setDataQueryParam('Subsite.filter' , false);
-// 		}
-
-		$toreturn = null;
-
-		$toreturn = $this->PopulateEvents($toreturn, $events);
+		$toreturn = $this->PopulateEvents($events);
 		
 		return $toreturn;
 	}
 	
-	public function Events($sort=null, $futureEvents=true){
+	public function Events($sort = null, $futureEvents = true){
+		$eventsList = CalendarEvent::get();
 		
-		$events = CalendarEvent::get();
 		$sort = Convert::raw2sql($sort);
+		
 		if($sort == "ASC" || $sort == "DESC"){
-			$events = $events->sort("\"Start\" $sort");
+		    $eventsList = $eventsList->sort("\"Start\" $sort");
 		}
 		
-		if(!empty($this->day)){
+		if( ! empty($this->day)){
+		    //show events of selected date.
 			$where = sprintf(
 				'"Start" < \'%s\' AND "End" > \'%s\'',
 				date('Y-m-d H:i:s', mktime(0, 0, 0, $this->month, $this->day + 1, $this->year)),
 				date('Y-m-d H:i:s', mktime(0, 0, -1, $this->month, $this->day, $this->year))
 			);
-			$events = $events->where($where);
+			$eventsList = $eventsList->where($where);
 		}else{
 			if($futureEvents){
-				$events = $events->filter(array('End:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
+			    $eventsList = $eventsList->filter(array('End:GreaterThanOrEqual' => date('Y-m-d H:i:s')));
 			}else{
 				if($this->start){
 					$startAu = str_replace('/', '-', $this->start);
 					$startAu = date('Y-m-d', strtotime($startAu));
-					$events = $events->filterAny(array('Start:GreaterThanOrEqual' => $startAu, 'End:GreaterThanOrEqual' => $startAu));
+					$eventsList = $eventsList->filterAny(array('Start:GreaterThanOrEqual' => $startAu, 'End:GreaterThanOrEqual' => $startAu));
 				}			
 			}
 			if($this->end){
 				//we need to add one day so that end date is included
 				$endAu = str_replace('/', '-', $this->end);
-				$events	 = $events->filter(array('End:LessThanOrEqual' => $endAu));
+				$eventsList	 = $eventsList->filter(array('End:LessThanOrEqual' => $endAu));
 			}
 		}
 		
 		if($this->searchQuery){
-			$eventTable = 'SiteTree';
-			if(Versioned::current_stage() == 'Live'){
-				$eventTable .= '_Live';
-			}
-			$events = $events->where("\"$eventTable\".\"Title\" LIKE '%" . $this->searchQuery . "%' OR \"$eventTable\".\"Content\" LIKE '%" . $this->searchQuery . "%'");
+// 			$eventTable = 'SiteTree';
+// 			if(Versioned::current_stage() == 'Live'){
+// 				$eventTable .= '_Live';
+// 			}
+		    $eventsList = $eventsList->where("\"Title\" LIKE '%" . $this->searchQuery . "%' OR \"Content\" LIKE '%" . $this->searchQuery . "%'");
 		}
 		
 		if($this->category){
@@ -450,7 +464,7 @@ class EventsPage_Controller extends Page_Controller {
 			$str  = "(" . $this->category . ")" ;
 				
 		
-			$events = $events->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str . $extraWhere . ')');
+			$eventsList = $eventsList->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str . $extraWhere . ')');
 		}
 		
 		if($this->types){
@@ -462,48 +476,46 @@ class EventsPage_Controller extends Page_Controller {
 			}
 			$str  = "(" . $this->types . ")" ;
 		
-			$events = $events->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str . $extraWhere . ')');
+			$eventsList = $eventsList->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str . $extraWhere . ')');
 		}
 		
-		$toreturn = null;
+		$this->extend('updateEventsList', $eventsList);
 		
-		$toreturn = $this->PopulateEvents($toreturn, $events);
+		//pagination
+		$toreturn = $this->PopulateEvents($eventsList);
 		
 		return $toreturn;
 	}
 	
-	public function PopulateEvents($toreturn, DataList &$events){
+	/**
+	 * @param DataList $events
+	 * @return PaginatedList
+	 */
+	public function PopulateEvents(DataList &$events){
 		$paginationType = Config::inst()->get('Events', 'pagination_type');
 		
-		if($paginationType == "ajax") {
-			$startVar = $this->request->getVar("start");
+		$paginatedList = PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);
 		
-			if($startVar && !Director::is_ajax()) { // Only apply this when the user is returning from the article OR if they were linked here
-				$toload = ($startVar / $this->PaginationLimit); // What page are we at?
+		$offset = $paginatedList->getPageStart();
+		
+		$this->AllEventsCount 	= $paginatedList->getTotalItems();
+		
+		if($paginationType == "ajax") {
+			if($offset && ! Director::is_ajax()) { // Only apply this when the user is returning from the article OR if they were linked here
+			    $toload = ($offset / $this->PaginationLimit); // What page are we at?
 				$limit = (($toload + 1) * $this->PaginationLimit); // Need to add 1 so we always load the first page as well (articles 0 to 5)
 					
-				$list = $events->limit($limit, 0);
-				$next = $limit;
-			} else {
-				$offset = $this->getOffset();
-				$limit = $this->PaginationLimit;
-					
-				$list = $events->limit($limit, $offset);
-				$next = $offset + $this->PaginationLimit;
+				$paginatedList->setPageStart(0);
+				$paginatedList->setPageLength($limit);
 			}
 		
-			$this->AllEventsCount 	= $events->count();
-			$this->MoreEvents 		= ($next < $this->AllEventsCount);
-			$this->MoreLink 		= HTTP::setGetVar("start", $next);
-			$toreturn 				= $list;
-		} else {
-			$this->AllEventsCount 	= $events->count();
-			$toreturn = PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);
+			$this->MoreEvents 		= $paginatedList->MoreThanOnePage();
+			$this->MoreLink 		= $paginatedList->NextLink();
 		}
 		
-		Session::set('EventsOffset'.$this->ID, $this->getOffset());
+		Session::set('EventsOffset'.$this->ID, $offset);
 		
-		return $toreturn;
+		return $paginatedList;
 	}
 	
 	public function StartDateField(){
@@ -617,7 +629,7 @@ class EventsPage_Controller extends Page_Controller {
 	}
 	
 	public function eventcalendar() {
-		$calendar = new EventsPageCalendar($this, 'eventcalendar', $this->month, $this->year, $this->day);
+		$calendar = EventsPageCalendar::create($this, 'eventcalendar', $this->month, $this->year, $this->day);
 		return $calendar;
 	}
 
@@ -692,14 +704,12 @@ class EventsPage_Controller extends Page_Controller {
 			}
 		}
 		
-		foreach($data as $key => $value){
-			$data[$key] = Convert::raw2sql($value);
-		}
+		$data = Convert::raw2sql($data);
 		
-		$event = new CalendarEvent();
+		$event = CalendarEvent::create();
 		$form->saveInto($event);
 		$parent 		 = EventsPage::get()->first();
-		$event->ParentID = $parent->ID;
+		$event->ParentID = $parent ? $parent->ID : 0;
 		$event->writeToStage('Stage');
 		
 		$category = EventCategory::get()->byID((int) $data['Categories']);
@@ -708,14 +718,14 @@ class EventsPage_Controller extends Page_Controller {
 			$event->writeToStage('Stage');
 		}
 		
-		$toEmail 		= $this->AddEventEmailTo ? $this->AddEventEmailTo : ''; // TODO: Default emails
-		$fromEmail 		= $this->AddEventEmailFrom ? $this->AddEventEmailFrom : ''; // TODO: Default emails
+		$toEmail 		= $this->AddEventEmailTo ? $this->AddEventEmailTo : Email::config()->admin_email;
+		$fromEmail 		= $this->AddEventEmailFrom ? $this->AddEventEmailFrom : Email::config()->admin_email;
 		$data['Event'] 	= $event;
 		
 		if($toEmail == '' || $fromEmail == '') {
 			// Don't send if one of the above fields is empty. 
 		} else {
-			$email = new Email();
+			$email = Email::create();
 			$email->setSubject('New event submission from website');
 			$email->setTo($toEmail);
 			$email->setFrom($fromEmail);

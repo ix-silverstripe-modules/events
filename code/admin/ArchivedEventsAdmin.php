@@ -23,7 +23,7 @@ class ArchivedEventsAdmin extends VersionedModelAdmin {
 	
 		if($this->modelClass == 'CalendarEvent') {
 			$gridField = $form->Fields()->fieldByName($this->sanitiseClassName($this->modelClass));
-			//$gridField->getConfig()->removeComponentsByType('GridFieldAddNewButton');
+			$gridField->getConfig()->removeComponentsByType('GridFieldAddNewButton');
 			$gridField->setTitle('Archived Events');
 		} 
 	

@@ -1,32 +1,19 @@
-### Most Important
+# Version 1.1 Roadmap
 
-~~1) Event listing - switch between pagination/ajax~~
+## Most Important
 
-~~2) Add the "back to events" functionality just like news~~
+* ~~Update the way create object. Make sure it calls Class::create().~~
 
-~~3) Enable/Disable calendar functionality. Allow calendar to be both in the content/sidebar (an include)
- Hovering over a day in the calendar should show all the events on that day in a qtip.
- Clicking on a day in the calendar should take the user to an event listing page where all the events on that day are shown.~~
- 
-~~4) Event list should optionally start with the filter fields (i.e Start,End, Content, Category, Keyword) - see gtcc~~
+* ~~Use PaginatedList for AJAX load more.~~
 
-~~5) Add event form. When a member of the public adds an event, that event is added but is in draft mode - steal this from gtcc~~
+* Improve events filter. Use SearchContext for front-end event filter. e.g. Model admin search bar.
 
-~~6) Add plenty of extension hooks.~~
+* Add AJAX support for paginated listing.
 
-~~7) Add Month Jumper~~
+* Update event registration process to support most up-to-date User Form module(4.2.3).
 
-~~8) Move Block Frontend Fields to YAML.~~
+## Desirable
 
-### Desirable
-~~1) Add an event registration page (extends userform). If a checkbox on the event is ticked, then a button on that event links the user to the registration page (where the event url-segment is in the url) This will assign the registration against that event. Look at the jobs module to see how this is done.~~
+* Change recurring events module to have a blacklist so submission relationships aren't cloned.
 
-1.1) Set forced fields as read only. I spent an hour on trying to do this but couldn't get far. Need to find somewhere to access the field before it's rendered to set it as readonly since it's only a private static variable on the class.
-
-~~2) Upgrading the calendar functionality so that months directly before and after are loaded in the calendar. If the user clicks to the next month, the month after that is loaded behind the scenes. This should make the loading appear pretty instant.~~
-
-~~3) Recurring events module continues to work~~
-
-3.1) Change recurring events module to have a blacklist so submission relationships aren't cloned
-
-~~4) ICS / Add to Calendar function~~
+* Add support for block module.

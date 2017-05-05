@@ -16,7 +16,7 @@ class EventPageExtension extends DataExtension {
 			'UpcomingEventsCount' 	=> 3
 	);
 	
-	public function IRXupdateCMSFields(FieldSet &$fields) {
+	public function IRXupdateCMSFields(FieldList &$fields) {
 
 		$tab = 'Root.SideBar';
 		$insertBefore = '';
@@ -48,7 +48,7 @@ class EventPageExtension extends DataExtension {
 	}
 	
 	public function eventcalendar() {
-		$calendar = new EventsPageCalendar($this->owner, 'eventcalendar');
+		$calendar = EventsPageCalendar::create($this->owner, 'eventcalendar');
 		return $calendar;
 	}
 	
@@ -78,14 +78,14 @@ class EventPageExtension extends DataExtension {
 			->addExtraClass('dropdown');
 		$categoryField = SelectAllCheckboxSetField::create('Categories', 'Categories', EventCategory::get(), $this->owner->getCalendarCategories());
 	
-		$fields = new FieldList($monthField, $yearField, $categoryField);
+		$fields = FieldList::create($monthField, $yearField, $categoryField);
 	
-		$formAction = new FormAction('search', 'Go');
+		$formAction = FormAction::create('search', 'Go');
 		$formAction->addExtraClass('events-submit');
 	
-		$actions = new FieldList( $formAction);
+		$actions = FieldList::create( $formAction);
 	
-		$form = new Form($this->owner, 'MonthForm', $fields, $actions, new RequiredFields( 'Year'));
+		$form = Form::create($this->owner, 'MonthForm', $fields, $actions, new RequiredFields( 'Year'));
 		$form->disableSecurityToken();
 		$form->setFormMethod('GET');
 		
@@ -112,7 +112,7 @@ class EventPageExtension extends DataExtension {
 	 * @return array
 	 */
 	protected function getYearRange() {
-		$conn = DB::getConn();
+	    $conn = DB::get_conn();
 		$year = date('Y');
 	
 		$min   = $conn->formattedDatetimeClause('MIN("Start")', '%Y');
@@ -142,8 +142,8 @@ class EventPageExtension_Controller extends Extension {
 		Requirements::block(FRAMEWORK_DIR .'/thirdparty/jquery/jquery.js');
 		
 		Requirements::combine_files(EVENTCALENDAR_DIR . '.js', array(
-		EVENTCALENDAR_DIR . '/thirdparty/qtip/jquery.qtip-2.0.0.min.js',
-		EVENTCALENDAR_DIR . '/javascript/EventsPageCalendar.js'
-				));
+    		EVENTCALENDAR_DIR . '/thirdparty/qtip/jquery.qtip-2.0.0.min.js',
+    		EVENTCALENDAR_DIR . '/javascript/EventsPageCalendar.js'
+		));
 	}
 }

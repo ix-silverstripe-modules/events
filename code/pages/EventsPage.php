@@ -536,7 +536,7 @@ class EventsPage_Controller extends Page_Controller {
 			$start->setValue($now);
 		}
 
-		return $start->SmallFieldHolder();
+		return $start;
 	}
 	
 	public function EndDateField(){
@@ -555,19 +555,20 @@ class EventsPage_Controller extends Page_Controller {
 			$end->setValue($this->end);
 		}
 		
-		return $end->SmallFieldHolder();
+		return $end;
 	}
 	
 	public function CategoriesField(){
 		$categories = DropdownField::create('category', 'Filter By:')
 			->setSource(EventCategory::get()->map("URLSegment", "Title")->toArray())
 			->setEmptyString("");
+		
 		if($this->categoryurl){
 			$categories->setValue($this->categoryurl);
 		}
 		$this->extend('updateCategoriesField', $categories);
 		
-		return $categories->FieldHolder();
+		return $categories;
 	}
 	
 	public function HiddenCategoriesField(){
@@ -577,7 +578,7 @@ class EventsPage_Controller extends Page_Controller {
 		}
 		$this->extend('updateHiddenCategoriesField', $categories);
 	
-		return $categories->FieldHolder();
+		return $categories;
 	}
 	
 	public function searchQueryField(){
@@ -587,14 +588,14 @@ class EventsPage_Controller extends Page_Controller {
 		if($this->searchQuery){
 			$searchQuery->setValue($this->searchQuery);
 		}
-			
+		
 		if($this->SearchEventsPlaceholder){
 			$searchQuery->setAttribute('placeholder', $this->SearchEventsPlaceholder);
 		}
 		
 		$this->extend('updateSearchQueryField', $searchQuery);
 		
-		return $searchQuery->Field();
+		return $searchQuery;
 	}
 	
 	public function ShowImagesField(){

@@ -447,11 +447,7 @@ class EventsPage_Controller extends Page_Controller {
 		}
 		
 		if($this->searchQuery){
-// 			$eventTable = 'SiteTree';
-// 			if(Versioned::current_stage() == 'Live'){
-// 				$eventTable .= '_Live';
-// 			}
-		    $eventsList = $eventsList->where("\"Title\" LIKE '%" . $this->searchQuery . "%' OR \"Content\" LIKE '%" . $this->searchQuery . "%'");
+		    $eventsList = $eventsList->where("\"SiteTree\".\"Title\" LIKE '%" . $this->searchQuery . "%' OR \"SiteTree\".\"Content\" LIKE '%" . $this->searchQuery . "%'");
 		}
 		
 		if($this->category){
@@ -489,9 +485,13 @@ class EventsPage_Controller extends Page_Controller {
 	
 	/**
 	 * @param DataList $events
-	 * @return PaginatedList
+	 * @return PaginatedList|DataList
 	 */
 	public function PopulateEvents(DataList &$events){
+	    if($this->request->requestVar('show-all-events')){
+	        return $events;
+	    }
+	    
 		$paginationType = Config::inst()->get('Events', 'pagination_type');
 		
 		$paginatedList = PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);

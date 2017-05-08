@@ -472,7 +472,7 @@ class EventsPage_Controller extends Page_Controller {
 			$extraWhere = "";
 			if(Versioned::current_stage() == 'Live'){
 				$eventTable .= '_Live';
-				// 				$extraWhere = ' AND "EventCategory_Events"."Approved" = 1 ';
+// 				$extraWhere = ' AND "EventCategory_Events"."Approved" = 1 ';
 			}
 			$str  = "(" . $this->types . ")" ;
 		
@@ -501,7 +501,7 @@ class EventsPage_Controller extends Page_Controller {
 		$this->AllEventsCount 	= $paginatedList->getTotalItems();
 		
 		if($paginationType == "ajax") {
-			if($offset && ! Director::is_ajax()) { // Only apply this when the user is returning from the article OR if they were linked here
+		    if($offset && ! Director::is_ajax() && Config::inst()->get('Events', 'ajax_show_more')) { // Only apply this when the user is returning from the article OR if they were linked here
 			    $toload = ($offset / $this->PaginationLimit); // What page are we at?
 				$limit = (($toload + 1) * $this->PaginationLimit); // Need to add 1 so we always load the first page as well (articles 0 to 5)
 					

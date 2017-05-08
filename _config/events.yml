@@ -7,6 +7,7 @@ Events:
   enable_sharing: false
   enable_archive: true
   pagination_type: static
+  ajax_show_more: true
   page_search_type: refine
   enable_public_add_event: true
   enable_event_registration: false

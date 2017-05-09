@@ -515,6 +515,8 @@ class EventsPage_Controller extends Page_Controller {
 		
 		Session::set('EventsOffset'.$this->ID, $offset);
 		
+		$this->extend('updatePopulateEvents', $paginatedList);
+		
 		return $paginatedList;
 	}
 	

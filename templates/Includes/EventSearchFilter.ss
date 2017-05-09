@@ -4,13 +4,13 @@
 	<form action="$SearchEventsFormAction" id="filter-search" method="GET">
     	<div class="row">
             <div class="large-4 medium-6 columns">
-                $StartDateField
+                $StartDateField.SmallFieldHolder
             </div>
             <div class="large-4 medium-6 columns">
-            	$EndDateField
+            	$EndDateField.SmallFieldHolder
             </div>
             <div class="large-4 medium-12 columns">
-                $CategoriesField
+                $CategoriesField.FieldHolder
             </div>
             <div class="large-8 medium-12 columns">
         		$searchQueryField

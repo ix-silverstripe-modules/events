@@ -447,11 +447,7 @@ class EventsPage_Controller extends Page_Controller {
 		}
 		
 		if($this->searchQuery){
-// 			$eventTable = 'SiteTree';
-// 			if(Versioned::current_stage() == 'Live'){
-// 				$eventTable .= '_Live';
-// 			}
-		    $eventsList = $eventsList->where("\"Title\" LIKE '%" . $this->searchQuery . "%' OR \"Content\" LIKE '%" . $this->searchQuery . "%'");
+		    $eventsList = $eventsList->where("\"SiteTree\".\"Title\" LIKE '%" . $this->searchQuery . "%' OR \"SiteTree\".\"Content\" LIKE '%" . $this->searchQuery . "%'");
 		}
 		
 		if($this->category){
@@ -472,7 +468,7 @@ class EventsPage_Controller extends Page_Controller {
 			$extraWhere = "";
 			if(Versioned::current_stage() == 'Live'){
 				$eventTable .= '_Live';
-				// 				$extraWhere = ' AND "EventCategory_Events"."Approved" = 1 ';
+// 				$extraWhere = ' AND "EventCategory_Events"."Approved" = 1 ';
 			}
 			$str  = "(" . $this->types . ")" ;
 		
@@ -489,9 +485,13 @@ class EventsPage_Controller extends Page_Controller {
 	
 	/**
 	 * @param DataList $events
-	 * @return PaginatedList
+	 * @return PaginatedList|DataList
 	 */
 	public function PopulateEvents(DataList &$events){
+	    if($this->request->requestVar('show-all-events')){
+	        return $events;
+	    }
+	    
 		$paginationType = Config::inst()->get('Events', 'pagination_type');
 		
 		$paginatedList = PaginatedList::create($events, $this->request)->setPageLength($this->PaginationLimit);
@@ -501,7 +501,7 @@ class EventsPage_Controller extends Page_Controller {
 		$this->AllEventsCount 	= $paginatedList->getTotalItems();
 		
 		if($paginationType == "ajax") {
-			if($offset && ! Director::is_ajax()) { // Only apply this when the user is returning from the article OR if they were linked here
+		    if($offset && ! Director::is_ajax() && Config::inst()->get('Events', 'ajax_show_more')) { // Only apply this when the user is returning from the article OR if they were linked here
 			    $toload = ($offset / $this->PaginationLimit); // What page are we at?
 				$limit = (($toload + 1) * $this->PaginationLimit); // Need to add 1 so we always load the first page as well (articles 0 to 5)
 					
@@ -536,7 +536,7 @@ class EventsPage_Controller extends Page_Controller {
 			$start->setValue($now);
 		}
 
-		return $start->SmallFieldHolder();
+		return $start;
 	}
 	
 	public function EndDateField(){
@@ -555,19 +555,20 @@ class EventsPage_Controller extends Page_Controller {
 			$end->setValue($this->end);
 		}
 		
-		return $end->SmallFieldHolder();
+		return $end;
 	}
 	
 	public function CategoriesField(){
 		$categories = DropdownField::create('category', 'Filter By:')
 			->setSource(EventCategory::get()->map("URLSegment", "Title")->toArray())
 			->setEmptyString("");
+		
 		if($this->categoryurl){
 			$categories->setValue($this->categoryurl);
 		}
 		$this->extend('updateCategoriesField', $categories);
 		
-		return $categories->FieldHolder();
+		return $categories;
 	}
 	
 	public function HiddenCategoriesField(){
@@ -577,7 +578,7 @@ class EventsPage_Controller extends Page_Controller {
 		}
 		$this->extend('updateHiddenCategoriesField', $categories);
 	
-		return $categories->FieldHolder();
+		return $categories;
 	}
 	
 	public function searchQueryField(){
@@ -587,14 +588,14 @@ class EventsPage_Controller extends Page_Controller {
 		if($this->searchQuery){
 			$searchQuery->setValue($this->searchQuery);
 		}
-			
+		
 		if($this->SearchEventsPlaceholder){
 			$searchQuery->setAttribute('placeholder', $this->SearchEventsPlaceholder);
 		}
 		
 		$this->extend('updateSearchQueryField', $searchQuery);
 		
-		return $searchQuery->Field();
+		return $searchQuery;
 	}
 	
 	public function ShowImagesField(){

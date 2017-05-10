@@ -29,8 +29,8 @@
 		"silverstripe-modules/versionedmodeladmin" : "*",
 		"silverstripe-modules/listingsummary" : "*",
 		"micschk/silverstripe-excludechildren" : "*",
-		"tractorcow/silverstripe-colorpicker" : "dev-master#931454b672a5d9e273aebb6da49c369ee90485f0",
-		"silverstripe/timedropdownfield" : "dev-master#bda13f4aa9c703a48a18db7b11b98aa0e6a51e08",
+		"tractorcow/silverstripe-colorpicker" : "3.0.0",
+		"silverstripe/timedropdownfield" : "*",
 		"silverstripe-australia/addressable" : "*",
 		"silverstripe-australia/grouped-cms-menu" : "2.4",
 		"silverstripe/userforms" : "*"

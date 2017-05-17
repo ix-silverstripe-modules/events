@@ -40,4 +40,4 @@ LeftAndMain:
 
 EditableFormField:
   extensions:
-    - EditableFormFieldExtension
+    - EventsEditableFormFieldExtension

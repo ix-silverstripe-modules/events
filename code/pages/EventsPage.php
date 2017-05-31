@@ -15,14 +15,6 @@ class EventsPage extends Page {
 	
 	private static $plural_name = 'Events Holders';
 	
-	private static $extensions = array(
-		"ExcludeChildren"
-	);
-	
-	private static $excluded_children = array(
-		'CalendarEvent'
-	);
-	
 	private static $db = array(
 		'PaginationLimit' 			=> 'Int',
 		'ViewMoreText' 				=> 'Varchar(255)',

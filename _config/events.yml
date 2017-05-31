@@ -41,3 +41,10 @@ LeftAndMain:
 EditableFormField:
   extensions:
     - EventsEditableFormFieldExtension
+
+EventsPage:
+  extensions:
+    - 'Lumberjack'
+
+CalendarEvent:
+  show_in_sitetree: false

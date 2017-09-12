@@ -83,8 +83,8 @@ class CalendarEvent extends Page {
 	public function populateDefaults(){
 		parent::populateDefaults();
 		
-		$this->setField('Start', date('Y-m-d', strtotime('now')));
-		$this->setField('End', date('Y-m-d', strtotime('now')));
+		$this->setField('Start', date('Y-m-d', strtotime('+1day')));
+		$this->setField('End', date('Y-m-d', strtotime('+1day')));
 	
 	}
 	

@@ -468,13 +468,13 @@ class CalendarEvent_Controller extends Page_Controller {
 		}
 		$result = trim(strip_tags($this->customise(array(
 		'HOST' => "IRXICS",
-		'START' => $timezone.':'.$this->obj('Start')->Format('Ymd\THis\Z'),
-		'END' => $timezone.':'.$this->obj('End')->Format('Ymd\THis\Z'),
+		'START' => $timezone.':' . gmdate('Ymd\THis\Z', strtotime($this->obj('Start')->getValue())),
+		'END' => $timezone.':' . gmdate('Ymd\THis\Z', strtotime($this->obj('End')->getValue())),
 		'URL' => $this->AbsoluteLink(),
 		'SUMMARY' => $this->Title,
 		'DESC' => $this->Content,
 		'LOCATION' => $this->LoadAddress(),
-		'NOW' => $timezone.':'.date('Ymd\THis\Z', time()),
+		'NOW' => $timezone.':' . gmdate('Ymd\THis\Z', time()),
 		'ID' => $this->ID
 		))->renderWith(array('ics'))));
 		return $result;

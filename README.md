@@ -105,10 +105,10 @@ Something here.
 
 You can include the "EventPageExtension" to the desired Page class to enable functionality of showing the event calendar and upcoming events on the page. A template has been provided "CalendarSidebar" to get you started.
 
-    SilverStripe\CMS\Model\SiteTree:
+    Page:
       extensions:
         - Internetrix\Events\Extensions\EventPageExtension
-    SilverStripe\CMS\Controllers\ContentController:
+    PageController:
       extensions:
         - Internetrix\Events\Extensions\EventPageExtensionController
 

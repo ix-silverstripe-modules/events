@@ -1,42 +1,47 @@
 {
-	"name" : "silverstripe-modules/events",
-	"description" : "A module for adding an events system",
-	"type" : "silverstripe-module",
-	"repositories" : [{
-			"type" : "git",
-			"url" : "https://gitlab.internetrix.net/silverstripe-modules/versionedmodeladmin.git",
-			"name" : "silverstripe-modules/VersionedModelAdmin"
-		}, {
-			"type" : "git",
-			"url" : "https://gitlab.internetrix.net/silverstripe-modules/listingsummary.git",
-			"name" : "silverstripe-modules/listingsummary"
-		}
-	],
-	"keywords" : [
-		"silverstripe",
-		"events",
-		"calendar",
-		"event"
-	],
-	"authors" : [{
-			"name" : "Stewart Wilson",
-			"email" : "stewart.wilson@internetrix.com.au"
-		}
-	],
-	"require" : {
-		"silverstripe/framework" : ">=3.4.0",
-		"silverstripe/cms" : ">=3.4.0",
-		"silverstripe-modules/versionedmodeladmin" : "*",
-		"silverstripe-modules/listingsummary" : "*",
-		"silverstripe/lumberjack" : ">=1.3.0",
-		"tractorcow/silverstripe-colorpicker" : "3.0.0",
-		"silverstripe/timedropdownfield" : "*",
-		"silverstripe-australia/addressable" : "*",
-		"silverstripe-australia/grouped-cms-menu" : "2.4",
-		"silverstripe/userforms" : "*"
-	},
-	"extra" : {
-		"installer-name" : "events"
-	},
-	"minimum-stability" : "dev"
+    "name": "internetrix/events",
+    "description": "A module for adding an events system",
+    "type": "silverstripe-vendormodule",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@gitlab.internetrix.net:silverstripe-modules/listingsummary.git",
+            "name": "internetrix/silverstripe-listingsummary"
+        }
+    ],
+    "keywords": [
+        "silverstripe",
+        "events",
+        "calendar",
+        "event"
+    ],
+    "authors": [
+        {
+            "name": "Stewart Wilson",
+            "email": "stewart.wilson@internetrix.com.au"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "^4.4",
+        "silverstripe/cms": "^4.4",
+        "silverstripe/admin": "^1.3",
+        "internetrix/silverstripe-listingsummary": "dev-master",
+        "silverstripe/lumberjack": "^2.0",
+        "tractorcow/silverstripe-colorpicker": "^4.0",
+        "symbiote/silverstripe-addressable": "^5.0",
+        "symbiote/silverstripe-gridfieldextensions": "^3.2",
+        "symbiote/silverstripe-grouped-cms-menu": "^4.0",
+        "silverstripe/userforms": "^5.4"
+    },
+    "extra": {
+        "installer-name": "events",
+        "expose": [
+            "css",
+            "images",
+            "javascript",
+            "thirdparty"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

@@ -5,26 +5,26 @@
  */
 
 (function($) {
-	$.entwine(function($) {
-		
-		$('form#filter-search').entwine({
-			onsubmit: function(e){
-				
-				if(!$('input#startd').val()){
-					$('input#startd').removeAttr('name');
-				}
-				
-				if(!$('input#end').val()){
-					$('input#end').removeAttr('name');
-				}
-				
-				if(!$('input#searchQuery').val()){
-					$('input#searchQuery').removeAttr('name');
-				}
-				
-				return true;
-			}
-		});
-		
-	});
+    $.entwine(function($) {
+
+        $('form#filter-search').entwine({
+            onsubmit: function(e){
+
+                if(!$('input#startd').val()){
+                    $('input#startd').removeAttr('name');
+                }
+
+                if(!$('input#end').val()){
+                    $('input#end').removeAttr('name');
+                }
+
+                if(!$('input#searchQuery').val()){
+                    $('input#searchQuery').removeAttr('name');
+                }
+
+                return true;
+            }
+        });
+
+    });
 })(jQuery);

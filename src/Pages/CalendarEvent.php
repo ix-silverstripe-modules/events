@@ -10,7 +10,6 @@ use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Assets\Image;
 use SilverStripe\Assets\Upload;
 use SilverStripe\Control\Email\Email;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DatetimeField;
 use SilverStripe\Forms\FormAction;
@@ -37,12 +36,10 @@ use SilverStripe\ORM\DB;
 use SilverStripe\Security\Member;
 use SilverStripe\UserForms\Extension\UserFormFieldEditorExtension;
 use SilverStripe\UserForms\Form\UserFormsGridFieldFilterHeader;
-use SilverStripe\UserForms\Model\EditableFormField;
 use SilverStripe\UserForms\Model\Submission\SubmittedForm;
 use SilverStripe\Versioned\Versioned;
 use Symbiote\Addressable\Addressable;
 use Symbiote\Addressable\Geocodable;
-
 
 /**
  * An event that is displayed on the events page.
@@ -216,8 +213,6 @@ class CalendarEvent extends Page
 
         // Show this tab only if the Registration Page has been enabled
         if ($this->EnableRegistrationPage) {
-
-
             $fields->addFieldToTab('Root.RegistrationForm', LiteralField::create('FE', '<div class="form-group field stacked"><div class="form__field-holder">Note: Full Name, Email and Phone are required fields. If they are deleted or modified, they will be recreated automatically.</div></div>'));
             $fields->addFieldToTab('Root.RegistrationForm', $this->getFieldEditorGrid());
 
@@ -304,9 +299,8 @@ SQL;
         return RequiredFields::create('Title', 'Start', 'End');
     }
 
-    public function duplicate($doWrite = true, $relations = NULL)
+    public function duplicate($doWrite = true, $relations = null)
     {
-
         $clonedCalendarEvent = parent::duplicate($doWrite, $relations);
         $clonedCalendarEvent->Created = date('Y-m-d H:i:s');
         $clonedCalendarEvent->Title = 'Copy of ' . $clonedCalendarEvent->Title;
@@ -435,8 +429,7 @@ SQL;
     {
         if ($this->isNew()) {
             return 'New Page';
-        }
-        elseif ($this->isPublished()) {
+        } elseif ($this->isPublished()) {
             return 'Published';
         } else {
             return 'Unpublished';

@@ -8,7 +8,6 @@ use SilverStripe\Control\Controller;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\Queries\SQLSelect;
-use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ArrayData;
 
 /**

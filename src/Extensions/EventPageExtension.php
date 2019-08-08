@@ -11,12 +11,6 @@ use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\NumericField;
-use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\FormAction;
-use SilverStripe\Forms\RequiredFields;
-use SilverStripe\Forms\Form;
-use SilverStripe\ORM\DB;
-use SilverStripe\ORM\ArrayLib;
 use SilverStripe\ORM\DataExtension;
 
 class EventPageExtension extends DataExtension

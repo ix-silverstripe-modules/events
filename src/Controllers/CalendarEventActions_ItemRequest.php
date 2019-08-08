@@ -9,7 +9,6 @@ use SilverStripe\Versioned\VersionedGridFieldItemRequest;
 
 class CalendarEventActions_ItemRequest extends VersionedGridFieldItemRequest
 {
-
     protected function getFormActions()
     {
         $calendarEvent = $this->getRecord();
@@ -24,7 +23,7 @@ class CalendarEventActions_ItemRequest extends VersionedGridFieldItemRequest
             );
         }
 
-       return $actions;
+        return $actions;
     }
 
     public function duplicateCalendarEvent($data, $form)

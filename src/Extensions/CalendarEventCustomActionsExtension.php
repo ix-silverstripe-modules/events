@@ -4,10 +4,6 @@ namespace Internetrix\Events\Extensions;
 
 use Internetrix\Events\Pages\CalendarEvent;
 use SilverStripe\Admin\LeftAndMainExtension;
-use SilverStripe\Control\Controller;
-use SilverStripe\Control\HTTPResponse_Exception;
-use SilverStripe\ORM\DataObject;
-
 
 class CalendarEventCustomActionsExtension extends LeftAndMainExtension
 {
@@ -41,7 +37,7 @@ class CalendarEventCustomActionsExtension extends LeftAndMainExtension
 
         $calendarEvent = CalendarEvent::get()->byID($id);
 
-        if (!$calendarEvent || !$calendarEvent->exists()){
+        if (!$calendarEvent || !$calendarEvent->exists()) {
             $this->owner->response->addHeader(
                 'X-Status',
                 rawurlencode('Calendar Event object not found')

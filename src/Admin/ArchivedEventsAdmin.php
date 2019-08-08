@@ -6,6 +6,7 @@ use Internetrix\Events\Controllers\CalendarEventActions_ItemRequest;
 use Internetrix\Events\Pages\CalendarEvent;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
 
 class ArchivedEventsAdmin extends ModelAdmin
 {

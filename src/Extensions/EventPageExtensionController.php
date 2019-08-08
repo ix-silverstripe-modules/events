@@ -12,8 +12,6 @@ use SilverStripe\ORM\ArrayLib;
 use SilverStripe\ORM\DB;
 use SilverStripe\View\Requirements;
 
-
-
 class EventPageExtensionController extends Extension
 {
     public function onAfterInit()

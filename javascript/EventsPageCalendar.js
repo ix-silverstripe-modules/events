@@ -55,7 +55,7 @@
         }
 
         function loadCalendarJumps() {
-            $(".ui-datepicker-title").append('<img class="spinner" style="width: 25px; text-align:center;" src="/_resources/events/images/loading_transparent.gif" />');
+            $(".ui-datepicker-title").append('<img class="spinner" style="width: 25px; text-align:center;" src="/_resources/vendor/internetrix/silverstripe-events/images/loading_transparent.gif" />');
 
             /* jump links */
             var prevurl = $('#month-navigator .calendar-prev').attr('href');

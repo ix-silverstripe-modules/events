@@ -18,7 +18,7 @@ class EventPageExtensionController extends Extension
     {
         Requirements::css('internetrix/silverstripe-events:thirdparty/qtip/jquery.qtip-2.0.0.css');
 
-        Requirements::javascript('//code.jquery.com/jquery-3.3.1.min.js');
+        Requirements::javascript('silverstripe/admin:thirdparty/jquery/jquery.js');
         Requirements::javascript('internetrix/silverstripe-events:javascript/EventsPageCalendar.js');
         Requirements::javascript('internetrix/silverstripe-events:thirdparty/qtip/jquery.qtip-2.0.0.min.js');
     }

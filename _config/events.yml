@@ -44,10 +44,3 @@ SilverStripe\Admin\LeftAndMain:
 
 Internetrix\Events\Pages\CalendarEvent:
   show_in_sitetree: false
-
-Page:
-  extensions:
-    - Internetrix\Events\Extensions\EventPageExtension
-PageController:
-  extensions:
-    - Internetrix\Events\Extensions\EventPageExtensionController

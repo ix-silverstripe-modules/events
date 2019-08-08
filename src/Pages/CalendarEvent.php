@@ -2,6 +2,7 @@
 
 namespace Internetrix\Events\Pages;
 
+use Colymba\BulkManager\BulkManager;
 use Internetrix\Events\Controllers\CalendarEventController;
 use Internetrix\Events\Model\EventCategory;
 use Internetrix\Events\Pages\EventsPage;
@@ -157,7 +158,7 @@ class CalendarEvent extends Page
         $putBefore = ($fields->fieldByName('Root.Main.ListingSummaryToggle') ? 'ListingSummaryToggle' : $configBefore);
 
         // If an image has not been set, open the toggle field to remind user
-        if (class_exists('ListingSummary') && $this->ListingImageID == 0) {
+        if ($this->ListingImageID == 0) {
             $toggle = $fields->fieldByName('Root.Main.ListingSummaryToggle');
             $toggle->setStartClosed(false);
         }
@@ -253,8 +254,8 @@ SQL;
             /**
              * Support for {@link https://github.com/colymba/GridFieldBulkEditingTools}
             */
-            if (class_exists('GridFieldBulkManager')) {
-                $config->addComponent(new GridFieldBulkManager());
+            if (class_exists(BulkManager::class)) {
+                $config->addComponent(new BulkManager());
             }
 
             $sort->setThrowExceptionOnBadDataType(false);

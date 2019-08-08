@@ -15,6 +15,7 @@ use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\View\ArrayData;
 
 /**
@@ -137,7 +138,7 @@ class EventsPage extends Page
         $query->setOrderBy('"tDate" DESC');
 
         // Modfiy select to add subsite in if it's installed
-        if (class_exists('Subsite')) {
+        if (class_exists(Subsite::class)) {
             $query->setSelect("$year tDate, \"SiteTree\".\"SubsiteID\"");
             $query->setWhere('"SiteTree"."SubsiteID" = ' . Subsite::currentSubsiteID());
         } else {

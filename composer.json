@@ -1,5 +1,5 @@
 {
-    "name": "internetrix/events",
+    "name": "internetrix/silverstripe-events",
     "description": "A module for adding an events system",
     "type": "silverstripe-vendormodule",
     "repositories": [

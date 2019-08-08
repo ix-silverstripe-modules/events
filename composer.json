@@ -42,6 +42,9 @@
             "thirdparty"
         ]
     },
+    "replace": {
+        "silverstripe-modules/events": "self.version"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }

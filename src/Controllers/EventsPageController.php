@@ -78,20 +78,20 @@ class EventsPageController extends PageController
         Requirements::javascript('silverstripe/admin:client/src/legacy/ssui.core.js');
         Requirements::add_i18n_javascript('silverstripe/admin:client/lang');
 
-        Requirements::javascript('internetrix/events:javascript/EventsPageCalendar.js');
-        Requirements::javascript('internetrix/events:thirdparty/qtip/jquery.qtip-2.0.0.min.js');
-        Requirements::css('internetrix/events:thirdparty/qtip/jquery.qtip-2.0.0.css');
+        Requirements::javascript('internetrix/silverstripe-events:javascript/EventsPageCalendar.js');
+        Requirements::javascript('internetrix/silverstripe-events:thirdparty/qtip/jquery.qtip-2.0.0.min.js');
+        Requirements::css('internetrix/silverstripe-events:thirdparty/qtip/jquery.qtip-2.0.0.css');
 
         if (EventsPage::config()->pagination_type == "ajax") {
-            Requirements::javascript('internetrix/events:javascript/eventspage.js');
+            Requirements::javascript('internetrix/silverstripe-events:javascript/eventspage.js');
         }
 
         if (EventsPage::config()->page_search_type == "refine") {
-            Requirements::javascript('internetrix/events:javascript/refine.js');
+            Requirements::javascript('internetrix/silverstripe-events:javascript/refine.js');
         }
 
         if (EventsPage::config()->page_search_type == "filter") {
-            Requirements::javascript('internetrix/events:javascript/filter.js');
+            Requirements::javascript('internetrix/silverstripe-events:javascript/filter.js');
         }
 
         $request = $this->getRequest();

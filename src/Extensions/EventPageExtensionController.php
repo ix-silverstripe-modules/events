@@ -10,10 +10,10 @@ class EventPageExtensionController extends Extension
 {
     public function onAfterInit()
     {
-        Requirements::css('internetrix/events:thirdparty/qtip/jquery.qtip-2.0.0.css');
+        Requirements::css('internetrix/silverstripe-events:thirdparty/qtip/jquery.qtip-2.0.0.css');
 
         Requirements::javascript('//code.jquery.com/jquery-3.3.1.min.js');
-        Requirements::javascript('internetrix/events:javascript/EventsPageCalendar.js');
-        Requirements::javascript('internetrix/events:thirdparty/qtip/jquery.qtip-2.0.0.min.js');
+        Requirements::javascript('internetrix/silverstripe-events:javascript/EventsPageCalendar.js');
+        Requirements::javascript('internetrix/silverstripe-events:thirdparty/qtip/jquery.qtip-2.0.0.min.js');
     }
 }

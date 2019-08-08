@@ -13,8 +13,8 @@ class SelectAllCheckboxSetField extends CheckboxSetField
 {
     public function Field($properties = [])
     {
-        Requirements::css('internetrix/events:css/SelectAllCheckboxSetField.css');
-        Requirements::javascript('internetrix/events:javascript/SelectAllCheckboxSetField.js');
+        Requirements::css('internetrix/silverstripe-events:css/SelectAllCheckboxSetField.css');
+        Requirements::javascript('internetrix/silverstripe-events:javascript/SelectAllCheckboxSetField.js');
 
         $source = $this->source;
         $values = $this->value;

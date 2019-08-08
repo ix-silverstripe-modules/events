@@ -52,12 +52,12 @@ class GenerateCalendarEvent extends BuildTask
             $calendarEvent->Content = $text;
 
             if ($rand_category) {
-                $cattoadd = EventCategory::get_by_id("EventCategory", $rand_category);
+                $cattoadd = EventCategory::get()->byID($rand_category);
                 $calendarEvent->Categories()->add($cattoadd);
             }
 
             if ($rand_category2 && ($rand_category != $rand_category2)) {
-                $cattoadd2 = EventCategory::get_by_id("EventCategory", $rand_category2);
+                $cattoadd2 = EventCategory::get()->byID($rand_category2);
                 $calendarEvent->Categories()->add($cattoadd2);
             }
 

@@ -5,10 +5,10 @@ namespace Internetrix\Events\Extensions;
 use Internetrix\Events\Controllers\EventsPageCalendar;
 use Internetrix\Events\Model\EventCategory;
 use Internetrix\Events\Pages\CalendarEvent;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\CheckboxSetField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\ORM\DataExtension;
 

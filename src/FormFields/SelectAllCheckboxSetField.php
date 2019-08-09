@@ -96,7 +96,7 @@ class SelectAllCheckboxSetField extends CheckboxSetField
                     'Value' => $item->URLSegment,
                     'Title' => $title,
                     'isChecked' => in_array($value, $items) || in_array($value, $this->defaultItems),
-                    'isDisabled' => $this->disabled || in_array($value, $this->disabledItems)
+                    'isDisabled' => $this->disabled || in_array($value, $this->disabledItems),
                 ]);
             }
         }

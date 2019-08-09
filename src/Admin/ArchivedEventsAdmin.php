@@ -28,6 +28,7 @@ class ArchivedEventsAdmin extends ModelAdmin
         $list = parent::getList();
         $list = $list->filter(['End:LessThan' => date('Y-m-d H:i:s')]);
         $list = $list->sort('Start DESC');
+
         return $list;
     }
 

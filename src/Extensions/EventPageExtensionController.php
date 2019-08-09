@@ -60,7 +60,6 @@ class EventPageExtensionController extends Extension
 
         $session = $this->getRequest()->getSession();
 
-
         if ($data = $session->get('MonthForm')) {
             $session->clear('MonthForm');
             $form->loadDataFrom($data);
@@ -88,6 +87,7 @@ class EventPageExtensionController extends Extension
 
         $min = min($range['min'], $year - 1);
         $max = max($range['max'], $year + 1);
+
         return ArrayLib::valuekey(range($max, $min));
     }
 

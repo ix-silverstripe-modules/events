@@ -42,7 +42,7 @@ class EventCategory extends DataObject
     private static $many_many_extraFields = [
         'Events' => [
             'Approved' => 'Int',
-        ]
+        ],
     ];
 
     private static $searchable_fields = [
@@ -65,7 +65,6 @@ class EventCategory extends DataObject
         $fields->removeByName('Events');
 
         $fields->addFieldToTab('Root.Main', ColorField::create('Colour', 'Colour'));
-
 
         $fields->addFieldToTab(
             'Root.Main',
@@ -107,12 +106,14 @@ class EventCategory extends DataObject
     {
         $html = DBHTMLVarchar::create();
         $html->setValue("<div style='width: 20px; height: 92px; background-color: #" . $this->Colour . ";'></div>");
+
         return $html;
     }
 
     public function customTitle()
     {
         $colourBlock = $this->ColourBlock();
+
         return $colourBlock->getValue() . '<span class="category-title">' . $this->Title . '</span>';
     }
 
@@ -143,9 +144,9 @@ class EventCategory extends DataObject
             $request = $controller->getRequest();
             if (strpos($request->getVar('category'), $this->URLSegment) === false) {
                 return false;
-            } else {
-                return true;
             }
+
+            return true;
         }
 
         return false;

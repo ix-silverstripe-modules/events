@@ -2,7 +2,6 @@
 
 namespace Internetrix\Events\Controllers;
 
-use Internetrix\Events\FormFields\SelectAllCheckboxSetField;
 use Internetrix\Events\Model\EventCategory;
 use Internetrix\Events\Pages\CalendarEvent;
 use Internetrix\Events\Pages\EventsPage;
@@ -81,15 +80,15 @@ class EventsPageController extends PageController
         Requirements::javascript('internetrix/silverstripe-events:thirdparty/qtip/jquery.qtip-2.0.0.min.js');
         Requirements::css('internetrix/silverstripe-events:thirdparty/qtip/jquery.qtip-2.0.0.css');
 
-        if (EventsPage::config()->pagination_type == "ajax") {
+        if (EventsPage::config()->pagination_type == 'ajax') {
             Requirements::javascript('internetrix/silverstripe-events:javascript/eventspage.js');
         }
 
-        if (EventsPage::config()->page_search_type == "refine") {
+        if (EventsPage::config()->page_search_type == 'refine') {
             Requirements::javascript('internetrix/silverstripe-events:javascript/refine.js');
         }
 
-        if (EventsPage::config()->page_search_type == "filter") {
+        if (EventsPage::config()->page_search_type == 'filter') {
             Requirements::javascript('internetrix/silverstripe-events:javascript/filter.js');
         }
 
@@ -97,8 +96,8 @@ class EventsPageController extends PageController
 
         $getParams = $request->getVars();
 
-        $this->start = isset($getParams['startd']) ? $getParams['startd'] : null;
-        $this->end = isset($getParams['end']) ? $getParams['end'] : null;
+        $this->start = $getParams['startd'] ?? null;
+        $this->end = $getParams['end'] ?? null;
         $this->categoryurl = isset($getParams['category']) ? Convert::raw2sql($getParams['category']) : null;
         $this->searchQuery = isset($getParams['searchQuery']) ? Convert::raw2sql($getParams['searchQuery']) : null;
         $this->showimages = isset($getParams['images']) ? Convert::raw2sql($getParams['images']) : false;
@@ -106,16 +105,16 @@ class EventsPageController extends PageController
         $this->typesurl = isset($getParams['types']) ? Convert::raw2sql($getParams['types']) : null;
 
         if ($this->categoryurl) {
-            $catURLs = explode(".", $this->categoryurl);
+            $catURLs = explode('.', $this->categoryurl);
             $category = EventCategory::get()->filter('URLSegment', $catURLs);
-            $this->category = implode(",", $category->map("ID", "ID")->toArray());
+            $this->category = implode(',', $category->map('ID', 'ID')->toArray());
         }
 
         if ($this->typesurl) {
-            $typesURLs = explode(".", $this->typesurl);
+            $typesURLs = explode('.', $this->typesurl);
             $types = EventCategory::get()->filter('URLSegment', $typesURLs);
             $this->typesDL = $types;
-            $this->types = implode(",", $types->map("ID", "ID")->toArray());
+            $this->types = implode(',', $types->map('ID', 'ID')->toArray());
         }
 
         if ($this->start && $this->end && $this->start == $this->end) {
@@ -146,30 +145,30 @@ class EventsPageController extends PageController
     public function index()
     {
         if (Director::is_ajax()) {
-            $this->response->addHeader("Vary", "Accept"); // This will enable pushState to work correctly
+            $this->response->addHeader('Vary', 'Accept'); // This will enable pushState to work correctly
             return $this->renderWith('Internetrix/Events/Includes/EventList');
         }
 
-        $customTitle = (!empty($this->EventsListTitle) ? $this->EventsListTitle : "Events");
+        $customTitle = (!empty($this->EventsListTitle) ? $this->EventsListTitle : 'Events');
 
         if ($this->start || $this->end || $this->category > 0 || $this->content) {
-            $customTitle = "Showing results ";
+            $customTitle = 'Showing results ';
 
             if ($this->typesDL && $this->typesDL->count()) {
-                $customTitle .= "in <span>" . implode(",", $this->typesDL->map("Title", "Title")->toArray()) . "</span>";
+                $customTitle .= 'in <span>' . implode(',', $this->typesDL->map('Title', 'Title')->toArray()) . '</span>';
             }
 
             if ($this->start && $this->end) {
-                $customTitle .= " between <span>" . $this->start . "</span> and <span>" . $this->end . "</span>";
+                $customTitle .= ' between <span>' . $this->start . '</span> and <span>' . $this->end . '</span>';
             } elseif ($this->start) {
-                $customTitle .= " after <span>" . $this->start . "</span>";
+                $customTitle .= ' after <span>' . $this->start . '</span>';
             } elseif ($this->end) {
-                $customTitle .= " before <span>" . $this->end . "</span>";
+                $customTitle .= ' before <span>' . $this->end . '</span>';
             }
         }
 
         return $this->customise([
-            'EventsListTitle' => $customTitle
+            'EventsListTitle' => $customTitle,
         ]);
     }
 
@@ -177,11 +176,11 @@ class EventsPageController extends PageController
     {
         $vars = $this->request->getVars();
 
-        $date = "01/".(!empty($vars["Month"]) ? $vars["Month"] : "01") ."/".$vars["Year"];
-        $categories = (!empty($vars["Categories"]) ? implode(".", $vars["Categories"]) : null);
+        $date = '01/' . (!empty($vars['Month']) ? $vars['Month'] : '01') . '/' . $vars['Year'];
+        $categories = (!empty($vars['Categories']) ? implode('.', $vars['Categories']) : null);
         ;
 
-        $this->redirect($this->Link("?startd=$date".($categories ? "&types=".$categories : "")));
+        $this->redirect($this->Link("?startd=$date" . ($categories ? '&types=' . $categories : '')));
     }
 
     public function add()
@@ -221,7 +220,7 @@ class EventsPageController extends PageController
             'Title' => $this->year . ' Events Archive',
             'Content' => '',
             'InArchive' => true,
-            'NoEventsText' => $this->NoEventsText ? $this->NoEventsText : "<p>Sorry! There are no events to display.</p>",
+            'NoEventsText' => $this->NoEventsText ? $this->NoEventsText : '<p>Sorry! There are no events to display.</p>',
         ];
 
         return $this->customise($data)->renderWith(['EventsPage_archive', 'NewsHolder', 'Page']);
@@ -230,50 +229,52 @@ class EventsPageController extends PageController
     public function ArchiveEvents()
     {
         $events = CalendarEvent::get()->sort('"Start" DESC')->where(DB::get_conn()->formattedDatetimeClause('"Start"', '%Y') . " = $this->year");
+
         return GroupedList::create($events);
     }
 
     public function PrintTitle()
     {
         $pt = $this->data()->PrintTitle;
-        $start = str_replace("/", "-", $this->start);
-        $end = str_replace("/", "-", $this->end);
+        $start = str_replace('/', '-', $this->start);
+        $end = str_replace('/', '-', $this->end);
         $startTime = strtotime($start);
         $endTime = strtotime($end);
 
-        $dates = date("d M Y", $startTime) . ' - ' . date("d M Y", $endTime);
+        $dates = date('d M Y', $startTime) . ' - ' . date('d M Y', $endTime);
 
         if (!($start && $end)) {
             return 'Upcoming Events';
         }
 
-        $startMonth = date("m", $startTime);
-        $endMonth = date("m", $endTime);
+        $startMonth = date('m', $startTime);
+        $endMonth = date('m', $endTime);
 
         if ($startMonth == $endMonth) {
             //lets see if it entire month
-            $startDay = date("j", $startTime);
+            $startDay = date('j', $startTime);
             if ($startDay == '1') {
-                $endDay = date("j", $endTime);
+                $endDay = date('j', $endTime);
 
-                if ($endDay == date("t", $endTime)) {
-                    $dates = date("F Y", $endTime);
+                if ($endDay == date('t', $endTime)) {
+                    $dates = date('F Y', $endTime);
                 }
             }
         }
 
-        return $pt . " " . $dates;
+        return $pt . ' ' . $dates;
     }
 
     public function ViewMoreText()
     {
-        return ($this->ViewMoreText ? $this->ViewMoreText : "View Event");
+        return ($this->ViewMoreText ? $this->ViewMoreText : 'View Event');
     }
 
     public function EventsCategories()
     {
-        $categories =  EventCategory::get();
+        $categories = EventCategory::get();
         $this->extend('updateEventsCategories', $categories);
+
         return $categories;
     }
 
@@ -281,7 +282,7 @@ class EventsPageController extends PageController
     {
         $events = CalendarEvent::get()->sort('"Start" DESC');
         $sort = Convert::raw2sql($sort);
-        if ($sort == "ASC" || $sort == "DESC") {
+        if ($sort == 'ASC' || $sort == 'DESC') {
             $events = $events->sort("\"Start\" $sort");
         }
 
@@ -296,7 +297,7 @@ class EventsPageController extends PageController
 
         $sort = Convert::raw2sql($sort);
 
-        if ($sort == "ASC" || $sort == "DESC") {
+        if ($sort == 'ASC' || $sort == 'DESC') {
             $eventsList = $eventsList->sort("\"Start\" $sort");
         }
 
@@ -331,27 +332,26 @@ class EventsPageController extends PageController
 
         if ($this->category) {
             $eventTable = 'CalendarEvent';
-            $extraWhere = "";
+            $extraWhere = '';
             if (Versioned::get_stage() == 'Live') {
                 $eventTable .= '_Live';
                 $extraWhere = ' AND "EventCategory_Events"."Approved" = 1 ';
             }
-            $str = "(" . $this->category . ")" ;
+            $str = '(' . $this->category . ')' ;
 
-
-            $eventsList = $eventsList->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str . $extraWhere . ')');
+            $eventsList = $eventsList->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "' . $eventTable . '"."ID" AND "EventCategory_Events"."EventCategoryID" IN ' . $str . $extraWhere . ')');
         }
 
         if ($this->types) {
             $eventTable = 'CalendarEvent';
-            $extraWhere = "";
+            $extraWhere = '';
             if (Versioned::get_stage() == 'Live') {
                 $eventTable .= '_Live';
                 // $extraWhere = ' AND "EventCategory_Events"."Approved" = 1 ';
             }
-            $str = "(" . $this->types . ")" ;
+            $str = '(' . $this->types . ')' ;
 
-            $eventsList = $eventsList->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "'. $eventTable .'"."ID" AND "EventCategory_Events"."EventCategoryID" IN '. $str . $extraWhere . ')');
+            $eventsList = $eventsList->where('(SELECT COUNT("EventCategory_Events"."ID") FROM "EventCategory_Events" WHERE "EventCategory_Events"."CalendarEventID" = "' . $eventTable . '"."ID" AND "EventCategory_Events"."EventCategoryID" IN ' . $str . $extraWhere . ')');
         }
 
         $this->extend('updateEventsList', $eventsList);
@@ -380,7 +380,7 @@ class EventsPageController extends PageController
 
         $this->AllEventsCount = $paginatedList->getTotalItems();
 
-        if ($paginationType == "ajax") {
+        if ($paginationType == 'ajax') {
             if ($offset && ! Director::is_ajax() && EventsPage::config()->ajax_show_more) { // Only apply this when the user is returning from the article OR if they were linked here
                 $toload = ($offset / $this->PaginationLimit); // What page are we at?
                 $limit = (($toload + 1) * $this->PaginationLimit); // Need to add 1 so we always load the first page as well (articles 0 to 5)
@@ -447,8 +447,8 @@ class EventsPageController extends PageController
     public function CategoriesField()
     {
         $categories = DropdownField::create('category', 'Filter By:')
-            ->setSource(EventCategory::get()->map("URLSegment", "Title")->toArray())
-            ->setEmptyString("");
+            ->setSource(EventCategory::get()->map('URLSegment', 'Title')->toArray())
+            ->setEmptyString('');
 
         if ($this->categoryurl) {
             $categories->setValue($this->categoryurl);
@@ -501,6 +501,7 @@ class EventsPageController extends PageController
     public function SearchEventsFormAction()
     {
         $action = $this->Link();
+
         return $action;
     }
 
@@ -516,17 +517,18 @@ class EventsPageController extends PageController
 
     public function filterSearchEnabled()
     {
-        return (EventsPage::config()->page_search_type == "filter");
+        return (EventsPage::config()->page_search_type == 'filter');
     }
 
     public function refineSearchEnabled()
     {
-        return (EventsPage::config()->page_search_type == "refine");
+        return (EventsPage::config()->page_search_type == 'refine');
     }
 
     public function eventcalendar()
     {
         $calendar = EventsPageCalendar::create($this, 'eventcalendar', $this->month, $this->year, $this->day);
+
         return $calendar;
     }
 
@@ -549,7 +551,7 @@ class EventsPageController extends PageController
         }
 
         // Rename Page Title to Event Name
-        $contentFields->renameField("Title", "Event Name");
+        $contentFields->renameField('Title', 'Event Name');
 
         $upField = UploadField::create('ListingImage', Image::class)
             ->setFolderName(Upload::config()->uploads_folder . '/Events')
@@ -565,7 +567,7 @@ class EventsPageController extends PageController
         $upField->getValidator()->setAllowedMaxFileSize($size);
 
         // Add Submitter Values
-        $contentFields->push(HeaderField::create("Your Details"));
+        $contentFields->push(HeaderField::create('Your Details'));
         $contentFields->push($firstName = TextField::create('SubmitterFirstName', 'First Name'));
         $contentFields->push($surname = TextField::create('SubmitterSurname', 'Surname')->addExtraClass('second'));
         $contentFields->push($email = EmailField::create('SubmitterEmail', Email::class));
@@ -585,9 +587,9 @@ class EventsPageController extends PageController
             $phone->setValue($member->PhoneNumber);
         }
 
-        $this->extend("updateEventAddFields", $contentFields);
-        $this->extend("updateEventAddActions", $actions);
-        $this->extend("updateEventAddValidator", $validator);
+        $this->extend('updateEventAddFields', $contentFields);
+        $this->extend('updateEventAddActions', $actions);
+        $this->extend('updateEventAddValidator', $validator);
 
         $form = Form::create($this, 'AddForm', $contentFields, $actions, $validator);
 

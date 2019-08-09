@@ -14,7 +14,7 @@ class ApproveCalendarEventManyManyRelations extends BuildTask
     {
         increase_time_limit_to();
 
-        DB::query("UPDATE \"EventCategory_Events\" SET \"Approved\" = 1");
+        DB::query('UPDATE "EventCategory_Events" SET "Approved" = 1');
 
         DB::alteration_message('Job Done. Set approved');
     }

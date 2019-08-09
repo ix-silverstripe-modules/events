@@ -111,7 +111,7 @@ class EventsPageCalendar extends Controller
                 date('Y-m-d', $curr),
                 date('Y-m-d', $curr + $nWeeks * 3600 * 24 * 7)
         )
-        )->sort("Start");
+        )->sort('Start');
 
         $eventDays = [];
 
@@ -126,10 +126,10 @@ class EventsPageCalendar extends Controller
                 $category = $event->Categories()->first();
                 if ($category) {
                     $colour = $category->Colour;
-                    $extra = "style='color: #" .$colour. "'";
+                    $extra = "style='color: #" . $colour . "'";
                 }
 
-                $title = "<li style='list-style: none;'><span $extra>" . $event->MenuTitle . "</span></li>";
+                $title = "<li style='list-style: none;'><span $extra>" . $event->MenuTitle . '</span></li>';
 
                 $eventDays[date('m', $start)][date('d', $start)]['Title'][] = $title;
                 $eventDays[date('m', $start)][date('d', $start)]['ID'][] = $event->ID;
@@ -154,14 +154,14 @@ class EventsPageCalendar extends Controller
                 }
                 $curr = strtotime('+1 day', $curr);
 
-                $ids = "";
-                $titles = "";
-                $colours = "";
+                $ids = '';
+                $titles = '';
+                $colours = '';
                 if (isset($eventDays[$m][$d])) {
                     $titles = $eventDays[$m][$d]['Title'];
-                    $titles = implode(" ", $titles);
+                    $titles = implode(' ', $titles);
                     $ids = $eventDays[$m][$d]['ID'];
-                    $ids = implode(" ", $ids);
+                    $ids = implode(' ', $ids);
                     $colours = $eventDays[$m][$d]['Colour'];
                     if (is_array($colours)) {
                         $assc = [];
@@ -175,7 +175,7 @@ class EventsPageCalendar extends Controller
 
                 $days->push(new ArrayData([
                     'Num' => $d,
-                    'Link' => $this->DayLink('?startd=' . $ymd.'&end='.$ymd),
+                    'Link' => $this->DayLink('?startd=' . $ymd . '&end=' . $ymd),
                     'InMonth' => $m == $this->month,
                     'Past' => $m < date('m'),
                     'Today' => $ymd == date('Y-m-d'),
@@ -183,7 +183,7 @@ class EventsPageCalendar extends Controller
                     'Title' => $titles,
                     'EventID' => $ids,
                     'Colours' => $colours,
-                    'Selected' => $selected
+                    'Selected' => $selected,
                 ]));
             }
 

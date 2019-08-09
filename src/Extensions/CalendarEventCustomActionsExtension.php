@@ -8,7 +8,7 @@ use SilverStripe\Admin\LeftAndMainExtension;
 class CalendarEventCustomActionsExtension extends LeftAndMainExtension
 {
     private static $allowed_actions = [
-        'doDuplicateCalendarEvent'
+        'doDuplicateCalendarEvent',
     ];
 
     public function doDuplicateCalendarEvent()
@@ -54,7 +54,6 @@ class CalendarEventCustomActionsExtension extends LeftAndMainExtension
             'X-Status',
             rawurlencode('Calendar event successfully duplicated')
         );
-
 
         return $this->owner->redirect($clonedCalendarEvent->CMSEditLink());
     }

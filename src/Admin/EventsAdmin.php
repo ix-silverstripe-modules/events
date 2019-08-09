@@ -39,7 +39,7 @@ class EventsAdmin extends ModelAdmin
         $context = parent::getSearchContext();
 
         if ($this->modelClass == CalendarEvent::class) {
-            $categories = EventCategory::get()->sort("Sort");
+            $categories = EventCategory::get()->sort('Sort');
             $fields = $context->getFields();
 
             $fields->push(
@@ -48,6 +48,7 @@ class EventsAdmin extends ModelAdmin
             );
             $fields->push(CheckboxField::create('q[UserSubmitted]', 'Submitted by a user?'));
         }
+
         return $context;
     }
 
@@ -59,13 +60,13 @@ class EventsAdmin extends ModelAdmin
             $params = $this->request->requestVar('q'); // use this to access search parameters
 
             $list = $list->filter(['End:GreaterThan' => date('Y-m-d H:i:s')]);
-            $list = $list->leftJoin('CalendarEvent', '"SiteTree"."ID" = "EventsModelAdmin"."ID"', "EventsModelAdmin");
+            $list = $list->leftJoin('CalendarEvent', '"SiteTree"."ID" = "EventsModelAdmin"."ID"', 'EventsModelAdmin');
             $list = $list->sort('"EventsModelAdmin"."Start"');
 
-            if ($this->action !="EditForm") { //only apply filters to the listing page
+            if ($this->action != 'EditForm') { //only apply filters to the listing page
                 if (isset($params['Category']) && $params['Category']) {
-                    $list = $list->innerJoin("EventCategory_Events", '"EventCategory_Events"."CalendarEventID" = "CalendarEvent"."ID"');
-                    $list = $list->filter("EventCategory_Events.EventCategoryID", $params['Category']);
+                    $list = $list->innerJoin('EventCategory_Events', '"EventCategory_Events"."CalendarEventID" = "CalendarEvent"."ID"');
+                    $list = $list->filter('EventCategory_Events.EventCategoryID', $params['Category']);
                 }
 
                 if (isset($params['UserSubmitted']) && $params['UserSubmitted']) {
@@ -73,6 +74,7 @@ class EventsAdmin extends ModelAdmin
                 }
             }
         }
+
         return $list;
     }
 

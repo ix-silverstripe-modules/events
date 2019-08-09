@@ -54,22 +54,23 @@ class CalendarEventController extends PageController
         $this->getResponse()->addHeader('Content-Type', 'text/calendar');
         $this->getResponse()->addHeader('Content-Transfer-Encoding', 'binary');
 
-        if (stristr($_SERVER['HTTP_USER_AGENT'], "MSIE")) {
-            $this->getResponse()->addHeader("Content-disposition", "filename=event.ics; attachment;");
+        if (stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+            $this->getResponse()->addHeader('Content-disposition', 'filename=event.ics; attachment;');
         } else {
-            $this->getResponse()->addHeader("Content-disposition", "attachment; filename=event.ics");
+            $this->getResponse()->addHeader('Content-disposition', 'attachment; filename=event.ics');
         }
         $result = trim(strip_tags($this->customise([
-            'HOST' => "IRXICS",
-            'START' => $timezone.':' . gmdate('Ymd\THis\Z', strtotime($this->obj('Start')->getValue())),
-            'END' => $timezone.':' . gmdate('Ymd\THis\Z', strtotime($this->obj('End')->getValue())),
+            'HOST' => 'IRXICS',
+            'START' => $timezone . ':' . gmdate('Ymd\THis\Z', strtotime($this->obj('Start')->getValue())),
+            'END' => $timezone . ':' . gmdate('Ymd\THis\Z', strtotime($this->obj('End')->getValue())),
             'URL' => $this->AbsoluteLink(),
             'SUMMARY' => $this->Title,
             'DESC' => $this->Content,
             'LOCATION' => $this->LoadAddress(),
-            'NOW' => $timezone.':' . gmdate('Ymd\THis\Z', time()),
-            'ID' => $this->ID
+            'NOW' => $timezone . ':' . gmdate('Ymd\THis\Z', time()),
+            'ID' => $this->ID,
         ])->renderWith(['Internetrix/Events/ics'])));
+
         return $result;
     }
 
@@ -94,25 +95,25 @@ class CalendarEventController extends PageController
         // check the referrer first. If they came from a filtered page, the back link needs to be formulated a little different
         $referer = $this->request->getHeaders();
 
-        if (isset($referer["Referer"])) {
-            $parseReferer = parse_url($referer["Referer"]);
+        if (isset($referer['Referer'])) {
+            $parseReferer = parse_url($referer['Referer']);
 
             if (isset($parseReferer['query'])) {
                 // Get parent
                 $parent = $this->Parent;
-                $url = $parent->Link("?".$parseReferer['query']."&start=$value".'#'.$this->URLSegment);
+                $url = $parent->Link('?' . $parseReferer['query'] . "&start=$value" . '#' . $this->URLSegment);
             }
         }
 
         if (!$url && $value) {
             // Get parent
             $parent = $this->Parent;
-            $url = $parent->Link("?start=$value".'#'.$this->URLSegment);
+            $url = $parent->Link("?start=$value" . '#' . $this->URLSegment);
         }
 
         if (!$url) {
             $page = $this->Parent();
-            $url = $page ? $page->Link('#'.$this->URLSegment) : false;
+            $url = $page ? $page->Link('#' . $this->URLSegment) : false;
         }
 
         return $url;
@@ -121,11 +122,11 @@ class CalendarEventController extends PageController
     public function PrevNextPage($mode = 'next')
     {
         if ($mode == 'next') {
-            $direction = "Start:GreaterThan";
-            $sort = "Start ASC";
+            $direction = 'Start:GreaterThan';
+            $sort = 'Start ASC';
         } elseif ($mode == 'prev') {
-            $direction = "Start:LessThan";
-            $sort = "Start DESC";
+            $direction = 'Start:LessThan';
+            $sort = 'Start DESC';
         } else {
             return false;
         }
@@ -134,7 +135,7 @@ class CalendarEventController extends PageController
         $PrevNext = CalendarEvent::get()->filter(['Start:GreaterThan' => date('Y-m-d H:i:s')]);
 
         $PrevNext = $PrevNext->filter([
-                $direction => $this->Start
+                $direction => $this->Start,
             ])
             ->sort($sort)
             ->first();
@@ -169,7 +170,7 @@ class CalendarEventController extends PageController
                     $field->addExtraClass('required');
 
                     if ($identifier = UserDefinedForm::config()->required_identifier) {
-                        $title = $field->Title() ." <span class='required-identifier'>". $identifier . "</span>";
+                        $title = $field->Title() . " <span class='required-identifier'>" . $identifier . '</span>';
                         $field->setTitle($title);
                     }
                 }
@@ -219,7 +220,6 @@ class CalendarEventController extends PageController
 
             return Form::create($this, 'RegistrationForm', $fields, $actions, $validator);
         }
-        return;
     }
 
     public function doRegister($data, $form)
@@ -261,12 +261,14 @@ class CalendarEventController extends PageController
                         $upload = new Upload();
                         $file = new File();
                         $file->ShowInSearch = 0;
+
                         try {
                             $upload->loadIntoFile($_FILES[$field->Name], $file, $foldername);
                         } catch (ValidationException $e) {
                             $validationResult = $e->getResult();
                             $form->addErrorMessage($field->Name, $validationResult->message(), 'bad');
                             Controller::curr()->redirectBack();
+
                             return;
                         }
 
@@ -283,6 +285,6 @@ class CalendarEventController extends PageController
             $submittedFields->push($submittedField);
         }
 
-        $this->redirect($this->Link("finished"));
+        $this->redirect($this->Link('finished'));
     }
 }

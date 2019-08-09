@@ -144,7 +144,6 @@ class CalendarEvent extends Page
         $this->setField('End', date('Y-m-d', strtotime('+1day')));
     }
 
-
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -181,7 +180,6 @@ class CalendarEvent extends Page
             $fields->addFieldToTab('Root.Main', CheckboxField::create('EnableRegistrationPage', 'Enable visitors to register for event?'), $configBefore);
         }
 
-
         $fields->addFieldToTab('Root.Main', TextField::create('Cost', 'Cost (Leave it blank if cost is free)'), $configBefore);
 
         $fields->addFieldToTab('Root.Main', $cats = ListboxField::create('Categories', 'Categories', EventCategory::get()->map()->toArray()), $configBefore);
@@ -190,7 +188,7 @@ class CalendarEvent extends Page
             TextField::create('Website', 'Website'),
             TextField::create('Email', 'Email'),
             TextField::create('Contact', 'Contact'),
-            TextField::create('Phone', 'Phone')
+            TextField::create('Phone', 'Phone'),
         ]), $configBefore);
 
         $address = $fields->findOrMakeTab('Root.Address');
@@ -208,7 +206,7 @@ class CalendarEvent extends Page
                 ReadonlyField::create('SubmitterFirstName', 'First Name'),
                 ReadonlyField::create('SubmitterSurname', 'Surname'),
                 ReadonlyField::create('SubmitterEmail', Email::class),
-                ReadonlyField::create('SubmitterPhoneNumber', 'Phone Number')
+                ReadonlyField::create('SubmitterPhoneNumber', 'Phone Number'),
             ]);
         }
 
@@ -251,7 +249,7 @@ SQL;
             $config->addComponent($export = new GridFieldExportButton());
             $config->addComponent($print = new GridFieldPrintButton());
 
-            /**
+            /*
              * Support for {@link https://github.com/colymba/GridFieldBulkEditingTools}
             */
             if (class_exists(BulkManager::class)) {
@@ -404,7 +402,7 @@ SQL;
                 return $start;
             }
 
-            return $start.' - '.$end;
+            return $start . ' - ' . $end;
         }
 
         if ($this->Start && !$this->End) {
@@ -420,7 +418,7 @@ SQL;
     public function LoadAddress()
     {
         if ($this->Address && $this->Suburb && $this->State) {
-            return $this->Address.', '.$this->Suburb.', '.$this->State.' '.$this->Postcode;
+            return $this->Address . ', ' . $this->Suburb . ', ' . $this->State . ' ' . $this->Postcode;
         }
 
         return false;
@@ -432,9 +430,9 @@ SQL;
             return 'New Page';
         } elseif ($this->isPublished()) {
             return 'Published';
-        } else {
-            return 'Unpublished';
         }
+
+        return 'Unpublished';
     }
 
     public function Categories()
@@ -481,8 +479,8 @@ SQL;
             return $this->ListingImage();
         } elseif ($this->Categories()->first() && $this->Categories()->first()->ImageID) {
             return $this->Categories()->first()->Image();
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

@@ -5,7 +5,6 @@ namespace Internetrix\Events\Extensions;
 use Internetrix\Events\Controllers\EventsPageCalendar;
 use Internetrix\Events\Model\EventCategory;
 use Internetrix\Events\Pages\CalendarEvent;
-use Internetrix\Events\Pages\EventsPage;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\CheckboxField;
@@ -43,7 +42,7 @@ class EventPageExtension extends DataExtension
                 'Restrict to these categories',
                 EventCategory::get(),
                 $this->owner->ForcedCalendarCategories()
-        )->displayIf("ShowCalendar")->isChecked()->end(), $insertBefore);
+        )->displayIf('ShowCalendar')->isChecked()->end(), $insertBefore);
 
         $fields->addFieldToTab($tab, CheckboxField::create('ShowMonthJumper', 'Show the month jumper?'), $insertBefore);
 
@@ -58,13 +57,15 @@ class EventPageExtension extends DataExtension
     {
         if ($this->owner->ShowUpcomingEvents) {
             $limit = $this->owner->UpcomingEventsCount? $this->owner->UpcomingEventsCount : 3;
-            return CalendarEvent::get()->filter(['Start:GreaterThan' => date('Y-m-d H:i:s')])->limit($limit)->sort("Start");
+
+            return CalendarEvent::get()->filter(['Start:GreaterThan' => date('Y-m-d H:i:s')])->limit($limit)->sort('Start');
         }
     }
 
     public function eventcalendar()
     {
         $calendar = EventsPageCalendar::create($this->owner, 'eventcalendar');
+
         return $calendar;
     }
 

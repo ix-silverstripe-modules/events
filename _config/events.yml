@@ -2,7 +2,7 @@
 Name: events
 ---
 
-Events:
+Internetrix\Events\Pages\EventsPage:
   event_fields_before: 'Content'
   enable_sharing: false
   enable_archive: true
@@ -19,32 +19,28 @@ Events:
     - HideDatePosted
     - MenuTitle
     - EnableRegistrationPage
-  
-  RequiredEventFields:
+  required_event_fields:
     FullName:
       Title: 'Full Name'
-      Type: EditableTextField
+      Type: SilverStripe\UserForms\Model\EditableFormField\EditableTextField
     EmailAddress:
       Title: 'Email Address'
-      Type: EditableEmailField
+      Type: SilverStripe\UserForms\Model\EditableFormField\EditableEmailField
     ContactNumber:
       Title: 'Contact Number'
-      Type: EditableNumericField
+      Type: SilverStripe\UserForms\Model\EditableFormField\EditableNumericField
+  extensions:
+    - SilverStripe\Lumberjack\Model\Lumberjack
 
-LeftAndMain:
+SilverStripe\Admin\LeftAndMain:
   menu_groups:
     Events:
-      icon: 'eventsadmin'
-      - EventsAdmin
-      - ArchivedEventsAdmin
-
-EditableFormField:
+      icon: 'p-event-alt'
+      children:
+        - Internetrix-Events-Admin-EventsAdmin
+        - Internetrix-Events-Admin-ArchivedEventsAdmin
   extensions:
-    - EventsEditableFormFieldExtension
+    - Internetrix\Events\Extensions\CalendarEventCustomActionsExtension
 
-EventsPage:
-  extensions:
-    - 'Lumberjack'
-
-CalendarEvent:
+Internetrix\Events\Pages\CalendarEvent:
   show_in_sitetree: false

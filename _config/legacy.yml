@@ -1,0 +1,8 @@
+---
+Name: eventslegacy
+---
+SilverStripe\ORM\DatabaseAdmin:
+  classname_value_remapping:
+    CalendarEvent: Internetrix\Events\Pages\CalendarEvent
+    EventCategory: Internetrix\Events\Model\EventCategory
+    EventsPage: Internetrix\Events\Pages\EventsPage

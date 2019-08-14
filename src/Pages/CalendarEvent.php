@@ -302,7 +302,6 @@ SQL;
     {
         $clonedCalendarEvent = parent::duplicate($doWrite, $relations);
         $clonedCalendarEvent->Created = date('Y-m-d H:i:s');
-        $clonedCalendarEvent->Title = 'Copy of ' . $clonedCalendarEvent->Title;
         $clonedCalendarEvent->write();
 
         return $clonedCalendarEvent;

@@ -15,13 +15,13 @@ Maintainers
 
 ## Dependencies
 
-* silverstripe-modules/listingsummary
+* internetrix/silverstripe-listingsummary
 * silverstripe/lumberjack
-* tractorcow/silverstripe-colorpicker
+* silverstripe/userforms
 * symbiote/silverstripe-addressable
 * symbiote/silverstripe-gridfieldextensions
 * symbiote/silverstripe-grouped-cms-menu
-* userforms
+* tractorcow/silverstripe-colorpicker
 
 ## Notable Features
 

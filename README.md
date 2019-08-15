@@ -20,7 +20,6 @@ Maintainers
 * silverstripe/userforms
 * symbiote/silverstripe-addressable
 * symbiote/silverstripe-gridfieldextensions
-* symbiote/silverstripe-grouped-cms-menu
 * tractorcow/silverstripe-colorpicker
 
 ## Notable Features

@@ -18,7 +18,7 @@ use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 class EventsAdmin extends ModelAdmin
 {
     private static $title = 'Events';
-    private static $menu_title = 'Upcoming';
+    private static $menu_title = 'Events';
     private static $url_segment = 'events';
     private static $menu_icon_class = 'font-icon-p-event';
 
@@ -81,6 +81,7 @@ class EventsAdmin extends ModelAdmin
     public function getEditForm($id = null, $fields = null)
     {
         $form = parent::getEditForm($id, $fields);
+
         $gridField = $form->Fields()->fieldByName($this->sanitiseClassName($this->modelClass));
         if ($this->modelClass == EventCategory::class) {
             $gridField->getConfig()->addComponent(new GridFieldOrderableRows('Sort'));

@@ -33,12 +33,6 @@ Internetrix\Events\Pages\EventsPage:
     - SilverStripe\Lumberjack\Model\Lumberjack
 
 SilverStripe\Admin\LeftAndMain:
-  menu_groups:
-    Events:
-      icon: 'p-event-alt'
-      children:
-        - Internetrix-Events-Admin-EventsAdmin
-        - Internetrix-Events-Admin-ArchivedEventsAdmin
   extensions:
     - Internetrix\Events\Extensions\CalendarEventCustomActionsExtension
 

@@ -11,7 +11,7 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 class ArchivedEventsAdmin extends ModelAdmin
 {
     private static $title = 'Archived Events';
-    private static $menu_title = 'Archived';
+    private static $menu_title = 'Archived Events';
     private static $url_segment = 'archivedevents';
     private static $menu_icon_class = 'font-icon-p-archive';
 

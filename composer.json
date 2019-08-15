@@ -30,7 +30,6 @@
         "tractorcow/silverstripe-colorpicker": "^4.0",
         "symbiote/silverstripe-addressable": "^5.0",
         "symbiote/silverstripe-gridfieldextensions": "^3.2",
-        "symbiote/silverstripe-grouped-cms-menu": "^4.0",
         "silverstripe/userforms": "^5.4"
     },
     "extra": {

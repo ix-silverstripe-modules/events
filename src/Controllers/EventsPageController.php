@@ -67,9 +67,6 @@ class EventsPageController extends PageController
     {
         parent::init();
 
-        // Block out
-        Requirements::block('silverstripe/admin:thirdparty/jquery-ui-themes/smoothness/jquery-ui.css');
-
         Requirements::javascript('silverstripe/admin:thirdparty/jquery/jquery.js');
         Requirements::javascript('silverstripe/admin:thirdparty/jquery-ui/jquery-ui.js');
         Requirements::javascript('silverstripe/admin:thirdparty/jquery-entwine/dist/jquery.entwine-dist.js');

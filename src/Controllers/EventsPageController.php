@@ -70,7 +70,6 @@ class EventsPageController extends PageController
         Requirements::javascript('silverstripe/admin:thirdparty/jquery/jquery.js');
         Requirements::javascript('silverstripe/admin:thirdparty/jquery-ui/jquery-ui.js');
         Requirements::javascript('silverstripe/admin:thirdparty/jquery-entwine/dist/jquery.entwine-dist.js');
-        Requirements::add_i18n_javascript('silverstripe/admin:client/lang');
 
         Requirements::javascript('internetrix/silverstripe-events:javascript/EventsPageCalendar.js');
         Requirements::javascript('internetrix/silverstripe-events:thirdparty/qtip/jquery.qtip-2.0.0.min.js');

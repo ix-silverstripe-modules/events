@@ -81,7 +81,7 @@ class CalendarEventController extends PageController
 
     public function ShareLinksEnabled()
     {
-        return EventsPage::config()->enable_sharing;
+        return Config::inst()->get(EventsPage::class, 'enable_sharing');
     }
 
     public function BackLink()

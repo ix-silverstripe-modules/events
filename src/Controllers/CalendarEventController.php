@@ -20,6 +20,7 @@ use SilverStripe\Security\Member;
 use SilverStripe\UserForms\Model\EditableFormField\EditableFileField;
 use SilverStripe\UserForms\Model\Submission\SubmittedForm;
 use SilverStripe\UserForms\Model\UserDefinedForm;
+use SilverStripe\Core\Config\Config;
 
 class CalendarEventController extends PageController
 {

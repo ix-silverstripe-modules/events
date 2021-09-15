@@ -38,6 +38,10 @@ class EventsPage extends Page
 
     private static $controller_name = EventsPageController::class;
 
+    private static $allowed_children = [
+        CalendarEvent::class
+    ];
+
     private static $db = [
         'PaginationLimit' => 'Int',
         'ViewMoreText' => 'Varchar(255)',
